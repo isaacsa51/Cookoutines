@@ -1,7 +1,6 @@
 package com.serranoie.android.di
 
-import com.serranoie.android.cookoutines.BuildConfig
-import com.serranoie.android.data.remote.SpoonacularApi
+import com.serranoie.android.core.data.remote.SpoonacularApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

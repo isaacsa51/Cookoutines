@@ -9,5 +9,4 @@ java {
 }
 
 dependencies {
-    implementation(project(":core:domain"))
 }
