@@ -49,4 +49,13 @@
     </style>
 
     <attr name="colorPrimary" format="color"/>
+
+    <style name="Cookoutines.Component.Button" parent="Widget.Material3.Button">
+        <item name="cornerRadius">10dp</item>
+        <item name="android:fontFamily">@font/quattrocentosans_bold</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">?attr/colorSurfaceInverse</item>
+        <item name="backgroundTint">?attr/colorPrimaryContainer</item>
+        <item name="colorControlHighlight">?attr/colorSurfaceBright</item>
+    </style>
 </resources>

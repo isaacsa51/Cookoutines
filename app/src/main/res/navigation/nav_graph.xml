@@ -5,18 +5,19 @@
     app:startDestination="@id/onboardingFragment">
 
 
-
-    <fragment
-        android:id="@+id/recipes_list_fragment"
-        android:name="com.serranoie.android.feature.recipes_list.RecipesListFragment"
-        android:label="Recipes List Fragment" />
     <fragment
         android:id="@+id/onboardingFragment"
         android:name="com.serranoie.android.feature.onboarding.OnboardingFragment"
         android:label="OnboardingFragment" >
-        <action
-            android:id="@+id/action_onboardingFragment_to_recipes_list_fragment"
-            app:destination="@id/recipes_list_fragment" />
+        <deepLink
+            app:uri="cookoutines://onboarding"/>
     </fragment>
 
+    <fragment
+        android:id="@+id/recipesListFragment"
+        android:name="com.serranoie.android.feature.recipes_list.RecipesListFragment"
+        android:label="RecipesListFragment">
+        <deepLink
+            app:uri="cookoutines://recipes"/>
+    </fragment>
 </navigation>

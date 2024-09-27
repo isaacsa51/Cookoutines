@@ -6,6 +6,7 @@ plugins {
 
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
+    id("androidx.navigation.safeargs")
 }
 
 val baseUrl: String = gradleLocalProperties(rootDir, providers).getProperty("BASE_URL")
