@@ -59,10 +59,12 @@ android {
 
 dependencies {
 
+    implementation(project(":ui-theme"))
     implementation(project(":core:domain"))
     implementation(project(":core:di"))
-    implementation(project(":feature:recipes-list:domain"))
     implementation(project(":feature:recipes-list"))
+    implementation(project(":feature:recipes-list:domain"))
+    implementation(project(":feature:onboarding"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

@@ -2,11 +2,21 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/recipes_list_fragment">
+    app:startDestination="@id/onboardingFragment">
+
+
 
     <fragment
         android:id="@+id/recipes_list_fragment"
         android:name="com.serranoie.android.feature.recipes_list.RecipesListFragment"
         android:label="Recipes List Fragment" />
+    <fragment
+        android:id="@+id/onboardingFragment"
+        android:name="com.serranoie.android.feature.onboarding.OnboardingFragment"
+        android:label="OnboardingFragment" >
+        <action
+            android:id="@+id/action_onboardingFragment_to_recipes_list_fragment"
+            app:destination="@id/recipes_list_fragment" />
+    </fragment>
 
 </navigation>

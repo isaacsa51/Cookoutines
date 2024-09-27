@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.serranoie.android.core.data"
+    namespace = "com.serranoie.android.feature.onboarding"
     compileSdk = 34
 
     defaultConfig {
@@ -34,24 +34,19 @@ android {
 
 dependencies {
 
-    implementation(project(":core:domain"))
+    implementation(project(":ui-theme"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
+    implementation(libs.androidx.legacy.support.v4)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.fragment.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
-    // Retrofit
-    implementation(libs.retrofit)
-    implementation(libs.okhttp)
-    implementation(libs.sandwich.retrofit)
-
-    // Gson
-    implementation(libs.gson)
-    implementation(libs.converter.gson)
-
-    //Datastore
+    // DataStore
     implementation(libs.androidx.datastore.preferences)
 }

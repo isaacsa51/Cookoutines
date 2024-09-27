@@ -20,7 +20,7 @@ class RecipesListFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // TODO: Use the ViewMode
+        // TODO: Use the ViewModel
     }
 
     override fun onCreateView(

@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.serranoie.android.core.data"
+    namespace = "com.serranoie.android.ui_theme"
     compileSdk = 34
 
     defaultConfig {
@@ -34,24 +34,10 @@ android {
 
 dependencies {
 
-    implementation(project(":core:domain"))
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-
-    // Retrofit
-    implementation(libs.retrofit)
-    implementation(libs.okhttp)
-    implementation(libs.sandwich.retrofit)
-
-    // Gson
-    implementation(libs.gson)
-    implementation(libs.converter.gson)
-
-    //Datastore
-    implementation(libs.androidx.datastore.preferences)
 }
