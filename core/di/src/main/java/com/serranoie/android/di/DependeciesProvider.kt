@@ -1,6 +1,8 @@
 package com.serranoie.android.di
 
 import com.serranoie.android.core.data.remote.SpoonacularApi
+import com.serranoie.android.feature.recipes_list.data.remote.repository.RandomRecipesRepositoryImpl
+import com.serranoie.android.feature.recipes_list.domain.usecase.GetRandomRecipesUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -32,8 +34,11 @@ object DependenciesProvider {
     fun provideOkHttpClient(): OkHttpClient {
         val apiKeyInterceptor = Interceptor { chain ->
             val originalRequest = chain.request()
+            val url = originalRequest.url.newBuilder()
+                .addQueryParameter("apiKey", API_KEY)
+                .build()
             val request = originalRequest.newBuilder()
-                .header("Authorization", API_KEY)
+                .url(url)
                 .build()
             chain.proceed(request)
         }
@@ -46,5 +51,17 @@ object DependenciesProvider {
     @Singleton
     fun provideApiService(retrofit: Retrofit): SpoonacularApi {
         return retrofit.create(SpoonacularApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun providesRandomRecipesUseCase(repository: RandomRecipesRepositoryImpl): GetRandomRecipesUseCase {
+        return GetRandomRecipesUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideRecipeBulkRepositoryImpl(apiService: SpoonacularApi): RandomRecipesRepositoryImpl {
+        return RandomRecipesRepositoryImpl(apiService)
     }
 }

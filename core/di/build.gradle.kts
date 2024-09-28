@@ -50,10 +50,15 @@ android {
 }
 
 dependencies {
+
+    implementation(project(":core:domain"))
+    implementation(project(":core:data"))
+    implementation(project(":feature:recipes-list:domain"))
+    implementation(project(":feature:recipes-list:data"))
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
-    implementation(project(":core:data"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

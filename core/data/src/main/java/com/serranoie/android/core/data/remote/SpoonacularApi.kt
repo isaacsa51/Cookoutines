@@ -6,6 +6,6 @@ import retrofit2.http.GET
 
 interface SpoonacularApi {
 
-    @GET("/recipes/informationBulk")
+    @GET("/recipes/random?number=20")
     fun getRecipes(): Call<List<RecipeDto>>
 }
