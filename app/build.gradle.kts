@@ -98,6 +98,9 @@ dependencies {
     implementation(libs.androidx.navigation.fragment)
     implementation(libs.androidx.navigation.dynamic.features.fragment)
     androidTestImplementation(libs.androidx.navigation.testing)
+
+    // Coil
+    implementation(libs.coil)
 }
 
 kapt {

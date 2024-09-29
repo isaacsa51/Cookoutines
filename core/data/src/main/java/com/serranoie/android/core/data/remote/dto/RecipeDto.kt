@@ -3,12 +3,14 @@ package com.serranoie.android.core.data.remote.dto
 import com.google.gson.annotations.SerializedName
 
 data class RecipeDto(
+    @SerializedName("aggregateLikes")
+    val aggregateLikes: Int?,
     @SerializedName("analyzedInstructions")
-    val analyzedInstructions: List<Any?>?,
+    val analyzedInstructions: List<AnalyzedInstructionDto?>?,
     @SerializedName("cheap")
     val cheap: Boolean?,
     @SerializedName("cookingMinutes")
-    val cookingMinutes: Int?,
+    val cookingMinutes: Any?,
     @SerializedName("creditsText")
     val creditsText: String?,
     @SerializedName("cuisines")
@@ -26,7 +28,7 @@ data class RecipeDto(
     @SerializedName("glutenFree")
     val glutenFree: Boolean?,
     @SerializedName("healthScore")
-    val healthScore: Double?,
+    val healthScore: Int?,
     @SerializedName("id")
     val id: Int?,
     @SerializedName("image")
@@ -35,16 +37,14 @@ data class RecipeDto(
     val imageType: String?,
     @SerializedName("instructions")
     val instructions: String?,
-    @SerializedName("ketogenic")
-    val ketogenic: Boolean?,
-    @SerializedName("license")
-    val license: String?,
     @SerializedName("lowFodmap")
     val lowFodmap: Boolean?,
     @SerializedName("occasions")
     val occasions: List<Any?>?,
+    @SerializedName("originalId")
+    val originalId: Any?,
     @SerializedName("preparationMinutes")
-    val preparationMinutes: Int?,
+    val preparationMinutes: Any?,
     @SerializedName("pricePerServing")
     val pricePerServing: Double?,
     @SerializedName("readyInMinutes")
@@ -74,9 +74,5 @@ data class RecipeDto(
     @SerializedName("veryPopular")
     val veryPopular: Boolean?,
     @SerializedName("weightWatcherSmartPoints")
-    val weightWatcherSmartPoints: Int?,
-    @SerializedName("whole30")
-    val whole30: Boolean?,
-    @SerializedName("winePairing")
-    val winePairing: WinePairingDto?
+    val weightWatcherSmartPoints: Int?
 )

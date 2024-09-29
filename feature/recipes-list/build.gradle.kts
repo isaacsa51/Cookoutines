@@ -43,6 +43,7 @@ android {
 dependencies {
 
     implementation(project(":ui-theme"))
+    implementation(project(":core:domain"))
     implementation(project(":feature:recipes-list:domain"))
 
     implementation(libs.androidx.core.ktx)
@@ -52,7 +53,6 @@ dependencies {
     implementation(libs.androidx.lifecycle.livedata.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.fragment.ktx)
-    implementation(project(":core:domain"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -62,8 +62,10 @@ dependencies {
     kapt(libs.hilt.android.compiler)
     androidTestImplementation(libs.hilt.android.testing)
     kaptTest(libs.hilt.android.compiler)
-}
 
+    // Coil
+    implementation(libs.coil)
+}
 kapt {
     correctErrorTypes = true
 }

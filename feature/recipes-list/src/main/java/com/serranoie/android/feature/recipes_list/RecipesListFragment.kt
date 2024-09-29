@@ -51,21 +51,21 @@ class RecipesListFragment : Fragment() {
         lifecycleScope.launchWhenStarted {
             viewModel.recipesState.collect { result ->
                 when (result) {
-                    is com.serranoie.android.core.domain.result.Result.Success -> {
+                    is com.serranoie.android.core.domain.result.DataResult.Success -> {
                         // Hide loading/error views and show data
                         binding.progressBar.isVisible = false
                         binding.errorTextView.isVisible = false
                         recipesAdapter.submitList(result.data)
                     }
 
-                    is com.serranoie.android.core.domain.result.Result.Error -> {
+                    is com.serranoie.android.core.domain.result.DataResult.Error -> {
                         // Show error message and hide RecyclerView
                         binding.progressBar.isVisible = false
                         binding.errorTextView.isVisible = true
                         binding.errorTextView.text = result.exception.message ?: "Unknown error"
                     }
 
-                    is com.serranoie.android.core.domain.result.Result.Loading -> {
+                    is com.serranoie.android.core.domain.result.DataResult.Loading -> {
                         // Show loading view and hide data/error
                         binding.progressBar.isVisible = true
                         binding.errorTextView.isVisible = false

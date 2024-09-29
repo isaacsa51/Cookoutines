@@ -1,23 +1,30 @@
 package com.serranoie.android.core.data.mappers
 
+import com.serranoie.android.core.data.remote.dto.AnalyzedInstructionDto
+import com.serranoie.android.core.data.remote.dto.EquipmentDto
 import com.serranoie.android.core.data.remote.dto.ExtendedIngredientDto
+import com.serranoie.android.core.data.remote.dto.IngredientDto
+import com.serranoie.android.core.data.remote.dto.LengthDto
 import com.serranoie.android.core.data.remote.dto.MeasuresDto
 import com.serranoie.android.core.data.remote.dto.MetricDto
-import com.serranoie.android.core.data.remote.dto.ProductMatcheDto
 import com.serranoie.android.core.data.remote.dto.RecipeDto
+import com.serranoie.android.core.data.remote.dto.StepDto
 import com.serranoie.android.core.data.remote.dto.UsDto
-import com.serranoie.android.core.data.remote.dto.WinePairingDto
+import com.serranoie.android.core.domain.model.recipe.AnalyzedInstruction
+import com.serranoie.android.core.domain.model.recipe.Equipment
 import com.serranoie.android.core.domain.model.recipe.ExtendedIngredient
+import com.serranoie.android.core.domain.model.recipe.Ingredient
+import com.serranoie.android.core.domain.model.recipe.Length
 import com.serranoie.android.core.domain.model.recipe.Measures
 import com.serranoie.android.core.domain.model.recipe.Metric
-import com.serranoie.android.core.domain.model.recipe.ProductMatche
 import com.serranoie.android.core.domain.model.recipe.Recipe
+import com.serranoie.android.core.domain.model.recipe.Step
 import com.serranoie.android.core.domain.model.recipe.Us
-import com.serranoie.android.core.domain.model.recipe.WinePairing
 
 fun RecipeDto.toDomain(): Recipe {
     return Recipe(
-        analyzedInstructions = analyzedInstructions,
+        aggregateLikes = aggregateLikes,
+        analyzedInstructions = analyzedInstructions?.map { it?.toDomain() },
         cheap = cheap,
         cookingMinutes = cookingMinutes,
         creditsText = creditsText,
@@ -33,10 +40,9 @@ fun RecipeDto.toDomain(): Recipe {
         image = image,
         imageType = imageType,
         instructions = instructions,
-        ketogenic = ketogenic,
-        license = license,
         lowFodmap = lowFodmap,
         occasions = occasions,
+        originalId = originalId,
         preparationMinutes = preparationMinutes,
         pricePerServing = pricePerServing,
         readyInMinutes = readyInMinutes,
@@ -52,9 +58,49 @@ fun RecipeDto.toDomain(): Recipe {
         vegetarian = vegetarian,
         veryHealthy = veryHealthy,
         veryPopular = veryPopular,
-        weightWatcherSmartPoints = weightWatcherSmartPoints,
-        whole30 = whole30,
-        winePairing = winePairing?.toDomain()
+        weightWatcherSmartPoints = weightWatcherSmartPoints
+    )
+}
+
+fun AnalyzedInstructionDto.toDomain(): AnalyzedInstruction {
+    return AnalyzedInstruction(
+        name = name,
+        steps = steps?.map { it?.toDomain() }
+    )
+}
+
+fun StepDto.toDomain(): Step {
+    return Step(
+        equipment = equipment?.map { it?.toDomain() },
+        ingredients = ingredients?.map { it?.toDomain() },
+        number = number,
+        step = step,
+        length = length?.toDomain()
+    )
+}
+
+fun EquipmentDto.toDomain(): Equipment {
+    return Equipment(
+        id = id,
+        image = image,
+        localizedName = localizedName,
+        name = name
+    )
+}
+
+fun IngredientDto.toDomain(): Ingredient {
+    return Ingredient(
+        id = id,
+        image = image,
+        localizedName = localizedName,
+        name = name
+    )
+}
+
+fun LengthDto.toDomain(): Length {
+    return Length(
+        number = number,
+        unit = unit
     )
 }
 
@@ -68,6 +114,7 @@ fun ExtendedIngredientDto.toDomain(): ExtendedIngredient {
         measures = measures?.toDomain(),
         meta = meta,
         name = name,
+        nameClean = nameClean,
         original = original,
         originalName = originalName,
         unit = unit
@@ -94,27 +141,5 @@ fun UsDto.toDomain(): Us {
         amount = amount,
         unitLong = unitLong,
         unitShort = unitShort
-    )
-}
-
-fun WinePairingDto.toDomain(): WinePairing {
-    return WinePairing(
-        pairedWines = pairedWines,
-        pairingText = pairingText,
-        productMatches = productMatches?.map { it?.toDomain() }
-    )
-}
-
-fun ProductMatcheDto.toDomain(): ProductMatche {
-    return ProductMatche(
-        averageRating = averageRating,
-        description = description,
-        id = id,
-        imageUrl = imageUrl,
-        link = link,
-        price = price,
-        ratingCount = ratingCount,
-        score = score,
-        title = title
     )
 }

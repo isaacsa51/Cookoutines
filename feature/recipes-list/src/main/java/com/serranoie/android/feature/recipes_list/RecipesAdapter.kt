@@ -4,13 +4,15 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
+import coil.transform.CircleCropTransformation
 import com.serranoie.android.core.domain.model.recipe.Recipe
-import com.serranoie.android.feature.recipes_list.databinding.ItemReciptBinding
+import com.serranoie.android.feature.recipes_list.databinding.ItemRecipeBinding
 
 class RecipesAdapter : ListAdapter<Recipe, RecipesAdapter.RecipeViewHolder>(RecipeDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipeViewHolder {
-        val binding = ItemReciptBinding.inflate(
+        val binding = ItemRecipeBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false
@@ -23,22 +25,18 @@ class RecipesAdapter : ListAdapter<Recipe, RecipesAdapter.RecipeViewHolder>(Reci
         holder.bind(recipe)
     }
 
-    class RecipeViewHolder(private val binding: ItemReciptBinding) :
+    class RecipeViewHolder(private val binding: ItemRecipeBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(recipe: Recipe) {
-            // Bind the data with the view (e.g., title, description, etc.)
             binding.recipeTitleTextView.text = recipe.title
-            binding.recipeDescriptionTextView.text = recipe.summary
+            binding.authorTextView.text = recipe.creditsText
 
-            // Load image if available
-            // You can use libraries like Glide or Coil to load images
-
-            // Coil example:
-//            binding.recipeImageView.load(recipe.imageUrl) {
-//                placeholder(R.drawable.placeholder_image) // Optional placeholder
-//                error(R.drawable.error_image) // Optional error image
-//            }
+            binding.recipeImageView.load(recipe.image) {
+                crossfade(true)
+                placeholder(R.drawable.placeholder_image) // Optional placeholder
+                error(R.drawable.placeholder_image) // Optional error image
+            }
 
             // Optional: Handle click events
             binding.root.setOnClickListener {

@@ -1,4 +1,5 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
     <style name="Cookoutines.Base" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="colorPrimary">@color/md_theme_primary</item>
         <item name="colorOnPrimary">@color/md_theme_onPrimary</item>
@@ -48,7 +49,110 @@
         <item name="colorSurfaceContainerHighest">@color/md_theme_surfaceContainerHighest</item>
     </style>
 
-    <attr name="colorPrimary" format="color"/>
+    <style name="DisplayLarge" parent="TextAppearance.Material3.DisplayLarge">
+        <item name="fontFamily">@font/quattrocentosans_bold</item>
+        <item name="android:textSize">57sp</item>
+        <item name="android:lineHeight" tools:ignore="NewApi">64sp</item>
+        <item name="android:letterSpacing">-0.005</item>
+    </style>
+
+    <style name="DisplayMedium" parent="TextAppearance.Material3.DisplayMedium">
+        <item name="fontFamily">@font/quattrocentosans_bold</item>
+        <item name="android:textSize">45sp</item>
+        <item name="android:lineHeight" tools:ignore="NewApi">52sp</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
+
+    <style name="DisplaySmall" parent="TextAppearance.Material3.DisplaySmall">
+        <item name="fontFamily">@font/quattrocentosans_bold</item>
+        <item name="android:textSize">36sp</item>
+        <item name="android:lineHeight" tools:ignore="NewApi">44sp</item>
+        <item name="android:letterSpacing">0.005</item>
+    </style>
+
+    <style name="HeadlineLarge" parent="TextAppearance.Material3.HeadlineLarge">
+        <item name="fontFamily">@font/quattrocentosans_bold</item>
+        <item name="android:textSize">32sp</item>
+        <item name="android:lineHeight" tools:ignore="NewApi">40sp</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
+
+    <style name="HeadlineMedium" parent="TextAppearance.Material3.HeadlineMedium">
+        <item name="fontFamily">@font/quattrocentosans_bold</item>
+        <item name="android:textSize">28sp</item>
+        <item name="android:lineHeight" tools:ignore="NewApi">36sp</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
+
+    <style name="HeadlineSmall" parent="TextAppearance.Material3.HeadlineSmall">
+        <item name="fontFamily">@font/quattrocentosans_bold</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:lineHeight" tools:ignore="NewApi">32sp</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
+
+    <style name="TitleLarge" parent="TextAppearance.Material3.TitleLarge">
+        <item name="fontFamily">@font/quattrocentosans_bold</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:lineHeight" tools:ignore="NewApi">28sp</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
+
+    <style name="TitleMedium" parent="TextAppearance.Material3.TitleMedium">
+        <item name="fontFamily">@font/quattrocentosans_bold</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:lineHeight" tools:ignore="NewApi">24sp</item>
+        <item name="android:letterSpacing">0.005</item>
+    </style>
+
+    <style name="TitleSmall" parent="TextAppearance.Material3.TitleSmall">
+        <item name="fontFamily">@font/quattrocentosans_bold</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:lineHeight" tools:ignore="NewApi">20sp</item>
+        <item name="android:letterSpacing">0.01</item>
+    </style>
+
+    <style name="BodyLarge" parent="TextAppearance.Material3.BodyLarge">
+        <item name="fontFamily">@font/quattrocento_regular</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:lineHeight" tools:ignore="NewApi">24sp</item>
+        <item name="android:letterSpacing">0.005</item>
+    </style>
+
+    <style name="BodyMedium" parent="TextAppearance.Material3.BodyMedium">
+        <item name="fontFamily">@font/quattrocento_regular</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:lineHeight" tools:ignore="NewApi">20sp</item>
+        <item name="android:letterSpacing">0.01</item>
+    </style>
+
+    <style name="BodySmall" parent="TextAppearance.Material3.BodySmall">
+        <item name="fontFamily">@font/quattrocento_regular</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:lineHeight" tools:ignore="NewApi" >16sp</item>
+        <item name="android:letterSpacing">0.02</item>
+    </style>
+
+    <style name="LabelLarge" parent="TextAppearance.Material3.LabelLarge">
+        <item name="fontFamily">@font/quattrocento_regular</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:lineHeight" tools:ignore="NewApi">20sp</item>
+        <item name="android:letterSpacing">0.01</item>
+    </style>
+
+    <style name="LabelMedium" parent="TextAppearance.Material3.LabelMedium">
+        <item name="fontFamily">@font/quattrocento_regular</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:lineHeight" tools:ignore="NewApi">16sp</item>
+        <item name="android:letterSpacing">0.02</item>
+    </style>
+
+    <style name="LabelSmall" parent="TextAppearance.Material3.LabelSmall">
+        <item name="fontFamily">@font/quattrocento_regular</item>
+        <item name="android:textSize">11sp</item>
+        <item name="android:lineHeight" tools:ignore="NewApi">16sp</item>
+        <item name="android:letterSpacing">0.03</item>
+    </style>
 
     <style name="Cookoutines.Component.Button" parent="Widget.Material3.Button">
         <item name="cornerRadius">10dp</item>
@@ -57,5 +161,25 @@
         <item name="android:textColor">?attr/colorSurfaceInverse</item>
         <item name="backgroundTint">?attr/colorPrimaryContainer</item>
         <item name="colorControlHighlight">?attr/colorSurfaceBright</item>
+    </style>
+
+    <style name="Cookoutines.Component.FilterChip" parent="Widget.Material3.Chip.Assist">
+        <item name="chipStrokeWidth">0dp</item>
+        <item name="chipBackgroundColor">@drawable/chip_background</item>
+    </style>
+
+    <style name="Cookoutines.Component.RatingChip" parent="Widget.Material3.Chip.Assist">
+        <item name="chipStrokeWidth">0dp</item>
+        <item name="chipBackgroundColor">@drawable/rating_chip_background</item>
+    </style>
+
+    <style name="Cookoutines.Component.Card" parent="Widget.Material3.CardView.Outlined">
+        <item name="strokeWidth">0dp</item>
+        <item name="android:strokeWidth">0</item>
+    </style>
+
+    <style name="RoundedImageView" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">8dp</item>
     </style>
 </resources>

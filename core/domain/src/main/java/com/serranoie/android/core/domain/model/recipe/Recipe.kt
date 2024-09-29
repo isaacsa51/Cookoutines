@@ -1,9 +1,10 @@
 package com.serranoie.android.core.domain.model.recipe
 
 data class Recipe(
-    val analyzedInstructions: List<Any?>?,
+    val aggregateLikes: Int?,
+    val analyzedInstructions: List<AnalyzedInstruction?>?,
     val cheap: Boolean?,
-    val cookingMinutes: Int?,
+    val cookingMinutes: Any?,
     val creditsText: String?,
     val cuisines: List<Any?>?,
     val dairyFree: Boolean?,
@@ -12,16 +13,15 @@ data class Recipe(
     val extendedIngredients: List<ExtendedIngredient?>?,
     val gaps: String?,
     val glutenFree: Boolean?,
-    val healthScore: Double?,
+    val healthScore: Int?,
     val id: Int?,
     val image: String?,
     val imageType: String?,
     val instructions: String?,
-    val ketogenic: Boolean?,
-    val license: String?,
     val lowFodmap: Boolean?,
     val occasions: List<Any?>?,
-    val preparationMinutes: Int?,
+    val originalId: Any?,
+    val preparationMinutes: Any?,
     val pricePerServing: Double?,
     val readyInMinutes: Int?,
     val servings: Int?,
@@ -36,7 +36,5 @@ data class Recipe(
     val vegetarian: Boolean?,
     val veryHealthy: Boolean?,
     val veryPopular: Boolean?,
-    val weightWatcherSmartPoints: Int?,
-    val whole30: Boolean?,
-    val winePairing: WinePairing?
+    val weightWatcherSmartPoints: Int?
 )

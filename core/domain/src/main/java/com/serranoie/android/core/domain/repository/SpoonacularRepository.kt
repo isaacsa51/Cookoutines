@@ -1,8 +1,8 @@
 package com.serranoie.android.core.domain.repository
 
 import com.serranoie.android.core.domain.model.recipe.Recipe
-import com.serranoie.android.core.domain.result.Result
+import com.serranoie.android.core.domain.result.DataResult
 
 interface SpoonacularRepository {
-    suspend fun getRandomRecipes(): Result<List<Recipe>>
+    suspend fun getRandomRecipes(): DataResult<List<Recipe>>
 }

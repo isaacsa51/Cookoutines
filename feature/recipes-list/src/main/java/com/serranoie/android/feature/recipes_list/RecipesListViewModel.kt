@@ -1,8 +1,10 @@
 package com.serranoie.android.feature.recipes_list
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.serranoie.android.core.domain.model.recipe.Recipe
+import com.serranoie.android.core.domain.result.DataResult
 import com.serranoie.android.feature.recipes_list.domain.usecase.GetRandomRecipesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -18,8 +20,8 @@ class RecipesListViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _recipesState =
-        MutableStateFlow<com.serranoie.android.core.domain.result.Result<List<Recipe>>>(com.serranoie.android.core.domain.result.Result.Loading)
-    val recipesState: StateFlow<com.serranoie.android.core.domain.result.Result<List<Recipe>>> =
+        MutableStateFlow<DataResult<List<Recipe>>>(DataResult.Loading)
+    val recipesState: StateFlow<DataResult<List<Recipe>>> =
         _recipesState
 
     init {
@@ -27,14 +29,14 @@ class RecipesListViewModel @Inject constructor(
     }
 
     private fun loadRecipes() {
-
-
         viewModelScope.launch {
-            _recipesState.value = com.serranoie.android.core.domain.result.Result.Loading
+            _recipesState.value = DataResult.Loading
 
             val result = withContext(Dispatchers.IO) {
                 getRecipesUseCase()
             }
+
+            Log.d("RecipesListViewModel", "loadRecipes: $result")
 
             _recipesState.value = result
         }
