@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.serranoie.android.feature.recipes_list.databinding.FragmentRecipesListBinding
+import com.serranoie.android.feature.recipes_list.trending.TrendingAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -20,6 +21,7 @@ class RecipesListFragment : Fragment() {
 
     private val viewModel: RecipesListViewModel by viewModels()
     private lateinit var recipesAdapter: RecipesAdapter
+    private lateinit var trendingAdapter: TrendingAdapter
 
 
     override fun onCreateView(
@@ -45,6 +47,12 @@ class RecipesListFragment : Fragment() {
             adapter = recipesAdapter
             layoutManager = LinearLayoutManager(context)
         }
+
+        trendingAdapter = TrendingAdapter()
+        binding.trendingRecyclerView.apply {
+            adapter = trendingAdapter
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        }
     }
 
     private fun setupObservers() {
@@ -56,6 +64,7 @@ class RecipesListFragment : Fragment() {
                         binding.progressBar.isVisible = false
                         binding.errorTextView.isVisible = false
                         recipesAdapter.submitList(result.data)
+                        trendingAdapter.submitList(result.data)
                     }
 
                     is com.serranoie.android.core.domain.result.DataResult.Error -> {

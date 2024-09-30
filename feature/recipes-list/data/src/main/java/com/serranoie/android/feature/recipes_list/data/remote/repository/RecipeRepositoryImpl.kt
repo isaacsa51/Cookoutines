@@ -6,7 +6,7 @@ import com.serranoie.android.core.domain.model.recipe.Recipe
 import com.serranoie.android.core.domain.repository.SpoonacularRepository
 import com.serranoie.android.core.domain.result.DataResult
 
-class RandomRecipesRepositoryImpl(private val api: SpoonacularApi): SpoonacularRepository {
+class RecipeRepositoryImpl(private val api: SpoonacularApi): SpoonacularRepository {
 
     override suspend fun getRandomRecipes(): DataResult<List<Recipe>> {
         return try {
@@ -21,6 +21,10 @@ class RandomRecipesRepositoryImpl(private val api: SpoonacularApi): SpoonacularR
         } catch (e: Exception) {
             DataResult.Error(e)
         }
+    }
+
+    override suspend fun getTrendingRecipes(): DataResult<List<Recipe>> {
+        TODO("Not yet implemented")
     }
 
 }

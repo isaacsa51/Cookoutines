@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import coil.transform.CircleCropTransformation
 import com.serranoie.android.core.domain.model.recipe.Recipe
 import com.serranoie.android.feature.recipes_list.databinding.ItemRecipeBinding
 
@@ -34,8 +33,9 @@ class RecipesAdapter : ListAdapter<Recipe, RecipesAdapter.RecipeViewHolder>(Reci
 
             binding.recipeImageView.load(recipe.image) {
                 crossfade(true)
-                placeholder(R.drawable.placeholder_image) // Optional placeholder
-                error(R.drawable.placeholder_image) // Optional error image
+                crossfade(500)
+                placeholder(R.drawable.placeholder_image)
+                error(R.drawable.placeholder_image)
             }
 
             // Optional: Handle click events

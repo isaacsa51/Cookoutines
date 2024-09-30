@@ -22,13 +22,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:elevation="0dp"
-                app:title="Welcome Back!" />
+                app:titleTextAppearance="@style/Cookoutines.Component.MediumAppBar"
+                app:title="Find the best recipes for cooking!"/>
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
@@ -56,13 +58,30 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
+            <TextView
+                android:id="@+id/labelTrending"
+                style="@style/TitleLarge"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingVertical="8dp"
+                android:text="Trending recipes"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/searchTextInputLayout" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/trendingRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/labelTrending" />
+
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/cuisinesChipGroup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/searchTextInputLayout"
+                app:layout_constraintTop_toBottomOf="@id/trendingRecyclerView"
                 app:singleLine="true">
 
                 <com.google.android.material.chip.Chip
@@ -99,12 +118,24 @@
 
             </com.google.android.material.chip.ChipGroup>
 
+            <TextView
+                android:id="@+id/labelLatestText"
+                style="@style/TitleLarge"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingVertical="8dp"
+                android:text="Latest recipes"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cuisinesChipGroup" />
+
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recipesRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cuisinesChipGroup" />
+                app:layout_constraintTop_toBottomOf="@id/labelLatestText" />
 
             <ProgressBar
                 android:id="@+id/progressBar"
