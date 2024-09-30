@@ -16,7 +16,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RecipesListViewModel @Inject constructor(
-    private val getRecipesUseCase: GetRandomRecipesUseCase
+    private val getRecipesUseCase: GetRandomRecipesUseCase,
+    private val getRandomRecipesUseCase: GetRandomRecipesUseCase
 ) : ViewModel() {
 
     private val _recipesState =
@@ -24,8 +25,24 @@ class RecipesListViewModel @Inject constructor(
     val recipesState: StateFlow<DataResult<List<Recipe>>> =
         _recipesState
 
+    private val _trendingRecipesState =
+        MutableStateFlow<DataResult<List<Recipe>>>(DataResult.Loading)
+    val trendingRecipesState: StateFlow<DataResult<List<Recipe>>> =
+        _trendingRecipesState
+
     init {
         loadRecipes()
+        loadTrendingRecipes()
+    }
+
+    private fun loadTrendingRecipes() {
+        viewModelScope.launch {
+            _trendingRecipesState.value = DataResult.Loading
+            val result = withContext(Dispatchers.IO) {
+                getRandomRecipesUseCase()
+            }
+            _trendingRecipesState.value = result
+        }
     }
 
     private fun loadRecipes() {
@@ -35,9 +52,6 @@ class RecipesListViewModel @Inject constructor(
             val result = withContext(Dispatchers.IO) {
                 getRecipesUseCase()
             }
-
-            Log.d("RecipesListViewModel", "loadRecipes: $result")
-
             _recipesState.value = result
         }
     }

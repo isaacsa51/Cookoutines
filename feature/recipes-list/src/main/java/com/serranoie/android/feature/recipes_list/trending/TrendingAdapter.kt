@@ -24,7 +24,7 @@ class TrendingAdapter : ListAdapter<Recipe, TrendingAdapter.TrendingViewHolder>(
         return TrendingViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: TrendingAdapter.TrendingViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: TrendingViewHolder, position: Int) {
         val recipe = getItem(position)
         holder.bind(recipe)
     }
@@ -34,6 +34,7 @@ class TrendingAdapter : ListAdapter<Recipe, TrendingAdapter.TrendingViewHolder>(
         fun bind(recipe: Recipe) {
 
             binding.trendingTitleRecipe.text = recipe.title
+            binding.authorTextView.text = recipe.creditsText
 
             binding.imageTrendingRecipe.load(recipe.image) {
                 crossfade(true)

@@ -9,9 +9,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.serranoie.android.core.domain.result.DataResult
 import com.serranoie.android.feature.recipes_list.databinding.FragmentRecipesListBinding
 import com.serranoie.android.feature.recipes_list.trending.TrendingAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class RecipesListFragment : Fragment() {
@@ -32,8 +34,28 @@ class RecipesListFragment : Fragment() {
 
         setupUi()
         setupObservers()
+        setupPopularAdapter()
 
         return binding.root
+    }
+
+    private fun setupPopularAdapter() {
+        lifecycleScope.launch {
+            viewModel.trendingRecipesState.collect { result ->
+                when (result) {
+                    is DataResult.Success -> {
+                        trendingAdapter.submitList(result.data)
+                    }
+
+                    is DataResult.Error -> {
+                        binding.errorTextView.text = result.exception.message ?: "Unknown error"
+                    }
+
+                    is DataResult.Loading -> {
+                    }
+                }
+            }
+        }
     }
 
     override fun onDestroyView() {
@@ -56,25 +78,24 @@ class RecipesListFragment : Fragment() {
     }
 
     private fun setupObservers() {
-        lifecycleScope.launchWhenStarted {
+        lifecycleScope.launch {
             viewModel.recipesState.collect { result ->
                 when (result) {
-                    is com.serranoie.android.core.domain.result.DataResult.Success -> {
-                        // Hide loading/error views and show data
+                    is DataResult.Success -> {
                         binding.progressBar.isVisible = false
                         binding.errorTextView.isVisible = false
                         recipesAdapter.submitList(result.data)
                         trendingAdapter.submitList(result.data)
                     }
 
-                    is com.serranoie.android.core.domain.result.DataResult.Error -> {
+                    is DataResult.Error -> {
                         // Show error message and hide RecyclerView
                         binding.progressBar.isVisible = false
                         binding.errorTextView.isVisible = true
                         binding.errorTextView.text = result.exception.message ?: "Unknown error"
                     }
 
-                    is com.serranoie.android.core.domain.result.DataResult.Loading -> {
+                    is DataResult.Loading -> {
                         // Show loading view and hide data/error
                         binding.progressBar.isVisible = true
                         binding.errorTextView.isVisible = false
