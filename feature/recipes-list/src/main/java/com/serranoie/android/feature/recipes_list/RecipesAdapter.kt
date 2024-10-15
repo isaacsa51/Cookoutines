@@ -2,6 +2,9 @@ package com.serranoie.android.feature.recipes_list
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.net.toUri
+import androidx.navigation.NavDeepLinkRequest
+import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
@@ -9,7 +12,6 @@ import com.serranoie.android.core.domain.model.recipe.Recipe
 import com.serranoie.android.feature.recipes_list.databinding.ItemRecipeBinding
 
 class RecipesAdapter : ListAdapter<Recipe, RecipesAdapter.RecipeViewHolder>(RecipeDiffCallback()) {
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipeViewHolder {
         val binding = ItemRecipeBinding.inflate(
             LayoutInflater.from(parent.context),
@@ -38,10 +40,12 @@ class RecipesAdapter : ListAdapter<Recipe, RecipesAdapter.RecipeViewHolder>(Reci
                 error(R.drawable.placeholder_image)
             }
 
-            // Optional: Handle click events
             binding.root.setOnClickListener {
-                // Handle item click
-                // You can trigger callbacks or navigation here
+                val recipeId = recipe.id
+                val request = NavDeepLinkRequest.Builder
+                    .fromUri("cookoutines://instructions/${recipeId?.toString()}".toUri())
+                    .build()
+                findNavController(this.itemView).navigate(request)
             }
         }
     }

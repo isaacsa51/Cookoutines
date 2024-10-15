@@ -1,4 +1,4 @@
-package com.serranoie.android.feature.recipes_list.data.remote.repository
+package com.serranoie.android.core.data.remote.repository
 
 import com.serranoie.android.core.data.mappers.toDomain
 import com.serranoie.android.core.data.remote.SpoonacularApi
@@ -29,6 +29,22 @@ class RecipeRepositoryImpl(private val api: SpoonacularApi) : SpoonacularReposit
             if (response.isSuccessful) {
                 val recipes = response.body()?.recipes?.map { it.toDomain() }
                 DataResult.Success(recipes ?: emptyList())
+            } else {
+                DataResult.Error(Exception("API request failed"))
+            }
+        } catch (e: Exception) {
+            DataResult.Error(e)
+        }
+    }
+
+    override suspend fun getRecipeById(id: Int): DataResult<Recipe> {
+        return try {
+            val response = api.getRecipeDetails(id).execute()
+
+            if (response.isSuccessful) {
+                val recipe = response.body()
+
+                DataResult.Success(recipe!!)
             } else {
                 DataResult.Error(Exception("API request failed"))
             }

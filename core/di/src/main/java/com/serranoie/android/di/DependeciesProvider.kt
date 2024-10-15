@@ -1,7 +1,8 @@
 package com.serranoie.android.di
 
 import com.serranoie.android.core.data.remote.SpoonacularApi
-import com.serranoie.android.feature.recipes_list.data.remote.repository.RecipeRepositoryImpl
+import com.serranoie.android.core.data.remote.repository.RecipeRepositoryImpl
+import com.serranoie.android.feature.instructions.domain.usecase.GetRecipeByIdUseCase
 import com.serranoie.android.feature.recipes_list.domain.usecase.GetPopularRecipesUseCase
 import com.serranoie.android.feature.recipes_list.domain.usecase.GetRandomRecipesUseCase
 import dagger.Module
@@ -64,6 +65,12 @@ object DependenciesProvider {
     @Singleton
     fun providesPopularRecipesUseCase(repository: RecipeRepositoryImpl): GetPopularRecipesUseCase {
         return GetPopularRecipesUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetRecipeByIdUseCase(repository: RecipeRepositoryImpl): GetRecipeByIdUseCase {
+        return GetRecipeByIdUseCase(repository)
     }
 
     @Provides

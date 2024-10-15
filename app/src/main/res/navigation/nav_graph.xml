@@ -8,16 +8,22 @@
     <fragment
         android:id="@+id/onboardingFragment"
         android:name="com.serranoie.android.feature.onboarding.OnboardingFragment"
-        android:label="OnboardingFragment" >
-        <deepLink
-            app:uri="cookoutines://onboarding"/>
+        android:label="OnboardingFragment">
+        <deepLink app:uri="cookoutines://onboarding" />
     </fragment>
 
     <fragment
         android:id="@+id/recipesListFragment"
         android:name="com.serranoie.android.feature.recipes_list.RecipesListFragment"
         android:label="RecipesListFragment">
+        <deepLink app:uri="cookoutines://recipes" />
+    </fragment>
+    <fragment
+        android:id="@+id/instructionsRecipeFragment"
+        android:name="com.serranoie.android.feature.instructions.InstructionsRecipeFragment"
+        android:label="InstructionsRecipeFragment">
         <deepLink
-            app:uri="cookoutines://recipes"/>
+            app:argType="integer"
+            app:uri="cookoutines://instructions/{recipeId}" />
     </fragment>
 </navigation>

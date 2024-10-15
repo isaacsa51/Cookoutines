@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.serranoie.android.core.data"
+    namespace = "com.serranoie.android.feature.instructions.data"
     compileSdk = 34
 
     defaultConfig {
@@ -24,35 +24,22 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
     kotlinOptions {
-        jvmTarget = "17"
+        jvmTarget = "11"
     }
 }
 
 dependencies {
 
-    implementation(project(":core:domain"))
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
-    implementation(project(":feature:instructions:data"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
-    // Retrofit
-    implementation(libs.retrofit)
-    implementation(libs.okhttp)
-    implementation(libs.sandwich.retrofit)
-
-    // Gson
     implementation(libs.gson)
-    implementation(libs.converter.gson)
-
-    //Datastore
-    implementation(libs.androidx.datastore.preferences)
 }

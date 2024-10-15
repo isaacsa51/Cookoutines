@@ -39,25 +39,6 @@ class RecipesListFragment : Fragment() {
         return binding.root
     }
 
-    private fun setupPopularAdapter() {
-        lifecycleScope.launch {
-            viewModel.trendingRecipesState.collect { result ->
-                when (result) {
-                    is DataResult.Success -> {
-                        trendingAdapter.submitList(result.data)
-                    }
-
-                    is DataResult.Error -> {
-                        binding.errorTextView.text = result.exception.message ?: "Unknown error"
-                    }
-
-                    is DataResult.Loading -> {
-                    }
-                }
-            }
-        }
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
@@ -77,6 +58,25 @@ class RecipesListFragment : Fragment() {
         }
     }
 
+    private fun setupPopularAdapter() {
+        lifecycleScope.launch {
+            viewModel.trendingRecipesState.collect { result ->
+                when (result) {
+                    is DataResult.Success -> {
+                        trendingAdapter.submitList(result.data)
+                    }
+
+                    is DataResult.Error -> {
+                        binding.errorTextView.text = result.exception.message ?: "Unknown error"
+                    }
+
+                    is DataResult.Loading -> {
+                    }
+                }
+            }
+        }
+    }
+
     private fun setupObservers() {
         lifecycleScope.launch {
             viewModel.recipesState.collect { result ->
@@ -85,7 +85,6 @@ class RecipesListFragment : Fragment() {
                         binding.progressBar.isVisible = false
                         binding.errorTextView.isVisible = false
                         recipesAdapter.submitList(result.data)
-                        trendingAdapter.submitList(result.data)
                     }
 
                     is DataResult.Error -> {

@@ -22,7 +22,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:elevation="0dp"
-                app:title="Find the best recipes for cooking!"
+                app:title="Welcome back!"
                 app:titleTextAppearance="@style/Cookoutines.Component.MediumAppBar" />
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
