@@ -5,9 +5,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import coil.load
+import com.google.android.material.tabs.TabLayoutMediator
 import com.serranoie.android.core.domain.result.DataResult
 import com.serranoie.android.feature.instructions.databinding.FragmentInstructionsRecipeBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -15,10 +19,6 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class InstructionsRecipeFragment : Fragment() {
-
-    companion object {
-        fun newInstance() = InstructionsRecipeFragment()
-    }
 
     private val viewModel: InstructionsRecipeViewModel by viewModels()
 
@@ -32,10 +32,7 @@ class InstructionsRecipeFragment : Fragment() {
         val recipeId = recipeIdString?.toIntOrNull()
 
         if (recipeId != null) {
-            Log.d("InstructionsRecipeFragment", "Recipe ID: $recipeId")
-            viewModel.getCurrentRecipe(recipeId) // Trigger data fetching
-        } else {
-            // Handle case where recipeId is not available (e.g., show error)
+            viewModel.getCurrentRecipe(recipeId)
         }
     }
 
@@ -55,7 +52,20 @@ class InstructionsRecipeFragment : Fragment() {
 
                     is DataResult.Success -> {
                         binding.circularLoader.visibility = View.GONE
-                        Log.d("InstructionsRecipeFragment", "Recipe Data: ${state.data}")
+
+                        Log.d("InstructionsRecipeFragment", "Success: ${state.data.title}")
+                        binding.collapsingToolbarLayout.title = state.data.title
+
+                        binding.summaryInfo.text = HtmlCompat.fromHtml(
+                            state.data.summary.toString(),
+                            HtmlCompat.FROM_HTML_MODE_LEGACY
+                        )
+                        binding.recipeImageView.load(state.data.image) {
+                            crossfade(true)
+                            crossfade(500)
+                            placeholder(R.drawable.placeholder_image)
+                            error(R.drawable.placeholder_image)
+                        }
                     }
 
                     is DataResult.Error -> {
@@ -67,6 +77,21 @@ class InstructionsRecipeFragment : Fragment() {
         }
 
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val tabTitles = listOf("Ingredient", "Direction")
+        val pagerAdapter = RecipePagerAdapter(this)
+        binding.viewPager.adapter = pagerAdapter
+
+        TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
+            val customView = LayoutInflater.from(requireContext())
+                .inflate(R.layout.tab_item_buttom, null) as TextView
+            customView.text = tabTitles[position]
+            tab.customView = customView
+        }.attach()
     }
 
     override fun onDestroyView() {

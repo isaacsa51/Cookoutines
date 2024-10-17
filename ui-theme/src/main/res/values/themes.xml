@@ -167,6 +167,23 @@
         <item name="colorControlHighlight">?attr/colorSurfaceBright</item>
     </style>
 
+    <style name="Cookoutines.Component.TabLayout" parent="Widget.Material3.TabLayout">
+        <item name="cornerRadius">10dp</item>
+        <item name="android:fontFamily">@font/quattrocentosans_bold</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">?attr/colorOnTertiary</item>
+        <item name="backgroundTint">?attr/colorTertiary</item>
+        <item name="colorControlHighlight">?attr/colorTertiaryFixed</item>
+        <item name="materialThemeOverlay">@style/ThemeOverlay.App.TabLayout</item>
+        <item name="tabTextAppearance">@style/LabelLarge</item>
+    </style>
+
+    <style name="ThemeOverlay.App.TabLayout" parent="">
+<!--        <item name="colorPrimary">@color/shrine_pink_900</item>-->
+<!--        <item name="colorSurface">@color/shrine_pink_light</item>-->
+<!--        <item name="colorOnSurface">@color/shrine_pink_900</item>-->
+    </style>
+
     <style name="Cookoutines.Component.FilterChip" parent="Widget.Material3.Chip.Assist">
         <item name="chipStrokeWidth">0dp</item>
         <item name="chipBackgroundColor">@drawable/chip_background</item>
@@ -185,5 +202,18 @@
     <style name="RoundedImageView" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">8dp</item>
+    </style>
+
+    <style name="Cookoutines.Component.ExtendedFloatingActionButton" parent="Widget.Material3.ExtendedFloatingActionButton.Icon.Primary">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.App.FloatingActionButton</item>
+    </style>
+
+    <style name="Widget.App.FloatingActionButton" parent="Widget.Material3.FloatingActionButton.Primary">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.App.FloatingActionButton</item>
+    </style>
+
+    <style name="ThemeOverlay.App.FloatingActionButton" parent="">
+        <item name="colorContainer">?attr/colorSecondaryContainer</item>
+        <item name="colorOnContainer">?attr/colorOnSecondaryContainer</item>
     </style>
 </resources>
