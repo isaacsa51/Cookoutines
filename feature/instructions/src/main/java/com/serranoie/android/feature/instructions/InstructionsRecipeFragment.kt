@@ -5,15 +5,15 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import coil.load
-import com.google.android.material.tabs.TabLayoutMediator
 import com.serranoie.android.core.domain.result.DataResult
 import com.serranoie.android.feature.instructions.databinding.FragmentInstructionsRecipeBinding
+import com.serranoie.android.feature.instructions.directions.DirectionsFragment
+import com.serranoie.android.feature.instructions.ingredients.IngredientsFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -82,16 +82,25 @@ class InstructionsRecipeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val tabTitles = listOf("Ingredient", "Direction")
-        val pagerAdapter = RecipePagerAdapter(this)
-        binding.viewPager.adapter = pagerAdapter
+        childFragmentManager.beginTransaction()
+            .replace(R.id.fragmentContainer, IngredientsFragment())
+            .commit()
 
-        TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
-            val customView = LayoutInflater.from(requireContext())
-                .inflate(R.layout.tab_item_buttom, null) as TextView
-            customView.text = tabTitles[position]
-            tab.customView = customView
-        }.attach()
+        binding.radioGroupTabs.setOnCheckedChangeListener { _, checkedId ->
+            when (checkedId) {
+                R.id.radioIngredients -> {
+                    childFragmentManager.beginTransaction()
+                        .replace(R.id.fragmentContainer, IngredientsFragment())
+                        .commit()
+                }
+
+                R.id.radioDirections -> {
+                    childFragmentManager.beginTransaction()
+                        .replace(R.id.fragmentContainer, DirectionsFragment())
+                        .commit()
+                }
+            }
+        }
     }
 
     override fun onDestroyView() {
