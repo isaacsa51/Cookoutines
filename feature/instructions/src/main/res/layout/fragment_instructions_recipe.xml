@@ -156,30 +156,77 @@
                 android:id="@+id/radioGroupTabs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
                 android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"
+                android:paddingBottom="16dp"
+                android:gravity="center_horizontal"
                 android:orientation="horizontal"
-
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-
                 app:layout_constraintTop_toBottomOf="@id/summaryInfo">
 
                 <RadioButton
                     android:id="@+id/radioIngredients"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:background="@drawable/tab_background"
+                    android:button="@android:color/transparent"
                     android:checked="true"
-                    android:text="Ingredients" />
+                    android:gravity="center"
+                    android:layout_marginEnd="32dp"
+                    android:paddingLeft="16dp"
+                    android:paddingTop="3dp"
+                    android:paddingRight="16dp"
+                    android:paddingBottom="3dp"
+                    android:text="Ingredients"
+                    android:textColor="?attr/colorOnSurface" />
 
                 <RadioButton
                     android:id="@+id/radioDirections"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Directions" />
+                    android:background="@drawable/tab_background"
+                    android:button="@android:color/transparent"
+                    android:gravity="center"
+                    android:layout_marginStart="32dp"
+                    android:paddingLeft="16dp"
+                    android:paddingTop="3dp"
+                    android:paddingRight="16dp"
+                    android:paddingBottom="3dp"
+                    android:text="Instructions"
+                    android:textColor="?attr/colorOnSurface" />
 
             </RadioGroup>
+
+<!--            <RadioGroup-->
+<!--                android:id="@+id/radioGroupTabs"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="16dp"-->
+<!--                android:orientation="horizontal"-->
+
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+
+<!--                app:layout_constraintTop_toBottomOf="@id/summaryInfo">-->
+
+<!--                <RadioButton-->
+<!--                    android:id="@+id/radioIngredients"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:checked="true"-->
+<!--                    android:text="Ingredients" />-->
+
+<!--                <RadioButton-->
+<!--                    android:id="@+id/radioDirections"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:text="Directions" />-->
+
+<!--            </RadioGroup>-->
 
             <FrameLayout
                 android:id="@+id/fragmentContainer"
