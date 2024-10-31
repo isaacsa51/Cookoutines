@@ -1,13 +1,16 @@
 package com.serranoie.android.di
 
+import android.content.Context
 import com.serranoie.android.core.data.remote.SpoonacularApi
 import com.serranoie.android.core.data.remote.repository.RecipeRepositoryImpl
+import com.serranoie.android.data.local.persistence.DataStoreManager
 import com.serranoie.android.feature.instructions.domain.usecase.GetRecipeByIdUseCase
 import com.serranoie.android.feature.recipes_list.domain.usecase.GetPopularRecipesUseCase
 import com.serranoie.android.feature.recipes_list.domain.usecase.GetRandomRecipesUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -53,6 +56,12 @@ object DependenciesProvider {
     @Singleton
     fun provideApiService(retrofit: Retrofit): SpoonacularApi {
         return retrofit.create(SpoonacularApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideDataStoreManager(@ApplicationContext context: Context): DataStoreManager {
+        return DataStoreManager(context)
     }
 
     @Provides

@@ -10,7 +10,10 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.NavDeepLinkRequest
 import androidx.navigation.fragment.findNavController
 import com.serranoie.android.feature.onboarding.databinding.FragmentOnboardingBinding
+import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.internal.Contexts.getApplication
 
+@AndroidEntryPoint
 class OnboardingFragment : Fragment() {
 
     private var _binding: FragmentOnboardingBinding? = null
@@ -37,6 +40,8 @@ class OnboardingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.btnStart.setOnClickListener {
+            viewModel.setOnboardingCompleted()
+
             val request = NavDeepLinkRequest.Builder
                 .fromUri("cookoutines://recipes".toUri())
                 .build()

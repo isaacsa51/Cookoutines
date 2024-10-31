@@ -20,6 +20,8 @@
             <option value="$PROJECT_DIR$/feature/instructions/data" />
             <option value="$PROJECT_DIR$/feature/instructions/domain" />
             <option value="$PROJECT_DIR$/feature/onboarding" />
+            <option value="$PROJECT_DIR$/feature/onboarding/data" />
+            <option value="$PROJECT_DIR$/feature/onboarding/domain" />
             <option value="$PROJECT_DIR$/feature/recipes-list" />
             <option value="$PROJECT_DIR$/feature/recipes-list/data" />
             <option value="$PROJECT_DIR$/feature/recipes-list/domain" />

@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.serranoie.android.feature.onboarding"
+    namespace = "com.serranoie.android.data"
     compileSdk = 34
 
     defaultConfig {
@@ -24,40 +24,24 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
     kotlinOptions {
-        jvmTarget = "17"
-    }
-    buildFeatures {
-        viewBinding = true
-        buildConfig = true
+        jvmTarget = "11"
     }
 }
 
 dependencies {
 
-    implementation(project(":ui-theme"))
-    implementation(project(":core:domain"))
-    implementation(project(":core:di"))
-    implementation(project(":feature:onboarding:data"))
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
-    implementation(libs.androidx.legacy.support.v4)
-    implementation(libs.androidx.lifecycle.livedata.ktx)
-    implementation(libs.androidx.lifecycle.viewmodel.ktx)
-    implementation(libs.androidx.fragment.ktx)
     implementation(libs.hilt.android)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
-    // DataStore
+    //Datastore
     implementation(libs.androidx.datastore.preferences)
-
-    implementation(libs.androidx.navigation.fragment)
-    implementation(libs.androidx.navigation.fragment.ktx)
 }

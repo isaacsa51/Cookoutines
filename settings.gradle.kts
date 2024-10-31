@@ -20,6 +20,7 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "Cookoutines"
+
 include(":app")
 include(":core:data")
 include(":feature")
@@ -30,6 +31,8 @@ include(":feature:recipes-list:data")
 include(":feature:recipes-list:domain")
 include(":ui-theme")
 include(":feature:onboarding")
+include(":feature:onboarding:data")
+include(":feature:onboarding:domain")
 include(":feature:instructions")
 include(":feature:instructions:domain")
 include(":feature:instructions:data")

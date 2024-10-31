@@ -60,6 +60,7 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(project(":feature:instructions:domain"))
+    implementation(project(":feature:onboarding:data"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -82,6 +83,9 @@ dependencies {
     // Gson
     implementation(libs.gson)
     implementation(libs.converter.gson)
+
+    //Datastore
+    implementation(libs.androidx.datastore.preferences)
 }
 kapt {
     correctErrorTypes = true
