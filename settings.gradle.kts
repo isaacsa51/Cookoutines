@@ -22,14 +22,14 @@ dependencyResolutionManagement {
 rootProject.name = "Cookoutines"
 
 include(":app")
+include(":ui-theme")
+include(":core:di")
 include(":core:data")
+include(":core:domain")
 include(":feature")
 include(":feature:recipes-list")
-include(":core:di")
-include(":core:domain")
 include(":feature:recipes-list:data")
 include(":feature:recipes-list:domain")
-include(":ui-theme")
 include(":feature:onboarding")
 include(":feature:onboarding:data")
 include(":feature:onboarding:domain")

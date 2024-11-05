@@ -40,7 +40,6 @@ dependencies {
 
     implementation(project(":ui-theme"))
     implementation(project(":core:domain"))
-    implementation(project(":core:di"))
     implementation(project(":feature:onboarding:data"))
 
     implementation(libs.androidx.core.ktx)

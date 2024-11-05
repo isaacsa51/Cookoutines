@@ -1,22 +1,24 @@
 package com.serranoie.android.feature.onboarding
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.serranoie.android.data.local.persistence.DataStoreManager
-import dagger.hilt.android.internal.Contexts.getApplication
+import com.serranoie.android.feature.onboarding.domain.GetOnboardingStatusUseCase
+import com.serranoie.android.feature.onboarding.domain.SetOnboardingCompletedUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class OnboardingViewModel @Inject constructor(
-    private val dataStoreManager: DataStoreManager
+    getOnboardingStatusUseCase: GetOnboardingStatusUseCase,
+    private val setOnboardingCompletedUseCase: SetOnboardingCompletedUseCase
 ) : ViewModel() {
+    val onboardingCompleted: Flow<Boolean> = getOnboardingStatusUseCase()
+
     fun setOnboardingCompleted() {
         viewModelScope.launch {
-
+            setOnboardingCompletedUseCase(true)
         }
     }
 }

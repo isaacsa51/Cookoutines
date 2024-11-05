@@ -5,6 +5,9 @@ import com.serranoie.android.core.data.remote.SpoonacularApi
 import com.serranoie.android.core.data.remote.repository.RecipeRepositoryImpl
 import com.serranoie.android.data.local.persistence.DataStoreManager
 import com.serranoie.android.feature.instructions.domain.usecase.GetRecipeByIdUseCase
+import com.serranoie.android.feature.onboarding.OnboardingViewModelFactory
+import com.serranoie.android.feature.onboarding.domain.GetOnboardingStatusUseCase
+import com.serranoie.android.feature.onboarding.domain.SetOnboardingCompletedUseCase
 import com.serranoie.android.feature.recipes_list.domain.usecase.GetPopularRecipesUseCase
 import com.serranoie.android.feature.recipes_list.domain.usecase.GetRandomRecipesUseCase
 import dagger.Module
@@ -65,6 +68,14 @@ object DependenciesProvider {
     }
 
     @Provides
+    fun provideOnboardingViewModelFactory(
+        getOnboardingUseCase: GetOnboardingStatusUseCase,
+        saveOnboardingUseCase: SetOnboardingCompletedUseCase
+    ): OnboardingViewModelFactory {
+        return OnboardingViewModelFactory(getOnboardingUseCase, saveOnboardingUseCase)
+    }
+
+    @Provides
     @Singleton
     fun providesRandomRecipesUseCase(repository: RecipeRepositoryImpl): GetRandomRecipesUseCase {
         return GetRandomRecipesUseCase(repository)
@@ -86,5 +97,17 @@ object DependenciesProvider {
     @Singleton
     fun provideRecipeRepositoryImpl(apiService: SpoonacularApi): RecipeRepositoryImpl {
         return RecipeRepositoryImpl(apiService)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetOnboardingStatusUseCase(dataStoreManager: DataStoreManager): GetOnboardingStatusUseCase {
+        return GetOnboardingStatusUseCase(dataStoreManager)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSetOnboardingCompletedUseCase(dataStoreManager: DataStoreManager): SetOnboardingCompletedUseCase {
+        return SetOnboardingCompletedUseCase(dataStoreManager)
     }
 }

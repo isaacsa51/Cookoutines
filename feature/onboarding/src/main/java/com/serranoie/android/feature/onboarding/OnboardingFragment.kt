@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import com.serranoie.android.feature.onboarding.databinding.FragmentOnboardingBinding
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.internal.Contexts.getApplication
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class OnboardingFragment : Fragment() {
@@ -19,13 +20,10 @@ class OnboardingFragment : Fragment() {
     private var _binding: FragmentOnboardingBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: OnboardingViewModel by viewModels()
+    @Inject
+    lateinit var onboardingViewModelFactory: OnboardingViewModelFactory
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        // TODO: Use the ViewModel
-    }
+    private val viewModel: OnboardingViewModel by viewModels { onboardingViewModelFactory }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
