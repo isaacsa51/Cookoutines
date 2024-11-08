@@ -56,7 +56,9 @@ dependencies {
     implementation(project(":feature:recipes-list:domain"))
     implementation(project(":feature:recipes-list:data"))
     implementation(project(":feature:instructions:domain"))
+    implementation(project(":feature:onboarding"))
     implementation(project(":feature:onboarding:data"))
+    implementation(project(":feature:onboarding:domain"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

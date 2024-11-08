@@ -1,6 +1,9 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
+
+    id("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -41,6 +44,7 @@ dependencies {
     implementation(project(":ui-theme"))
     implementation(project(":core:domain"))
     implementation(project(":feature:onboarding:data"))
+    implementation(project(":feature:onboarding:domain"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
@@ -59,4 +63,14 @@ dependencies {
 
     implementation(libs.androidx.navigation.fragment)
     implementation(libs.androidx.navigation.fragment.ktx)
+
+    // Hilt
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.compiler)
+    androidTestImplementation(libs.hilt.android.testing)
+    kaptTest(libs.hilt.android.compiler)
+}
+
+kapt {
+    correctErrorTypes = true
 }

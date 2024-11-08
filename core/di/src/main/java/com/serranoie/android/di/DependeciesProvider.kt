@@ -5,7 +5,6 @@ import com.serranoie.android.core.data.remote.SpoonacularApi
 import com.serranoie.android.core.data.remote.repository.RecipeRepositoryImpl
 import com.serranoie.android.data.local.persistence.DataStoreManager
 import com.serranoie.android.feature.instructions.domain.usecase.GetRecipeByIdUseCase
-import com.serranoie.android.feature.onboarding.OnboardingViewModelFactory
 import com.serranoie.android.feature.onboarding.domain.GetOnboardingStatusUseCase
 import com.serranoie.android.feature.onboarding.domain.SetOnboardingCompletedUseCase
 import com.serranoie.android.feature.recipes_list.domain.usecase.GetPopularRecipesUseCase
@@ -65,14 +64,6 @@ object DependenciesProvider {
     @Singleton
     fun provideDataStoreManager(@ApplicationContext context: Context): DataStoreManager {
         return DataStoreManager(context)
-    }
-
-    @Provides
-    fun provideOnboardingViewModelFactory(
-        getOnboardingUseCase: GetOnboardingStatusUseCase,
-        saveOnboardingUseCase: SetOnboardingCompletedUseCase
-    ): OnboardingViewModelFactory {
-        return OnboardingViewModelFactory(getOnboardingUseCase, saveOnboardingUseCase)
     }
 
     @Provides

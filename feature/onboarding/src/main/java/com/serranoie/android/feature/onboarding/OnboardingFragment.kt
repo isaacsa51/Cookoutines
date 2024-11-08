@@ -7,23 +7,19 @@ import android.view.ViewGroup
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavDeepLinkRequest
 import androidx.navigation.fragment.findNavController
 import com.serranoie.android.feature.onboarding.databinding.FragmentOnboardingBinding
 import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.internal.Contexts.getApplication
-import javax.inject.Inject
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class OnboardingFragment : Fragment() {
+    private val viewModel: OnboardingViewModel by viewModels()
 
     private var _binding: FragmentOnboardingBinding? = null
     private val binding get() = _binding!!
-
-    @Inject
-    lateinit var onboardingViewModelFactory: OnboardingViewModelFactory
-
-    private val viewModel: OnboardingViewModel by viewModels { onboardingViewModelFactory }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,13 +33,17 @@ class OnboardingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.btnStart.setOnClickListener {
-            viewModel.setOnboardingCompleted()
+        lifecycleScope.launchWhenStarted {
+            viewModel.onboardingCompleted.collect { completed ->
+                binding.btnStart.setOnClickListener {
+                    viewModel.setOnboardingCompleted()
 
-            val request = NavDeepLinkRequest.Builder
-                .fromUri("cookoutines://recipes".toUri())
-                .build()
-            findNavController().navigate(request)
+                    val request = NavDeepLinkRequest.Builder
+                        .fromUri("cookoutines://recipes".toUri())
+                        .build()
+                    findNavController().navigate(request)
+                }
+            }
         }
     }
 
