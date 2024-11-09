@@ -1,8 +1,11 @@
 package com.serranoie.android.core.data.remote.repository
 
+import android.util.Log
 import com.serranoie.android.core.data.mappers.toDomain
+import com.serranoie.android.core.data.mappers.toListDomain
 import com.serranoie.android.core.data.remote.SpoonacularApi
 import com.serranoie.android.core.domain.model.recipe.Recipe
+import com.serranoie.android.core.domain.model.search.RecipeSearch
 import com.serranoie.android.core.domain.repository.SpoonacularRepository
 import com.serranoie.android.core.domain.result.DataResult
 
@@ -47,6 +50,24 @@ class RecipeRepositoryImpl(private val api: SpoonacularApi) : SpoonacularReposit
                 DataResult.Success(recipe!!)
             } else {
                 DataResult.Error(Exception("API request failed"))
+            }
+        } catch (e: Exception) {
+            DataResult.Error(e)
+        }
+    }
+
+    override suspend fun searchRecipes(query: String): DataResult<List<RecipeSearch>> {
+        return try {
+            val response = api.searchRecipes(query).execute()
+
+            if (response.isSuccessful) {
+                val recipes = response.body()?.toListDomain()
+
+                Log.d("REPOSITORY", recipes.toString())
+                DataResult.Success(recipes ?: emptyList())
+            } else {
+                Log.d("REPOSITORY", response.message())
+                DataResult.Error(Exception("API request failed: ${response.message()}"))
             }
         } catch (e: Exception) {
             DataResult.Error(e)

@@ -10,6 +10,8 @@ import com.serranoie.android.core.data.remote.dto.MetricDto
 import com.serranoie.android.core.data.remote.dto.RecipeDto
 import com.serranoie.android.core.data.remote.dto.StepDto
 import com.serranoie.android.core.data.remote.dto.UsDto
+import com.serranoie.android.core.data.remote.dto.search.RecipeSearchDto
+import com.serranoie.android.core.data.remote.dto.search.ResultDto
 import com.serranoie.android.core.domain.model.recipe.AnalyzedInstruction
 import com.serranoie.android.core.domain.model.recipe.Equipment
 import com.serranoie.android.core.domain.model.recipe.ExtendedIngredient
@@ -20,6 +22,8 @@ import com.serranoie.android.core.domain.model.recipe.Metric
 import com.serranoie.android.core.domain.model.recipe.Recipe
 import com.serranoie.android.core.domain.model.recipe.Step
 import com.serranoie.android.core.domain.model.recipe.Us
+import com.serranoie.android.core.domain.model.search.RecipeSearch
+import com.serranoie.android.core.domain.model.search.Result
 
 fun RecipeDto.toDomain(): Recipe {
     return Recipe(
@@ -142,4 +146,35 @@ fun UsDto.toDomain(): Us {
         unitLong = unitLong,
         unitShort = unitShort
     )
+}
+
+fun RecipeSearchDto.toDomain(): RecipeSearch {
+    return RecipeSearch(
+        number = number,
+        offset = offset,
+        results = results?.map { it?.toDomain() },
+        totalResults = totalResults
+    )
+}
+
+fun ResultDto.toDomain(): Result {
+    return Result(
+        id = id,
+        image = image,
+        imageType = imageType,
+        title = title
+    )
+}
+
+fun RecipeSearchDto.toListDomain(): List<RecipeSearch> {
+    return results?.mapNotNull { resultDto ->
+        resultDto?.let {
+            RecipeSearch(
+                number,
+                offset,
+                listOf(it.toDomain()),
+                totalResults
+            )
+        }
+    } ?: emptyList()
 }

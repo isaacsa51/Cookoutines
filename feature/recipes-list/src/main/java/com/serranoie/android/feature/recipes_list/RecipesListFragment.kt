@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -35,13 +36,9 @@ class RecipesListFragment : Fragment() {
         setupUi()
         setupObservers()
         setupPopularAdapter()
+        setupSearchObserver()
 
         return binding.root
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     private fun setupUi() {
@@ -56,6 +53,22 @@ class RecipesListFragment : Fragment() {
             adapter = trendingAdapter
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         }
+
+        // Set up the search icon click as before
+        binding.searchTextInputLayout.setEndIconOnClickListener {
+            submitSearchQuery()
+        }
+
+// Listen for "Done" action in the keyboard
+        binding.searchTextInputLayout.editText?.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                submitSearchQuery()
+                true  // Return true to indicate the event was handled
+            } else {
+                false
+            }
+        }
+
     }
 
     private fun setupPopularAdapter() {
@@ -88,19 +101,54 @@ class RecipesListFragment : Fragment() {
                     }
 
                     is DataResult.Error -> {
-                        // Show error message and hide RecyclerView
                         binding.progressBar.isVisible = false
                         binding.errorTextView.isVisible = true
                         binding.errorTextView.text = result.exception.message ?: "Unknown error"
                     }
 
                     is DataResult.Loading -> {
-                        // Show loading view and hide data/error
                         binding.progressBar.isVisible = true
                         binding.errorTextView.isVisible = false
                     }
                 }
             }
         }
+    }
+
+    private fun setupSearchObserver() {
+        lifecycleScope.launch {
+            viewModel.searchResultsState.collect { result ->
+                when (result) {
+                    is DataResult.Success -> {
+                        binding.progressBar.isVisible = false
+                        binding.errorTextView.isVisible = false
+                        recipesAdapter.submitList(result.data)
+                    }
+
+                    is DataResult.Error -> {
+                        binding.progressBar.isVisible = false
+                        binding.errorTextView.isVisible = true
+                        binding.errorTextView.text = result.exception.message ?: "Unknown error"
+                    }
+
+                    is DataResult.Loading -> {
+                        binding.progressBar.isVisible = true
+                        binding.errorTextView.isVisible = false
+                    }
+                }
+            }
+        }
+    }
+
+    private fun submitSearchQuery() {
+        val query = binding.searchTextInputLayout.editText?.text.toString()
+        if (query.isNotBlank()) {
+            viewModel.searchRecipes(query)
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

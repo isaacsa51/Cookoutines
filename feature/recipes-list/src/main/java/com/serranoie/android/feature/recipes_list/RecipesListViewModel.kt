@@ -4,8 +4,10 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.serranoie.android.core.domain.model.recipe.Recipe
+import com.serranoie.android.core.domain.model.search.RecipeSearch
 import com.serranoie.android.core.domain.result.DataResult
 import com.serranoie.android.feature.recipes_list.domain.usecase.GetRandomRecipesUseCase
+import com.serranoie.android.feature.recipes_list.domain.usecase.SearchRecipeUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,7 +19,8 @@ import javax.inject.Inject
 @HiltViewModel
 class RecipesListViewModel @Inject constructor(
     private val getRecipesUseCase: GetRandomRecipesUseCase,
-    private val getRandomRecipesUseCase: GetRandomRecipesUseCase
+    private val getRandomRecipesUseCase: GetRandomRecipesUseCase,
+    private val searchRecipesUseCase: SearchRecipeUseCase
 ) : ViewModel() {
 
     private val _recipesState =
@@ -29,6 +32,9 @@ class RecipesListViewModel @Inject constructor(
         MutableStateFlow<DataResult<List<Recipe>>>(DataResult.Loading)
     val trendingRecipesState: StateFlow<DataResult<List<Recipe>>> =
         _trendingRecipesState
+
+    private val _searchResultsState = MutableStateFlow<DataResult<List<RecipeSearch>>>(DataResult.Loading)
+    val searchResultsState: StateFlow<DataResult<List<RecipeSearch>>> = _searchResultsState
 
     init {
         loadRecipes()
@@ -53,6 +59,18 @@ class RecipesListViewModel @Inject constructor(
                 getRecipesUseCase()
             }
             _recipesState.value = result
+        }
+    }
+
+    fun searchRecipes(query: String) {
+        viewModelScope.launch {
+            _searchResultsState.value = DataResult.Loading
+            val result = withContext(Dispatchers.IO) {
+                searchRecipesUseCase(query)
+            }
+            _searchResultsState.value = result
+
+            Log.d("ISAAC", "Search results: $result")
         }
     }
 }

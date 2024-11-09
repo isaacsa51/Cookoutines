@@ -9,6 +9,7 @@ import com.serranoie.android.feature.onboarding.domain.GetOnboardingStatusUseCas
 import com.serranoie.android.feature.onboarding.domain.SetOnboardingCompletedUseCase
 import com.serranoie.android.feature.recipes_list.domain.usecase.GetPopularRecipesUseCase
 import com.serranoie.android.feature.recipes_list.domain.usecase.GetRandomRecipesUseCase
+import com.serranoie.android.feature.recipes_list.domain.usecase.SearchRecipeUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -100,5 +101,11 @@ object DependenciesProvider {
     @Singleton
     fun provideSetOnboardingCompletedUseCase(dataStoreManager: DataStoreManager): SetOnboardingCompletedUseCase {
         return SetOnboardingCompletedUseCase(dataStoreManager)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSearchRecipeUseCAse(repository: RecipeRepositoryImpl): SearchRecipeUseCase {
+        return SearchRecipeUseCase(repository)
     }
 }
