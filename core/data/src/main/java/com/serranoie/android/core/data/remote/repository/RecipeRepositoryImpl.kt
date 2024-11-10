@@ -6,6 +6,7 @@ import com.serranoie.android.core.data.mappers.toListDomain
 import com.serranoie.android.core.data.remote.SpoonacularApi
 import com.serranoie.android.core.domain.model.recipe.Recipe
 import com.serranoie.android.core.domain.model.search.RecipeSearch
+import com.serranoie.android.core.domain.model.search.Result
 import com.serranoie.android.core.domain.repository.SpoonacularRepository
 import com.serranoie.android.core.domain.result.DataResult
 
@@ -56,7 +57,7 @@ class RecipeRepositoryImpl(private val api: SpoonacularApi) : SpoonacularReposit
         }
     }
 
-    override suspend fun searchRecipes(query: String): DataResult<List<RecipeSearch>> {
+    override suspend fun searchRecipes(query: String): DataResult<List<Result>> {
         return try {
             val response = api.searchRecipes(query).execute()
 

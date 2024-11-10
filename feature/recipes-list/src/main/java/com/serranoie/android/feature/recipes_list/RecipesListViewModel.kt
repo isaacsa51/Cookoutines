@@ -1,10 +1,8 @@
 package com.serranoie.android.feature.recipes_list
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.serranoie.android.core.domain.model.recipe.Recipe
-import com.serranoie.android.core.domain.model.search.RecipeSearch
 import com.serranoie.android.core.domain.result.DataResult
 import com.serranoie.android.feature.recipes_list.domain.usecase.GetRandomRecipesUseCase
 import com.serranoie.android.feature.recipes_list.domain.usecase.SearchRecipeUseCase
@@ -33,8 +31,12 @@ class RecipesListViewModel @Inject constructor(
     val trendingRecipesState: StateFlow<DataResult<List<Recipe>>> =
         _trendingRecipesState
 
-    private val _searchResultsState = MutableStateFlow<DataResult<List<RecipeSearch>>>(DataResult.Loading)
-    val searchResultsState: StateFlow<DataResult<List<RecipeSearch>>> = _searchResultsState
+    private val _searchResultsState =
+        MutableStateFlow<DataResult<List<com.serranoie.android.core.domain.model.search.Result>>>(
+            DataResult.Loading
+        )
+    val searchResultsState: StateFlow<DataResult<List<com.serranoie.android.core.domain.model.search.Result>>> =
+        _searchResultsState
 
     init {
         loadRecipes()
@@ -69,8 +71,16 @@ class RecipesListViewModel @Inject constructor(
                 searchRecipesUseCase(query)
             }
             _searchResultsState.value = result
+        }
+    }
 
-            Log.d("ISAAC", "Search results: $result")
+    fun resetToRandomRecipes() {
+        viewModelScope.launch {
+            _recipesState.value = DataResult.Loading
+            val result = withContext(Dispatchers.IO) {
+                getRecipesUseCase()
+            }
+            _recipesState.value = result
         }
     }
 }

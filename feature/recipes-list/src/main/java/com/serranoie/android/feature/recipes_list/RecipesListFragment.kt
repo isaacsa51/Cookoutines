@@ -1,6 +1,8 @@
 package com.serranoie.android.feature.recipes_list
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -36,7 +38,7 @@ class RecipesListFragment : Fragment() {
         setupUi()
         setupObservers()
         setupPopularAdapter()
-        setupSearchObserver()
+        setupTrendingAdapter()
 
         return binding.root
     }
@@ -54,21 +56,41 @@ class RecipesListFragment : Fragment() {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         }
 
-        // Set up the search icon click as before
         binding.searchTextInputLayout.setEndIconOnClickListener {
             submitSearchQuery()
         }
 
-// Listen for "Done" action in the keyboard
         binding.searchTextInputLayout.editText?.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 submitSearchQuery()
-                true  // Return true to indicate the event was handled
+                true
             } else {
                 false
             }
         }
 
+        binding.searchTextInputLayout.editText?.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                if (s.isNullOrEmpty()) {
+                    viewModel.resetToRandomRecipes()
+                }
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
+    }
+
+    private fun setupTrendingAdapter() {
+        lifecycleScope.launch {
+            viewModel.trendingRecipesState.collect { result ->
+                when (result) {
+                    is DataResult.Success -> trendingAdapter.submitList(result.data)
+                    is DataResult.Error -> binding.errorTextView.text = result.exception.message ?: "Unknown error"
+                    is DataResult.Loading -> {}
+                }
+            }
+        }
     }
 
     private fun setupPopularAdapter() {
@@ -113,9 +135,7 @@ class RecipesListFragment : Fragment() {
                 }
             }
         }
-    }
 
-    private fun setupSearchObserver() {
         lifecycleScope.launch {
             viewModel.searchResultsState.collect { result ->
                 when (result) {
@@ -139,6 +159,7 @@ class RecipesListFragment : Fragment() {
             }
         }
     }
+
 
     private fun submitSearchQuery() {
         val query = binding.searchTextInputLayout.editText?.text.toString()

@@ -5,35 +5,71 @@ import android.view.ViewGroup
 import androidx.core.net.toUri
 import androidx.navigation.NavDeepLinkRequest
 import androidx.navigation.Navigation.findNavController
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.serranoie.android.core.domain.model.recipe.Recipe
+import com.serranoie.android.core.domain.model.search.Result
 import com.serranoie.android.feature.recipes_list.databinding.ItemRecipeBinding
 
-class RecipesAdapter : ListAdapter<Recipe, RecipesAdapter.RecipeViewHolder>(RecipeDiffCallback()) {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipeViewHolder {
-        val binding = ItemRecipeBinding.inflate(
-            LayoutInflater.from(parent.context),
-            parent,
-            false
-        )
-        return RecipeViewHolder(binding)
+class RecipesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    private val items = mutableListOf<Any>()
+
+    override fun getItemViewType(position: Int): Int {
+        return when (items[position]) {
+            is Recipe -> TYPE_RECIPE
+            is Result -> TYPE_RECIPE_SEARCH
+            else -> throw IllegalArgumentException("Unknown type")
+        }
     }
 
-    override fun onBindViewHolder(holder: RecipeViewHolder, position: Int) {
-        val recipe = getItem(position)
-        holder.bind(recipe)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return when (viewType) {
+            TYPE_RECIPE -> {
+                val binding =
+                    ItemRecipeBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                RecipeViewHolder(binding)
+            }
+
+            TYPE_RECIPE_SEARCH -> {
+                val binding =
+                    ItemRecipeBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                RecipeSearchViewHolder(binding)
+            }
+
+            else -> throw IllegalArgumentException("Unknown view type")
+        }
     }
 
-    class RecipeViewHolder(private val binding: ItemRecipeBinding) :
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        when (holder) {
+            is RecipeViewHolder -> {
+                val recipe = items[position] as Recipe
+                holder.bind(recipe)
+            }
+
+            is RecipeSearchViewHolder -> {
+                val recipeSearch = items[position] as Result
+                holder.bind(recipeSearch)
+            }
+        }
+    }
+
+    override fun getItemCount(): Int = items.size
+
+    fun submitList(newItems: List<Any>) {
+        items.clear()
+        items.addAll(newItems)
+        notifyDataSetChanged()
+    }
+
+    inner class RecipeSearchViewHolder(private val binding: ItemRecipeBinding) :
         RecyclerView.ViewHolder(binding.root) {
+        fun bind(data: Result) {
+            binding.recipeTitleTextView.text = data.title
+            binding.authorTextView.text = ""
 
-        fun bind(recipe: Recipe) {
-            binding.recipeTitleTextView.text = recipe.title
-            binding.authorTextView.text = recipe.creditsText
-
-            binding.recipeImageView.load(recipe.image) {
+            binding.recipeImageView.load(data.image) {
                 crossfade(true)
                 crossfade(500)
                 placeholder(R.drawable.placeholder_image)
@@ -41,12 +77,41 @@ class RecipesAdapter : ListAdapter<Recipe, RecipesAdapter.RecipeViewHolder>(Reci
             }
 
             binding.root.setOnClickListener {
-                val recipeId = recipe.id
+                val recipeId = data.id
                 val request = NavDeepLinkRequest.Builder
                     .fromUri("cookoutines://instructions/${recipeId?.toString()}".toUri())
                     .build()
                 findNavController(this.itemView).navigate(request)
             }
         }
+    }
+
+    inner class RecipeViewHolder(private val binding: ItemRecipeBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(data: Recipe) {
+            binding.recipeTitleTextView.text = data.title
+            binding.authorTextView.text = data.creditsText
+
+            binding.recipeImageView.load(data.image) {
+                crossfade(true)
+                crossfade(500)
+                placeholder(R.drawable.placeholder_image)
+                error(R.drawable.placeholder_image)
+            }
+
+            binding.root.setOnClickListener {
+                val recipeId = data.id
+                val request = NavDeepLinkRequest.Builder
+                    .fromUri("cookoutines://instructions/${recipeId?.toString()}".toUri())
+                    .build()
+                findNavController(this.itemView).navigate(request)
+            }
+        }
+    }
+
+    companion object {
+        private const val TYPE_RECIPE = 0
+        private const val TYPE_RECIPE_SEARCH = 1
     }
 }

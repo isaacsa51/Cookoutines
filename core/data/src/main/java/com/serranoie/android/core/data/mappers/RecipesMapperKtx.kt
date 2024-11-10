@@ -178,3 +178,14 @@ fun RecipeSearchDto.toListDomain(): List<RecipeSearch> {
         }
     } ?: emptyList()
 }
+
+fun ResultDto.toListDomain() : List<Result> {
+    return listOf(
+        Result(
+            id,
+            image,
+            imageType,
+            title,
+        )
+    )
+}
