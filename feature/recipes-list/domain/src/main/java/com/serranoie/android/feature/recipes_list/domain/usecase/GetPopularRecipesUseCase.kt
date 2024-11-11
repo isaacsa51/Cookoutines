@@ -6,7 +6,6 @@ import com.serranoie.android.core.domain.result.DataResult
 
 class GetPopularRecipesUseCase(private val repository: SpoonacularRepository) {
     suspend operator fun invoke(): DataResult<List<Result>> {
-        println("POPULAR USECASE: ${repository.getPopularRecipes()}")
         return repository.getPopularRecipes()
     }
 

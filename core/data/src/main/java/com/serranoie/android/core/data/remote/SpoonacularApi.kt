@@ -25,5 +25,5 @@ interface SpoonacularApi {
         @Query("query") query: String,
         @Query("maxFat") maxFat: Int? = null,
         @Query("number") number: Int = 10
-    ): Call<ResultDto>
+    ): Call<RecipeSearchDto>
 }
