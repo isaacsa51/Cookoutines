@@ -7,7 +7,7 @@ import com.serranoie.android.core.domain.result.DataResult
 
 interface SpoonacularRepository {
     suspend fun getRandomRecipes(): DataResult<List<Recipe>>
-    suspend fun getPopularRecipes(): DataResult<List<Recipe>>
+    suspend fun getPopularRecipes(): DataResult<List<Result>>
     suspend fun getRecipeById(id: Int): DataResult<Recipe>
     suspend fun searchRecipes(query: String): DataResult<List<Result>>
 }

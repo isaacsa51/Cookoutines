@@ -19,7 +19,6 @@ class RecipeRepositoryImpl(private val api: SpoonacularApi) : SpoonacularReposit
                 val recipes = response.body()?.recipes?.map { it.toDomain() }
                 DataResult.Success(recipes ?: emptyList())
             } else {
-                // Handle error cases
                 DataResult.Error(Exception("API request failed"))
             }
         } catch (e: Exception) {
@@ -27,13 +26,19 @@ class RecipeRepositoryImpl(private val api: SpoonacularApi) : SpoonacularReposit
         }
     }
 
-    override suspend fun getPopularRecipes(): DataResult<List<Recipe>> {
+    override suspend fun getPopularRecipes(): DataResult<List<Result>> {
         return try {
             val response = api.getPopularRecipes().execute()
+
             if (response.isSuccessful) {
-                val recipes = response.body()?.recipes?.map { it.toDomain() }
-                DataResult.Success(recipes ?: emptyList())
+                val resultsDtoList = response.body()?.results.orEmpty()  // Safely get results or an empty list
+                val recipes = resultsDtoList.mapNotNull { it?.toDomain() }  // Map each ResultDto to Result, ignoring nulls
+
+                Log.d("POPULAR RESPONSE", recipes.toString())
+
+                DataResult.Success(recipes)
             } else {
+                Log.d("POPULAR ERROR", response.message().toString())
                 DataResult.Error(Exception("API request failed"))
             }
         } catch (e: Exception) {
@@ -62,6 +67,8 @@ class RecipeRepositoryImpl(private val api: SpoonacularApi) : SpoonacularReposit
             val response = api.searchRecipes(query).execute()
 
             if (response.isSuccessful) {
+                Log.d("RESPONSE", response.message())
+
                 val recipes = response.body()?.toListDomain()
 
                 Log.d("REPOSITORY", recipes.toString())

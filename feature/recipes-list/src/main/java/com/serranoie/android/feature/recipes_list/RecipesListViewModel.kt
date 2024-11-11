@@ -1,9 +1,12 @@
 package com.serranoie.android.feature.recipes_list
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.serranoie.android.core.domain.model.recipe.Recipe
+import com.serranoie.android.core.domain.model.search.Result
 import com.serranoie.android.core.domain.result.DataResult
+import com.serranoie.android.feature.recipes_list.domain.usecase.GetPopularRecipesUseCase
 import com.serranoie.android.feature.recipes_list.domain.usecase.GetRandomRecipesUseCase
 import com.serranoie.android.feature.recipes_list.domain.usecase.SearchRecipeUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,7 +20,7 @@ import javax.inject.Inject
 @HiltViewModel
 class RecipesListViewModel @Inject constructor(
     private val getRecipesUseCase: GetRandomRecipesUseCase,
-    private val getRandomRecipesUseCase: GetRandomRecipesUseCase,
+    private val getRandomRecipesUseCase: GetPopularRecipesUseCase,
     private val searchRecipesUseCase: SearchRecipeUseCase
 ) : ViewModel() {
 
@@ -27,15 +30,15 @@ class RecipesListViewModel @Inject constructor(
         _recipesState
 
     private val _trendingRecipesState =
-        MutableStateFlow<DataResult<List<Recipe>>>(DataResult.Loading)
-    val trendingRecipesState: StateFlow<DataResult<List<Recipe>>> =
+        MutableStateFlow<DataResult<List<Result>>>(DataResult.Loading)
+    val trendingRecipesState: StateFlow<DataResult<List<Result>>> =
         _trendingRecipesState
 
     private val _searchResultsState =
-        MutableStateFlow<DataResult<List<com.serranoie.android.core.domain.model.search.Result>>>(
+        MutableStateFlow<DataResult<List<Result>>>(
             DataResult.Loading
         )
-    val searchResultsState: StateFlow<DataResult<List<com.serranoie.android.core.domain.model.search.Result>>> =
+    val searchResultsState: StateFlow<DataResult<List<Result>>> =
         _searchResultsState
 
     init {
@@ -65,12 +68,16 @@ class RecipesListViewModel @Inject constructor(
     }
 
     fun searchRecipes(query: String) {
+
+        Log.d("VIEWMODEL", "searchRecipes: $query")
+
         viewModelScope.launch {
             _searchResultsState.value = DataResult.Loading
             val result = withContext(Dispatchers.IO) {
                 searchRecipesUseCase(query)
             }
             _searchResultsState.value = result
+            Log.d("VIEWMODEL", result.toString())
         }
     }
 

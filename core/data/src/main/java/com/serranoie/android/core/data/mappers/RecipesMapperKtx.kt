@@ -1,5 +1,6 @@
 package com.serranoie.android.core.data.mappers
 
+import android.util.Log
 import com.serranoie.android.core.data.remote.dto.AnalyzedInstructionDto
 import com.serranoie.android.core.data.remote.dto.EquipmentDto
 import com.serranoie.android.core.data.remote.dto.ExtendedIngredientDto
@@ -159,10 +160,10 @@ fun RecipeSearchDto.toDomain(): RecipeSearch {
 
 fun ResultDto.toDomain(): Result {
     return Result(
-        id = id,
-        image = image,
-        imageType = imageType,
-        title = title
+        id = this.id,
+        image = this.image,
+        imageType = this.imageType,
+        title = this.title
     )
 }
 
@@ -180,6 +181,9 @@ fun RecipeSearchDto.toListDomain(): List<RecipeSearch> {
 }
 
 fun ResultDto.toListDomain() : List<Result> {
+
+    Log.d("RESULT", this.toString())
+
     return listOf(
         Result(
             id,

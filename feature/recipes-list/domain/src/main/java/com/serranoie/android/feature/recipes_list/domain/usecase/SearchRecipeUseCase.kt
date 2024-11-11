@@ -6,6 +6,7 @@ import com.serranoie.android.core.domain.result.DataResult
 
 class SearchRecipeUseCase(private val repository: SpoonacularRepository) {
     suspend operator fun invoke(query: String): DataResult<List<Result>> {
+        println(repository.searchRecipes(query))
         return repository.searchRecipes(query)
     }
 }

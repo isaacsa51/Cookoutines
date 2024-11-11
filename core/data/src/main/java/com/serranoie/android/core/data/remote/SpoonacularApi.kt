@@ -14,8 +14,8 @@ interface SpoonacularApi {
     @GET("/recipes/random?number=20")
     fun getRecipes(): Call<RecipesResponseDto>
 
-    @GET("/recipes/complexSearch&sort=popularity&number=10")
-    fun getPopularRecipes(): Call<RecipesResponseDto>
+    @GET("/recipes/complexSearch?sort=popularity&number=10")
+    fun getPopularRecipes(): Call<RecipeSearchDto>
 
     @GET("/recipes/{id}/information")
     fun getRecipeDetails(@Path("id") id: Int): Call<Recipe>

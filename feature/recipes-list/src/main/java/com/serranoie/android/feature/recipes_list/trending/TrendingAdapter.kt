@@ -6,19 +6,18 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.serranoie.android.core.domain.model.recipe.Recipe
+import com.serranoie.android.core.domain.model.search.Result
 import com.serranoie.android.feature.recipes_list.R
 import com.serranoie.android.feature.recipes_list.databinding.ItemPopularRecipeBinding
 
-class TrendingAdapter : ListAdapter<Recipe, TrendingAdapter.TrendingViewHolder>(TrendingDiffCallback()) {
+class TrendingAdapter :
+    ListAdapter<Result, TrendingAdapter.TrendingViewHolder>(TrendingDiffCallback()) {
 
     override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
+        parent: ViewGroup, viewType: Int
     ): TrendingViewHolder {
         val binding = ItemPopularRecipeBinding.inflate(
-            LayoutInflater.from(parent.context),
-            parent,
-            false
+            LayoutInflater.from(parent.context), parent, false
         )
 
         return TrendingViewHolder(binding)
@@ -31,10 +30,10 @@ class TrendingAdapter : ListAdapter<Recipe, TrendingAdapter.TrendingViewHolder>(
 
     class TrendingViewHolder(private val binding: ItemPopularRecipeBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(recipe: Recipe) {
+        fun bind(recipe: Result) {
 
             binding.trendingTitleRecipe.text = recipe.title
-            binding.authorTextView.text = recipe.creditsText
+            binding.authorTextView.text = recipe.title
 
             binding.imageTrendingRecipe.load(recipe.image) {
                 crossfade(true)
