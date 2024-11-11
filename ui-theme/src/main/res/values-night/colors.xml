@@ -143,4 +143,6 @@
 
     <color name="md_theme_ratingChipContainer">#A4000000</color>
 
+    <color name="md_theme_recipeToolbarBackground">#121410</color>
+
 </resources>

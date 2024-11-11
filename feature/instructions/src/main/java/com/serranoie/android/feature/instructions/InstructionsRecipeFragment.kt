@@ -64,12 +64,23 @@ class InstructionsRecipeFragment : Fragment() {
                         binding.readyTimeInfo.text =
                             state.data.readyInMinutes.toString() + " minutes"
                         binding.servingsInfo.text = state.data.servings.toString() + " servings"
-                        binding.cuisineType.text = state.data.cuisines.toString()
+
 
                         binding.summaryInfo.text = HtmlCompat.fromHtml(
                             state.data.summary.toString(),
                             HtmlCompat.FROM_HTML_MODE_LEGACY
                         )
+
+                        if(state.data.cuisines.toString().isEmpty()) {
+                            binding.cuisineRecyclerView.visibility = View.GONE
+                        } else {
+                            val cuisineList = state.data.cuisines.toString()
+                                .removeSurrounding("[", "]")
+                                .split(", ")
+                            val cuisineAdapter = CuisineTypeAdapter(cuisineList)
+                            binding.cuisineRecyclerView.adapter = cuisineAdapter
+                        }
+
                         binding.recipeImageView.load(state.data.image) {
                             crossfade(true)
                             crossfade(500)

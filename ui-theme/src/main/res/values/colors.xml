@@ -142,4 +142,6 @@
     <color name="md_theme_surfaceContainerHighest_highContrast">#E3E3DC</color>
 
     <color name="md_theme_ratingChipContainer">#A4000000</color>
+
+    <color name="md_theme_recipeToolbarBackground">#D1CFC8</color>
 </resources>

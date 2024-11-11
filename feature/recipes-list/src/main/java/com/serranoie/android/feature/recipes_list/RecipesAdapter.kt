@@ -69,6 +69,7 @@ class RecipesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         fun bind(data: Result) {
             binding.recipeTitleTextView.text = data.title
             binding.authorTextView.isVisible = false
+            binding.labelCredits.isVisible = false
 
             binding.recipeImageView.load(data.image) {
                 crossfade(true)

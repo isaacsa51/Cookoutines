@@ -28,7 +28,7 @@ class TrendingAdapter :
         holder.bind(recipe)
     }
 
-    class TrendingViewHolder(private val binding: ItemPopularRecipeBinding) :
+    inner class TrendingViewHolder(private val binding: ItemPopularRecipeBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(recipe: Result) {
 

@@ -174,24 +174,20 @@
         <item name="android:textColor">?attr/colorOnTertiary</item>
         <item name="backgroundTint">?attr/colorTertiary</item>
         <item name="colorControlHighlight">?attr/colorTertiaryFixed</item>
-        <item name="materialThemeOverlay">@style/ThemeOverlay.App.TabLayout</item>
         <item name="tabTextAppearance">@style/LabelLarge</item>
     </style>
 
-    <style name="ThemeOverlay.App.TabLayout" parent="">
-<!--        <item name="colorPrimary">@color/shrine_pink_900</item>-->
-<!--        <item name="colorSurface">@color/shrine_pink_light</item>-->
-<!--        <item name="colorOnSurface">@color/shrine_pink_900</item>-->
-    </style>
-
-    <style name="Cookoutines.Component.FilterChip" parent="Widget.Material3.Chip.Assist">
+    <style name="Cookoutines.Component.FilterChip" parent="Widget.Material3.Chip.Filter">
         <item name="chipStrokeWidth">0dp</item>
         <item name="chipBackgroundColor">@drawable/chip_background</item>
+        <item name="android:fontFamily">@font/quattrocento_bold</item>
+        <item name="android:textAppearance">@style/TitleSmall</item>
     </style>
 
     <style name="Cookoutines.Component.RatingChip" parent="Widget.Material3.Chip.Assist">
         <item name="chipStrokeWidth">0dp</item>
         <item name="chipBackgroundColor">@drawable/rating_chip_background</item>
+        <item name="android:fontFamily">@font/quattrocento_bold</item>
     </style>
 
     <style name="Cookoutines.Component.CuisineChip" parent="">
@@ -199,7 +195,8 @@
         <item name="android:paddingBottom">8dp</item>
         <item name="android:paddingStart">16dp</item>
         <item name="android:paddingEnd">16dp</item>
-        <item name="android:textColor">?attr/colorOnPrimaryContainer</item>
+        <item name="android:textColor">?attr/colorPrimarySurface</item>
+        <item name="android:fontFamily">@font/quattrocento_bold</item>
         <item name="android:background">@drawable/cousine_chip_background</item>
     </style>
 

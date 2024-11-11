@@ -1,12 +1,15 @@
 package com.serranoie.android.feature.recipes_list
 
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -56,13 +59,18 @@ class RecipesListFragment : Fragment() {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         }
 
-        binding.searchTextInputLayout.setEndIconOnClickListener {
-            submitSearchQuery()
-        }
+//        binding.searchTextInputLayout.setEndIconOnClickListener {
+//            submitSearchQuery()
+//        }
 
-        binding.searchTextInputLayout.editText?.setOnEditorActionListener { _, actionId, _ ->
+        binding.searchTextInputLayout.editText?.setOnEditorActionListener { v, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 submitSearchQuery()
+
+                // Hide the keyboard
+                val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(binding.searchTextInputLayout.windowToken, 0)
+
                 true
             } else {
                 false
@@ -86,7 +94,9 @@ class RecipesListFragment : Fragment() {
             viewModel.trendingRecipesState.collect { result ->
                 when (result) {
                     is DataResult.Success -> trendingAdapter.submitList(result.data)
-                    is DataResult.Error -> binding.errorTextView.text = result.exception.message ?: "Unknown error"
+                    is DataResult.Error -> binding.errorTextView.text =
+                        result.exception.message ?: "Unknown error"
+
                     is DataResult.Loading -> {}
                 }
             }
@@ -138,6 +148,9 @@ class RecipesListFragment : Fragment() {
 
         lifecycleScope.launch {
             viewModel.searchResultsState.collect { result ->
+
+                Log.d("FRAGMENT", "Search result: $result")
+
                 when (result) {
                     is DataResult.Success -> {
                         binding.progressBar.isVisible = false

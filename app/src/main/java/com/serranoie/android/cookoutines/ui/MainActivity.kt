@@ -40,11 +40,11 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
 
-        lifecycleScope.launch {
-            getOnboardingStatusUseCase().collect { onboardingCompleted ->
-                setStartDestination(onboardingCompleted)
-            }
-        }
+//        lifecycleScope.launch {
+//            getOnboardingStatusUseCase().collect { onboardingCompleted ->
+//                setStartDestination(onboardingCompleted)
+//            }
+//        }
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, windowInsets ->
             val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())

@@ -68,16 +68,12 @@ class RecipesListViewModel @Inject constructor(
     }
 
     fun searchRecipes(query: String) {
-
-        Log.d("VIEWMODEL", "searchRecipes: $query")
-
         viewModelScope.launch {
             _searchResultsState.value = DataResult.Loading
             val result = withContext(Dispatchers.IO) {
                 searchRecipesUseCase(query)
             }
             _searchResultsState.value = result
-            Log.d("VIEWMODEL", result.toString())
         }
     }
 
