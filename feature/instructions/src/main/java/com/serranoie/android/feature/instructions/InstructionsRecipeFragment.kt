@@ -5,10 +5,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import coil.load
 import com.serranoie.android.core.domain.result.DataResult
 import com.serranoie.android.feature.instructions.databinding.FragmentInstructionsRecipeBinding
@@ -31,6 +33,7 @@ class InstructionsRecipeFragment : Fragment() {
         val recipeIdString = arguments?.getString("recipeId")
         val recipeId = recipeIdString?.toIntOrNull()
 
+
         if (recipeId != null) {
             viewModel.getCurrentRecipe(recipeId)
         }
@@ -43,6 +46,9 @@ class InstructionsRecipeFragment : Fragment() {
         _binding = FragmentInstructionsRecipeBinding.inflate(inflater, container, false)
         val view = binding.root
 
+        (requireActivity() as AppCompatActivity).setSupportActionBar(binding.toolbar)
+        (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.recipeState.collect { state ->
                 when (state) {
@@ -53,8 +59,12 @@ class InstructionsRecipeFragment : Fragment() {
                     is DataResult.Success -> {
                         binding.circularLoader.visibility = View.GONE
 
-                        Log.d("InstructionsRecipeFragment", "Success: ${state.data.title}")
                         binding.collapsingToolbarLayout.title = state.data.title
+
+                        binding.readyTimeInfo.text =
+                            state.data.readyInMinutes.toString() + " minutes"
+                        binding.servingsInfo.text = state.data.servings.toString() + " servings"
+                        binding.cuisineType.text = state.data.cuisines.toString()
 
                         binding.summaryInfo.text = HtmlCompat.fromHtml(
                             state.data.summary.toString(),
@@ -100,6 +110,10 @@ class InstructionsRecipeFragment : Fragment() {
                         .commit()
                 }
             }
+        }
+
+        binding.toolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
         }
     }
 

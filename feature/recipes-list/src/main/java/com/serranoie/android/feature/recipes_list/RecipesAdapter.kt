@@ -3,9 +3,11 @@ package com.serranoie.android.feature.recipes_list
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.net.toUri
+import androidx.core.view.isVisible
 import androidx.navigation.NavDeepLinkRequest
 import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import androidx.transition.Visibility
 import coil.load
 import com.serranoie.android.core.domain.model.recipe.Recipe
 import com.serranoie.android.core.domain.model.search.Result
@@ -67,7 +69,7 @@ class RecipesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         RecyclerView.ViewHolder(binding.root) {
         fun bind(data: Result) {
             binding.recipeTitleTextView.text = data.title
-            binding.authorTextView.text = ""
+            binding.authorTextView.isVisible = false
 
             binding.recipeImageView.load(data.image) {
                 crossfade(true)
