@@ -1,5 +1,7 @@
 package com.serranoie.android.core.domain.model.recipe
 
+import java.io.Serializable
+
 data class ExtendedIngredient(
     val aisle: String?,
     val amount: Double?,
@@ -13,4 +15,4 @@ data class ExtendedIngredient(
     val original: String?,
     val originalName: String?,
     val unit: String?
-)
+) : Serializable

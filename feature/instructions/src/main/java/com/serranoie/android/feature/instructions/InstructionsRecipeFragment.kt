@@ -76,6 +76,11 @@ class InstructionsRecipeFragment : Fragment() {
                             placeholder(R.drawable.placeholder_image)
                             error(R.drawable.placeholder_image)
                         }
+
+                        val ingredientsFragment = IngredientsFragment.newInstance(state.data.extendedIngredients!!)
+                        childFragmentManager.beginTransaction()
+                            .replace(R.id.fragmentContainer, ingredientsFragment)
+                            .commit()
                     }
 
                     is DataResult.Error -> {
@@ -99,8 +104,10 @@ class InstructionsRecipeFragment : Fragment() {
         binding.radioGroupTabs.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
                 R.id.radioIngredients -> {
+                    val ingredients = (viewModel.recipeState.value as? DataResult.Success)?.data?.extendedIngredients ?: emptyList()
+                    val ingredientsFragment = IngredientsFragment.newInstance(ingredients)
                     childFragmentManager.beginTransaction()
-                        .replace(R.id.fragmentContainer, IngredientsFragment())
+                        .replace(R.id.fragmentContainer, ingredientsFragment)
                         .commit()
                 }
 

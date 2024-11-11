@@ -7,7 +7,6 @@ import androidx.core.view.isVisible
 import androidx.navigation.NavDeepLinkRequest
 import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import androidx.transition.Visibility
 import coil.load
 import com.serranoie.android.core.domain.model.recipe.Recipe
 import com.serranoie.android.core.domain.model.search.Result

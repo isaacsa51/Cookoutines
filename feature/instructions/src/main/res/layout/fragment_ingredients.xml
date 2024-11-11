@@ -3,11 +3,30 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingVertical="16dp"
+    android:paddingHorizontal="8dp"
     tools:context=".ingredients.IngredientsFragment">
 
     <TextView
+        android:id="@+id/totalIngredientsLabel"
+        style="@style/TitleMedium"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Ingredients" />
+        android:layout_height="wrap_content"
+        android:paddingBottom="16dp"
+        android:text="Total ingredients: 5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/ingredientsRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/totalIngredientsLabel" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
