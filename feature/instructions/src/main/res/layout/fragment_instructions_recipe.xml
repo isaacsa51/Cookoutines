@@ -136,7 +136,7 @@
                 style="@style/TitleMedium"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:text="Summary"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -147,7 +147,8 @@
                 style="@style/BodySmall"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Summary recipe information..."
+                android:paddingTop="8dp"
+                tools:text="lorem ipsum dolor sit amet consectetur adipiscing elit qui iriure qui sed enim praesent consequat sunt deserunt dolores velit commodo mollit iriure feugait luptatum quis elit mollit non invidunt nisi"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/summaryLabel" />
