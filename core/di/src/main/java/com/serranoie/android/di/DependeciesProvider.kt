@@ -4,6 +4,7 @@ import android.content.Context
 import com.serranoie.android.core.data.remote.SpoonacularApi
 import com.serranoie.android.core.data.remote.repository.RecipeRepositoryImpl
 import com.serranoie.android.data.local.persistence.DataStoreManager
+import com.serranoie.android.feature.instructions.domain.usecase.GetDetailedInstructionsUseCase
 import com.serranoie.android.feature.instructions.domain.usecase.GetRecipeByIdUseCase
 import com.serranoie.android.feature.onboarding.domain.GetOnboardingStatusUseCase
 import com.serranoie.android.feature.onboarding.domain.SetOnboardingCompletedUseCase
@@ -107,5 +108,12 @@ object DependenciesProvider {
     @Singleton
     fun provideSearchRecipeUseCAse(repository: RecipeRepositoryImpl): SearchRecipeUseCase {
         return SearchRecipeUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetDetailedInstructionsUseCase(repository: RecipeRepositoryImpl): GetDetailedInstructionsUseCase {
+        return GetDetailedInstructionsUseCase(repository)
+
     }
 }

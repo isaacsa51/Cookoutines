@@ -1,9 +1,9 @@
-package com.serranoie.android.core.data.remote.dto
+package com.serranoie.android.core.data.remote.dto.recipe
 
 
 import com.google.gson.annotations.SerializedName
 
-data class EquipmentDto(
+data class IngredientDto(
     @SerializedName("id")
     val id: Int?,
     @SerializedName("image")

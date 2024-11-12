@@ -55,12 +55,12 @@
                 android:gravity="center"
                 android:maxLines="2"
                 android:paddingHorizontal="16dp"
-                android:paddingTop="24dp"
+                android:paddingTop="52dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="Recipe text title name" />
+                tools:text="lorem ipsum dolor sit amet consectetur adipiscing elit doming" />
 
             <TextView
                 android:id="@+id/labelCredits"

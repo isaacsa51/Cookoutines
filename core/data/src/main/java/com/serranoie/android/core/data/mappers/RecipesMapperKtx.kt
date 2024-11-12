@@ -1,16 +1,16 @@
 package com.serranoie.android.core.data.mappers
 
 import android.util.Log
-import com.serranoie.android.core.data.remote.dto.AnalyzedInstructionDto
-import com.serranoie.android.core.data.remote.dto.EquipmentDto
-import com.serranoie.android.core.data.remote.dto.ExtendedIngredientDto
-import com.serranoie.android.core.data.remote.dto.IngredientDto
-import com.serranoie.android.core.data.remote.dto.LengthDto
-import com.serranoie.android.core.data.remote.dto.MeasuresDto
-import com.serranoie.android.core.data.remote.dto.MetricDto
-import com.serranoie.android.core.data.remote.dto.RecipeDto
-import com.serranoie.android.core.data.remote.dto.StepDto
-import com.serranoie.android.core.data.remote.dto.UsDto
+import com.serranoie.android.core.data.remote.dto.recipe.AnalyzedInstructionDto
+import com.serranoie.android.core.data.remote.dto.recipe.EquipmentDto
+import com.serranoie.android.core.data.remote.dto.recipe.ExtendedIngredientDto
+import com.serranoie.android.core.data.remote.dto.recipe.IngredientDto
+import com.serranoie.android.core.data.remote.dto.recipe.LengthDto
+import com.serranoie.android.core.data.remote.dto.recipe.MeasuresDto
+import com.serranoie.android.core.data.remote.dto.recipe.MetricDto
+import com.serranoie.android.core.data.remote.dto.recipe.RecipeDto
+import com.serranoie.android.core.data.remote.dto.recipe.StepDto
+import com.serranoie.android.core.data.remote.dto.recipe.UsDto
 import com.serranoie.android.core.data.remote.dto.search.RecipeSearchDto
 import com.serranoie.android.core.data.remote.dto.search.ResultDto
 import com.serranoie.android.core.domain.model.recipe.AnalyzedInstruction

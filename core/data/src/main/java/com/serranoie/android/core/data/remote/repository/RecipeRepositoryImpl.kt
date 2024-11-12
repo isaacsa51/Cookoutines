@@ -4,6 +4,7 @@ import android.util.Log
 import com.serranoie.android.core.data.mappers.toDomain
 import com.serranoie.android.core.data.mappers.toListDomain
 import com.serranoie.android.core.data.remote.SpoonacularApi
+import com.serranoie.android.core.domain.model.instructions.Instructions
 import com.serranoie.android.core.domain.model.recipe.Recipe
 import com.serranoie.android.core.domain.model.search.RecipeSearch
 import com.serranoie.android.core.domain.model.search.Result
@@ -31,7 +32,7 @@ class RecipeRepositoryImpl(private val api: SpoonacularApi) : SpoonacularReposit
             val response = api.getRecipeDetails(id).execute()
 
             if (response.isSuccessful) {
-                val recipe = response.body()
+                val recipe = response.body()?.toDomain()
 
                 DataResult.Success(recipe!!)
             } else {
@@ -68,7 +69,25 @@ class RecipeRepositoryImpl(private val api: SpoonacularApi) : SpoonacularReposit
                 val resultsDtoList = response.body()?.results.orEmpty()
                 val recipes = resultsDtoList.mapNotNull { it?.toDomain() }
 
-                DataResult.Success(recipes ?: emptyList())
+                DataResult.Success(recipes)
+            } else {
+                DataResult.Error(Exception("API request failed: ${response.message()}"))
+            }
+        } catch (e: Exception) {
+            DataResult.Error(e)
+        }
+    }
+
+    override suspend fun getRecipeInstructions(id: Int): DataResult<List<Instructions>> {
+        return try {
+            val response = api.getRecipeInstructions(id).execute()
+
+
+            if (response.isSuccessful) {
+                val instructionsDtoList = response.body()
+                val instructions = instructionsDtoList
+
+                DataResult.Success(instructions)
             } else {
                 DataResult.Error(Exception("API request failed: ${response.message()}"))
             }

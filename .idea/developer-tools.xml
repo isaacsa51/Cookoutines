@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="DeveloperToolsToolWindowSettingsV1">
-    <developerToolsConfigurations />
+  <component name="DeveloperToolsToolWindowSettingsV1" lastSelectedContentNodeId="lorem-ipsum-generator">
+    <developerToolsConfigurations>
+      <developerToolConfiguration developerToolId="lorem-ipsum-generator" id="759d6774-35b2-44fa-8e26-768a19b96b42" name="Workbench">
+        <properties>
+          <property key="generatedTextKind" type="CONFIGURATION" value="dev.turingcomplete.intellijdevelopertoolsplugin._internal.tool.ui.generator.LoremIpsumGenerator$TextMode|WORDS" />
+        </properties>
+      </developerToolConfiguration>
+    </developerToolsConfigurations>
     <expandedGroupNodeIds />
   </component>
 </project>

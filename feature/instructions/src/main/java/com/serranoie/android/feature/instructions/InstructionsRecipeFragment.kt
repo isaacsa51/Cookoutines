@@ -71,7 +71,7 @@ class InstructionsRecipeFragment : Fragment() {
                             HtmlCompat.FROM_HTML_MODE_LEGACY
                         )
 
-                        if(state.data.cuisines.toString().isEmpty()) {
+                        if(state.data.cuisines.toString() == "[]") {
                             binding.cuisineRecyclerView.visibility = View.GONE
                         } else {
                             val cuisineList = state.data.cuisines.toString()
