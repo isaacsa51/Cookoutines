@@ -82,10 +82,9 @@ class RecipeRepositoryImpl(private val api: SpoonacularApi) : SpoonacularReposit
         return try {
             val response = api.getRecipeInstructions(id).execute()
 
-
             if (response.isSuccessful) {
                 val instructionsDtoList = response.body()
-                val instructions = instructionsDtoList
+                val instructions = instructionsDtoList?.toListDomain()!!
 
                 DataResult.Success(instructions)
             } else {
