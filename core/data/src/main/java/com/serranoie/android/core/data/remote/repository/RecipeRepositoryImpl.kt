@@ -4,9 +4,8 @@ import android.util.Log
 import com.serranoie.android.core.data.mappers.toDomain
 import com.serranoie.android.core.data.mappers.toListDomain
 import com.serranoie.android.core.data.remote.SpoonacularApi
-import com.serranoie.android.core.domain.model.instructions.Instructions
+import com.serranoie.android.core.domain.model.instructions.InstructionsItem
 import com.serranoie.android.core.domain.model.recipe.Recipe
-import com.serranoie.android.core.domain.model.search.RecipeSearch
 import com.serranoie.android.core.domain.model.search.Result
 import com.serranoie.android.core.domain.repository.SpoonacularRepository
 import com.serranoie.android.core.domain.result.DataResult
@@ -78,16 +77,24 @@ class RecipeRepositoryImpl(private val api: SpoonacularApi) : SpoonacularReposit
         }
     }
 
-    override suspend fun getRecipeInstructions(id: Int): DataResult<List<Instructions>> {
+    override suspend fun getRecipeInstructions(id: Int): DataResult<List<InstructionsItem>> {
         return try {
             val response = api.getRecipeInstructions(id).execute()
 
             if (response.isSuccessful) {
-                val instructionsDtoList = response.body()
-                val instructions = instructionsDtoList?.toListDomain()!!
+                val responseBody = response.body()
 
-                DataResult.Success(instructions)
+                try {
+                    val mappedData = responseBody?.toListDomain()
+
+                    Log.d("REPOSITORY", "MAPPED: $mappedData.toString()")
+                    DataResult.Success(mappedData!!)
+                } catch (e: Exception) {
+                    Log.d("REPOSITORY", "EXCEPTION: ${e.message}")
+                    DataResult.Error(e)
+                }
             } else {
+                Log.d("REPOSITORY", "EXCEPTION: ${response.message()}")
                 DataResult.Error(Exception("API request failed: ${response.message()}"))
             }
         } catch (e: Exception) {

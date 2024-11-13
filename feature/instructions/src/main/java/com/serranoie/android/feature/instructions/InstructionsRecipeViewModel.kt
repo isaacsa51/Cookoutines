@@ -33,8 +33,4 @@ class InstructionsRecipeViewModel @Inject constructor(
             }
         }
     }
-
-    fun getRecipeInstructions(id: Int) {
-        // TODO: Add endpoint and repository impl...
-    }
 }

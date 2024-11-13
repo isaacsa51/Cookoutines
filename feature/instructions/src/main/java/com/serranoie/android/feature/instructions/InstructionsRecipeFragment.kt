@@ -16,6 +16,7 @@ import com.serranoie.android.core.domain.result.DataResult
 import com.serranoie.android.feature.instructions.databinding.FragmentInstructionsRecipeBinding
 import com.serranoie.android.feature.instructions.directions.DirectionsFragment
 import com.serranoie.android.feature.instructions.ingredients.IngredientsFragment
+import com.serranoie.android.feature.instructions.utils.CuisineTypeAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -32,7 +33,6 @@ class InstructionsRecipeFragment : Fragment() {
 
         val recipeIdString = arguments?.getString("recipeId")
         val recipeId = recipeIdString?.toIntOrNull()
-
 
         if (recipeId != null) {
             viewModel.getCurrentRecipe(recipeId)
@@ -91,6 +91,11 @@ class InstructionsRecipeFragment : Fragment() {
                         val ingredientsFragment = IngredientsFragment.newInstance(state.data.extendedIngredients!!)
                         childFragmentManager.beginTransaction()
                             .replace(R.id.fragmentContainer, ingredientsFragment)
+                            .commit()
+
+                        val directionsFragment = DirectionsFragment.newInstance(state.data.id!!)
+                        childFragmentManager.beginTransaction()
+                            .replace(R.id.fragmentContainer, directionsFragment)
                             .commit()
                     }
 

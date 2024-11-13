@@ -182,8 +182,6 @@ fun RecipeSearchDto.toListDomain(): List<RecipeSearch> {
 
 fun ResultDto.toListDomain() : List<Result> {
 
-    Log.d("RESULT", this.toString())
-
     return listOf(
         Result(
             id,

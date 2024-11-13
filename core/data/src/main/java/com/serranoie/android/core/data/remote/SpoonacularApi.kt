@@ -1,6 +1,7 @@
 package com.serranoie.android.core.data.remote
 
 import com.serranoie.android.core.data.remote.dto.instructions.InstructionsDto
+import com.serranoie.android.core.data.remote.dto.instructions.InstructionsDtoItem
 import com.serranoie.android.core.data.remote.dto.recipe.RecipeDto
 import com.serranoie.android.core.data.remote.dto.recipe.RecipesResponseDto
 import com.serranoie.android.core.data.remote.dto.search.RecipeSearchDto

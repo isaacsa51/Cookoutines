@@ -41,8 +41,8 @@
 
                 <ImageView
                     android:id="@+id/imageIngredient"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
+                    android:layout_width="55dp"
+                    android:layout_height="55dp"
                     android:background="@drawable/placeholder_image"
                     android:scaleType="centerCrop"
                     app:layout_constraintEnd_toEndOf="parent"

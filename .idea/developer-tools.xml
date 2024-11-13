@@ -4,7 +4,7 @@
     <developerToolsConfigurations>
       <developerToolConfiguration developerToolId="lorem-ipsum-generator" id="759d6774-35b2-44fa-8e26-768a19b96b42" name="Workbench">
         <properties>
-          <property key="generatedTextKind" type="CONFIGURATION" value="dev.turingcomplete.intellijdevelopertoolsplugin._internal.tool.ui.generator.LoremIpsumGenerator$TextMode|WORDS" />
+          <property key="numberOfValues" type="CONFIGURATION" value="kotlin.Int|1" />
         </properties>
       </developerToolConfiguration>
     </developerToolsConfigurations>

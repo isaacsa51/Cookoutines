@@ -1,78 +1,86 @@
 package com.serranoie.android.core.data.mappers
 
-import com.serranoie.android.core.data.remote.dto.instructions.Equipment
-import com.serranoie.android.core.data.remote.dto.instructions.Ingredient
+import com.serranoie.android.core.data.remote.dto.instructions.EquipmentDto
+import com.serranoie.android.core.data.remote.dto.instructions.IngredientDto
 import com.serranoie.android.core.data.remote.dto.instructions.InstructionsDto
-import com.serranoie.android.core.data.remote.dto.instructions.Length
-import com.serranoie.android.core.data.remote.dto.instructions.Step
-import com.serranoie.android.core.data.remote.dto.instructions.Temperature
+import com.serranoie.android.core.data.remote.dto.instructions.InstructionsDtoItem
+import com.serranoie.android.core.data.remote.dto.instructions.LengthDto
+import com.serranoie.android.core.data.remote.dto.instructions.StepDto
+import com.serranoie.android.core.data.remote.dto.instructions.TemperatureDto
+import com.serranoie.android.core.domain.model.instructions.Equipment
+import com.serranoie.android.core.domain.model.instructions.Ingredient
 import com.serranoie.android.core.domain.model.instructions.Instructions
 import com.serranoie.android.core.domain.model.instructions.InstructionsItem
+import com.serranoie.android.core.domain.model.instructions.Length
+import com.serranoie.android.core.domain.model.instructions.Step
+import com.serranoie.android.core.domain.model.instructions.Temperature
 
 fun InstructionsDto.toDomain(): Instructions {
-    val instructions = Instructions()
-    instructions.addAll(
-        this.map { instructionsDtoItem ->
-            InstructionsItem(
-                name = instructionsDtoItem.name,
-                steps = instructionsDtoItem.steps.map { it.toDomain() }
-            )
-        }
-    )
-    return instructions
-}
-
-fun InstructionsDto.toListDomain(): List<Instructions> {
-    return this.map { instructionsDtoItem ->
-        Instructions().apply {
+    return Instructions().apply {
+        this@toDomain.forEach { instructionsDtoItem ->
             add(
                 InstructionsItem(
-                    name = instructionsDtoItem.name,
-                    steps = instructionsDtoItem.steps.map { it.toDomain() }
+                    name = instructionsDtoItem.name ?: "",
+                    steps = instructionsDtoItem.step?.mapNotNull { it?.toDomain() } ?: emptyList()
                 )
             )
         }
     }
 }
 
-fun Step.toDomain(): com.serranoie.android.core.domain.model.instructions.Step {
-    return com.serranoie.android.core.domain.model.instructions.Step(
-        equipment = equipment.map { it.toDomain() },
-        ingredients = ingredients.map { it.toDomain() },
-        length = length.toDomain(),
-        number = number,
-        step = step
+fun InstructionsDtoItem.toDomain(): InstructionsItem {
+    return InstructionsItem(
+        name = name ?: "",
+        steps = step?.mapNotNull { it?.toDomain() } ?: emptyList()
     )
 }
 
-fun Length.toDomain(): com.serranoie.android.core.domain.model.instructions.Length {
-    return com.serranoie.android.core.domain.model.instructions.Length(
+fun InstructionsDto.toListDomain(): List<InstructionsItem> {
+    return this.map { dto ->
+        InstructionsItem(
+            name = dto.name ?: "",
+            steps = dto.step?.mapNotNull { it?.toDomain() } ?: emptyList()
+        )
+    }
+}
+
+fun StepDto.toDomain(): Step {
+    return Step(
+        equipment = equipment?.mapNotNull { it?.toDomain() } ?: emptyList(),
+        ingredients = ingredients?.mapNotNull { it?.toDomain() } ?: emptyList(),
+        length = length?.toDomain(),
         number = number,
-        unit = unit
+        step = step ?: ""
     )
 }
 
+fun LengthDto.toDomain(): Length {
+    return Length(
+        number = number,
+        unit = unit ?: ""
+    )
+}
 
-fun Equipment.toDomain(): com.serranoie.android.core.domain.model.instructions.Equipment {
-    return com.serranoie.android.core.domain.model.instructions.Equipment(
+fun EquipmentDto.toDomain(): Equipment {
+    return Equipment(
         id = id,
-        image = image,
-        name = name,
-        temperature = temperature.toDomain(),
+        image = image ?: "",
+        name = name ?: "",
+        temperature = temperature?.toDomain()
     )
 }
 
-fun Temperature.toDomain(): com.serranoie.android.core.domain.model.instructions.Temperature {
-    return com.serranoie.android.core.domain.model.instructions.Temperature(
+fun TemperatureDto.toDomain(): Temperature {
+    return Temperature(
         number = number,
-        unit = unit
+        unit = unit ?: ""
     )
 }
 
-fun Ingredient.toDomain(): com.serranoie.android.core.domain.model.instructions.Ingredient {
-    return com.serranoie.android.core.domain.model.instructions.Ingredient(
+fun IngredientDto.toDomain(): Ingredient {
+    return Ingredient(
         id = id,
-        image = image,
-        name = name,
+        image = image ?: "",
+        name = name ?: "",
     )
 }

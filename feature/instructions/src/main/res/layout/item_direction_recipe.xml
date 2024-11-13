@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardStep"
+        android:checkable="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/stepNumberLabel"
+                style="@style/TitleMedium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Step number: 1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/equipmentLabel"
+                style="@style/BodyMedium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Equipment needed: "
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/stepNumberLabel" />
+
+            <TextView
+                android:id="@+id/equipmentName"
+                style="@style/BodyMedium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Name item"
+                app:layout_constraintBottom_toBottomOf="@+id/equipmentLabel"
+                app:layout_constraintStart_toEndOf="@id/equipmentLabel"
+                app:layout_constraintTop_toTopOf="@+id/equipmentLabel" />
+
+            <TextView
+                android:id="@+id/ingredientNeededLabel"
+                style="@style/BodyMedium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ingredient needed: Ingredient"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/equipmentName" />
+
+            <com.google.android.material.divider.MaterialDivider
+                android:id="@+id/infoDivider"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="16dp"
+                app:dividerInsetEnd="16dp"
+                app:dividerInsetStart="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ingredientNeededLabel" />
+
+            <TextView
+                android:id="@+id/stepInfo"
+                style="@style/BodySmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vero ad nisl non incidunt. Duo vero stet voluptua delenit nobis lobortis accusam nonumy augue stet kasd culpa accusam velit accumsan hendrerit aliqua. Dolore congue at."
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/infoDivider" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

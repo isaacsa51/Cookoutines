@@ -45,6 +45,7 @@ dependencies {
     implementation(project(":ui-theme"))
     implementation(project(":core:domain"))
     implementation(project(":feature:recipes-list:domain"))
+    implementation(project(":core:data"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
@@ -55,7 +56,6 @@ dependencies {
     implementation(libs.androidx.fragment.ktx)
     implementation(libs.androidx.navigation.common.ktx)
     implementation(libs.androidx.navigation.runtime)
-    implementation(project(":core:data"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

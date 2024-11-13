@@ -1,6 +1,7 @@
 package com.serranoie.android.core.domain.repository
 
 import com.serranoie.android.core.domain.model.instructions.Instructions
+import com.serranoie.android.core.domain.model.instructions.InstructionsItem
 import com.serranoie.android.core.domain.model.recipe.Recipe
 import com.serranoie.android.core.domain.model.search.RecipeSearch
 import com.serranoie.android.core.domain.model.search.Result
@@ -11,5 +12,5 @@ interface SpoonacularRepository {
     suspend fun getPopularRecipes(): DataResult<List<Result>>
     suspend fun getRecipeById(id: Int): DataResult<Recipe>
     suspend fun searchRecipes(query: String): DataResult<List<Result>>
-    suspend fun getRecipeInstructions(id: Int): DataResult<List<Instructions>>
+    suspend fun getRecipeInstructions(id: Int): DataResult<List<InstructionsItem>>
 }

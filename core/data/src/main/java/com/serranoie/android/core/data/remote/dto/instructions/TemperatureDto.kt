@@ -3,9 +3,9 @@ package com.serranoie.android.core.data.remote.dto.instructions
 
 import com.google.gson.annotations.SerializedName
 
-data class Temperature(
+data class TemperatureDto(
     @SerializedName("number")
-    val number: Double,
+    val number: Double? = 0.0,
     @SerializedName("unit")
-    val unit: String
+    val unit: String? = ""
 )

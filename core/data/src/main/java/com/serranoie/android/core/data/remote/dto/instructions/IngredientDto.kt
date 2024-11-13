@@ -3,11 +3,13 @@ package com.serranoie.android.core.data.remote.dto.instructions
 
 import com.google.gson.annotations.SerializedName
 
-data class Ingredient(
+data class IngredientDto(
     @SerializedName("id")
-    val id: Int,
+    val id: Int? = 0,
     @SerializedName("image")
-    val image: String,
+    val image: String? = "",
+    @SerializedName("localizedName")
+    val localizedName: String? = "",
     @SerializedName("name")
-    val name: String
+    val name: String? = ""
 )

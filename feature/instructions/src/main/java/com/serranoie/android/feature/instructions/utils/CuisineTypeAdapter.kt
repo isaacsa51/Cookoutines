@@ -1,10 +1,11 @@
-package com.serranoie.android.feature.instructions
+package com.serranoie.android.feature.instructions.utils
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.serranoie.android.feature.instructions.R
 
 class CuisineTypeAdapter(private val cuisines: List<String>) :
     RecyclerView.Adapter<CuisineTypeAdapter.CuisineViewHolder>() {
