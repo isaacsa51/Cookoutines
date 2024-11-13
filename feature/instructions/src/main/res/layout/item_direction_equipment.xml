@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="4dp">
+
+    <ImageView
+        android:id="@+id/iv_equipment_image"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/placeholder_image" />
+
+    <TextView
+        android:id="@+id/tv_equipment_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="8dp"
+        android:text="Equipment Name" />
+
+</LinearLayout>

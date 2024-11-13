@@ -164,10 +164,10 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:paddingTop="8dp"
-                tools:text="lorem ipsum dolor sit amet consectetur adipiscing elit qui iriure qui sed enim praesent consequat sunt deserunt dolores velit commodo mollit iriure feugait luptatum quis elit mollit non invidunt nisi"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/summaryLabel" />
+                app:layout_constraintTop_toBottomOf="@+id/summaryLabel"
+                tools:text="lorem ipsum dolor sit amet consectetur adipiscing elit qui iriure qui sed enim praesent consequat sunt deserunt dolores velit commodo mollit iriure feugait luptatum quis elit mollit non invidunt nisi" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/cuisineRecyclerView"
@@ -184,48 +184,60 @@
                 android:id="@+id/radioGroupTabs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
+                android:layout_marginTop="16dp"
                 android:gravity="center_horizontal"
                 android:orientation="horizontal"
                 android:paddingBottom="16dp"
-                android:layout_marginTop="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cuisineRecyclerView">
 
-                <RadioButton
-                    android:id="@+id/radioIngredients"
-                    style="@style/TitleSmall"
-                    android:layout_width="130dp"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="32dp"
-                    android:background="@drawable/tab_background"
-                    android:button="@android:color/transparent"
-                    android:checked="true"
-                    android:gravity="center"
-                    android:paddingLeft="12dp"
-                    android:paddingTop="3dp"
-                    android:paddingRight="12dp"
-                    android:paddingBottom="3dp"
-                    android:text="Ingredients"
-                    android:textColor="?attr/colorOnSurface" />
+                    android:layout_weight="1">
 
-                <RadioButton
-                    android:id="@+id/radioDirections"
-                    style="@style/TitleSmall"
-                    android:layout_width="130dp"
+                    <RadioButton
+                        android:id="@+id/radioIngredients"
+                        style="@style/TitleSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/tab_background"
+                        android:button="@android:color/transparent"
+                        android:checked="true"
+                        android:gravity="center"
+                        android:paddingLeft="12dp"
+                        android:paddingTop="3dp"
+                        android:paddingRight="12dp"
+                        android:paddingBottom="3dp"
+                        android:text="Ingredients"
+                        android:textColor="?attr/colorOnSurface"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="32dp"
-                    android:background="@drawable/tab_background"
-                    android:button="@android:color/transparent"
-                    android:gravity="center"
-                    android:paddingLeft="12dp"
-                    android:paddingTop="3dp"
-                    android:paddingRight="12dp"
-                    android:paddingBottom="3dp"
-                    android:text="Instructions"
-                    android:textColor="?attr/colorOnSurface" />
+                    android:layout_weight="1">
+
+                    <RadioButton
+                        android:id="@+id/radioDirections"
+                        style="@style/TitleSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/tab_background"
+                        android:button="@android:color/transparent"
+                        android:gravity="center"
+                        android:paddingLeft="12dp"
+                        android:paddingTop="3dp"
+                        android:paddingRight="12dp"
+                        android:paddingBottom="3dp"
+                        android:text="Instructions"
+                        android:textColor="?attr/colorOnSurface"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
             </RadioGroup>
 

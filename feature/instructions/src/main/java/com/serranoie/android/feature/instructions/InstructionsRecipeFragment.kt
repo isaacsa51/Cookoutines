@@ -71,7 +71,7 @@ class InstructionsRecipeFragment : Fragment() {
                             HtmlCompat.FROM_HTML_MODE_LEGACY
                         )
 
-                        if(state.data.cuisines.toString() == "[]") {
+                        if (state.data.cuisines.toString() == "[]") {
                             binding.cuisineRecyclerView.visibility = View.GONE
                         } else {
                             val cuisineList = state.data.cuisines.toString()
@@ -88,7 +88,8 @@ class InstructionsRecipeFragment : Fragment() {
                             error(R.drawable.placeholder_image)
                         }
 
-                        val ingredientsFragment = IngredientsFragment.newInstance(state.data.extendedIngredients!!)
+                        val ingredientsFragment =
+                            IngredientsFragment.newInstance(state.data.extendedIngredients!!)
                         childFragmentManager.beginTransaction()
                             .replace(R.id.fragmentContainer, ingredientsFragment)
                             .commit()
@@ -100,7 +101,7 @@ class InstructionsRecipeFragment : Fragment() {
                     }
 
                     is DataResult.Error -> {
-                        binding.circularLoader.visibility = View.GONE
+                        binding.circularLoader.visibility = View.VISIBLE
                         Log.e("InstructionsRecipeFragment", "Error: ${state.exception}")
                     }
                 }
@@ -120,7 +121,9 @@ class InstructionsRecipeFragment : Fragment() {
         binding.radioGroupTabs.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
                 R.id.radioIngredients -> {
-                    val ingredients = (viewModel.recipeState.value as? DataResult.Success)?.data?.extendedIngredients ?: emptyList()
+                    val ingredients =
+                        (viewModel.recipeState.value as? DataResult.Success)?.data?.extendedIngredients
+                            ?: emptyList()
                     val ingredientsFragment = IngredientsFragment.newInstance(ingredients)
                     childFragmentManager.beginTransaction()
                         .replace(R.id.fragmentContainer, ingredientsFragment)
@@ -128,8 +131,11 @@ class InstructionsRecipeFragment : Fragment() {
                 }
 
                 R.id.radioDirections -> {
+                    val recipeId =
+                        (viewModel.recipeState.value as? DataResult.Success)?.data?.id ?: 0
+                    val directionsFragment = DirectionsFragment.newInstance(recipeId)
                     childFragmentManager.beginTransaction()
-                        .replace(R.id.fragmentContainer, DirectionsFragment())
+                        .replace(R.id.fragmentContainer, directionsFragment)
                         .commit()
                 }
             }

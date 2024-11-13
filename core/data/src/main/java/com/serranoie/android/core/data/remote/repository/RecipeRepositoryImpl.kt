@@ -83,11 +83,8 @@ class RecipeRepositoryImpl(private val api: SpoonacularApi) : SpoonacularReposit
 
             if (response.isSuccessful) {
                 val responseBody = response.body()
-
                 try {
                     val mappedData = responseBody?.toListDomain()
-
-                    Log.d("REPOSITORY", "MAPPED: $mappedData.toString()")
                     DataResult.Success(mappedData!!)
                 } catch (e: Exception) {
                     Log.d("REPOSITORY", "EXCEPTION: ${e.message}")

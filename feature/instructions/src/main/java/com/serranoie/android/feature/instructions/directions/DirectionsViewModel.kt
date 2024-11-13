@@ -1,5 +1,6 @@
 package com.serranoie.android.feature.instructions.directions
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.serranoie.android.core.domain.model.instructions.InstructionsItem
@@ -32,6 +33,7 @@ class DirectionsViewModel @Inject constructor(
                 }
 
                 _instructions.value = result
+
             } catch (e: Exception) {
                 _instructions.value = DataResult.Error(e)
             }
