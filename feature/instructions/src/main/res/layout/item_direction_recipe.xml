@@ -9,6 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
+        android:checkable="true"
         android:clickable="true"
         android:focusable="true"
         app:layout_constraintEnd_toEndOf="parent"
@@ -34,19 +35,9 @@
                     android:alpha="0.725"
                     android:text="Step 1"
                     app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
-
-                <Button
-                    android:id="@+id/iconButton"
-                    style="?attr/materialIconButtonStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:contentDescription="Mark as completed"
-                    app:icon="@drawable/ic_done"
-                    app:layout_constraintBottom_toBottomOf="@+id/tv_step_number"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/tv_step_number" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -60,13 +51,6 @@
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
-            <TextView
-                style="@style/BodyMedium"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="Lorem ipsum dolor amet, consectetuer adipiscing elit. Nullam praesent blandit pretium eleifend aptent malesuada rutrum. Metus aliquet rutrum primis, maximus volutpat aenean. Primis tempus tempor suscipit, mus justo viverra neque egestas." />
-
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardEquipment"
                 android:layout_width="match_parent"
@@ -75,8 +59,7 @@
                 android:layout_marginTop="16dp"
                 android:clickable="true"
                 android:focusable="true"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="2dp">
+                app:cardCornerRadius="8dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -84,12 +67,33 @@
                     android:orientation="vertical"
                     android:padding="16dp">
 
-                    <TextView
-                        style="@style/LabelMedium"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Equipment"
-                        android:textStyle="bold" />
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/textView"
+                            style="@style/LabelMedium"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="Equipment"
+                            android:textStyle="bold"
+                            app:layout_constraintEnd_toStartOf="@+id/iconDropdownEquipment"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <Button
+                            android:id="@+id/iconDropdownEquipment"
+                            style="?attr/materialIconButtonStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:contentDescription="dropdown"
+                            app:icon="@drawable/ic_dropdown_indicator"
+                            app:layout_constraintBottom_toBottomOf="@+id/textView"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="@id/textView" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rv_equipment"
@@ -109,8 +113,7 @@
                 android:layout_marginTop="16dp"
                 android:clickable="true"
                 android:focusable="true"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="2dp">
+                app:cardCornerRadius="8dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -118,12 +121,33 @@
                     android:orientation="vertical"
                     android:padding="16dp">
 
-                    <TextView
-                        style="@style/LabelMedium"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Ingredients"
-                        android:textStyle="bold" />
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/ingredientsCardLabel"
+                            style="@style/LabelMedium"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="Ingredients"
+                            android:textStyle="bold"
+                            app:layout_constraintEnd_toStartOf="@+id/iconDropdownIngredients"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <Button
+                            android:id="@+id/iconDropdownIngredients"
+                            style="?attr/materialIconButtonStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:contentDescription="dropdown"
+                            app:icon="@drawable/ic_dropdown_indicator"
+                            app:layout_constraintBottom_toBottomOf="@+id/ingredientsCardLabel"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="@id/ingredientsCardLabel" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rv_ingredients"

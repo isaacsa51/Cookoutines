@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
 import com.serranoie.android.core.domain.result.DataResult
 import com.serranoie.android.feature.instructions.databinding.FragmentInstructionsRecipeBinding
@@ -108,8 +109,12 @@ class InstructionsRecipeFragment : Fragment() {
 
                         // * DIRECTIONS
                         directionsAdapter = DirectionsAdapter()
-                        binding.directionsRecyclerView.adapter = directionsAdapter
+                        binding.stepsRecyclerView.layoutManager =
+                            LinearLayoutManager(requireContext())
+                        binding.stepsRecyclerView.adapter = directionsAdapter
                         directionsViewModel.getRecipeInstructions(state.data.id!!)
+
+                        val progressIndicator = binding.progressIndicator
 
                         // * INGREDIENTS
                         val ingredientsAdapter = IngredientsAdapter(state.data.extendedIngredients!!)
@@ -139,15 +144,15 @@ class InstructionsRecipeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        binding.ingredientsRecyclerView.visibility == View.GONE
-//
-//        binding.cardIngredients.setOnClickListener {
-//            if (binding.ingredientsRecyclerView.visibility == View.GONE) {
-//                binding.ingredientsRecyclerView.visibility = View.VISIBLE
-//            } else {
-//                binding.ingredientsRecyclerView.visibility = View.GONE
-//            }
-//        }
+        binding.ingredientsRecyclerView.visibility = View.GONE
+
+        binding.cardIngredients.setOnClickListener {
+            if (binding.ingredientsRecyclerView.visibility == View.GONE) {
+                binding.ingredientsRecyclerView.visibility = View.VISIBLE
+            } else {
+                binding.ingredientsRecyclerView.visibility = View.GONE
+            }
+        }
 
         binding.toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()

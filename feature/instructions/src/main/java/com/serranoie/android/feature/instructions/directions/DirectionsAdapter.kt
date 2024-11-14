@@ -13,17 +13,17 @@ import com.serranoie.android.core.domain.model.instructions.Ingredient
 import com.serranoie.android.core.domain.model.instructions.InstructionsItem
 import com.serranoie.android.core.domain.model.instructions.Step
 import com.serranoie.android.feature.instructions.R
-import com.serranoie.android.feature.instructions.databinding.FragmentInstructionsRecipeBinding
 import com.serranoie.android.feature.instructions.databinding.ItemDirectionEquipmentBinding
 import com.serranoie.android.feature.instructions.databinding.ItemDirectionIngredientBinding
 import com.serranoie.android.feature.instructions.databinding.ItemDirectionRecipeBinding
+import com.serranoie.android.feature.instructions.databinding.ItemStepsBinding
 
 class DirectionsAdapter :
     ListAdapter<InstructionsItem, DirectionsAdapter.InstructionGroupViewHolder>(
         InstructionGroupDiffCallback()
     ) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): InstructionGroupViewHolder {
-        val binding = FragmentInstructionsRecipeBinding.inflate(
+        val binding = ItemStepsBinding.inflate(
             LayoutInflater.from(parent.context), parent, false
         )
         return InstructionGroupViewHolder(binding)
@@ -39,12 +39,10 @@ class DirectionsAdapter :
     }
 
     inner class InstructionGroupViewHolder(
-        private val binding: FragmentInstructionsRecipeBinding
+        private val binding: ItemStepsBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(instructionGroup: InstructionsItem) {
-            binding.tvInstructionGroupName.text = instructionGroup.name
-
             val stepAdapter = InstructionStepAdapter()
 
             binding.directionsRecyclerView.apply {
@@ -55,11 +53,13 @@ class DirectionsAdapter :
         }
     }
 
-    // Adapter for the instruction steps
+    // * Adapter for the steps
     inner class InstructionStepAdapter :
         ListAdapter<Step, InstructionStepAdapter.InstructionStepViewHolder>(
             InstructionStepDiffCallback()
         ) {
+
+        private var checkedCount = 0
 
         override fun onCreateViewHolder(
             parent: ViewGroup,
@@ -81,31 +81,63 @@ class DirectionsAdapter :
         ) : RecyclerView.ViewHolder(binding.root) {
 
             fun bind(step: Step) {
-                binding.tvStepNumber.text = "${step.number}."
+                binding.tvStepNumber.text = "Step ${step.number}."
                 binding.tvStepDescription.text = step.step
 
-                // Set up ingredients RecyclerView if there are ingredients
+                // * Set up ingredients RecyclerView if there are ingredients
                 if (step.ingredients.isNotEmpty()) {
+                    binding.rvEquipment.visibility = View.VISIBLE
+
                     val ingredientsAdapter = IngredientAdapter()
                     binding.rvIngredients.apply {
                         layoutManager =
-                            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
                         adapter = ingredientsAdapter
                         visibility = View.VISIBLE
                     }
                     ingredientsAdapter.submitList(step.ingredients)
+
+                    binding.cardEquipment.setOnClickListener {
+                        if (binding.rvEquipment.visibility == View.GONE) {
+                            binding.rvEquipment.visibility = View.VISIBLE
+                            binding.iconDropdownEquipment.rotation = 180f
+                        } else {
+                            binding.rvEquipment.visibility = View.GONE
+                            binding.iconDropdownIngredients.rotation = 0f
+                        }
+                    }
+                } else {
+                    binding.cardIngredients.visibility = View.GONE
                 }
 
-                // Set up equipment RecyclerView if there is equipment
+                // * Set up equipment RecyclerView if there is equipment
                 if (step.equipment.isNotEmpty()) {
+                    binding.rvIngredients.visibility = View.VISIBLE
+
                     val equipmentAdapter = EquipmentAdapter()
                     binding.rvEquipment.apply {
                         layoutManager =
-                            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
                         adapter = equipmentAdapter
                         visibility = View.VISIBLE
                     }
                     equipmentAdapter.submitList(step.equipment)
+
+                    binding.cardIngredients.setOnClickListener {
+                        if (binding.rvIngredients.visibility == View.GONE) {
+                            binding.rvIngredients.visibility = View.VISIBLE
+                            binding.iconDropdownIngredients.rotation = 180f
+                        } else {
+                            binding.rvIngredients.visibility = View.GONE
+                            binding.iconDropdownIngredients.rotation = 0f
+                        }
+                    }
+                } else {
+                    binding.cardEquipment.visibility = View.GONE
+                }
+
+                binding.cardStep.setOnClickListener {
+                    binding.cardStep.isChecked = !binding.cardStep.isChecked
                 }
             }
         }
