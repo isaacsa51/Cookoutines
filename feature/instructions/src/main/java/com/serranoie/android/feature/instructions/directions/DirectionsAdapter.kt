@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import androidx.transition.AutoTransition
+import androidx.transition.TransitionManager
 import coil.load
 import com.serranoie.android.core.domain.model.instructions.Equipment
 import com.serranoie.android.core.domain.model.instructions.Ingredient
@@ -97,12 +99,21 @@ class DirectionsAdapter :
                     }
                     ingredientsAdapter.submitList(step.ingredients)
 
-                    binding.cardEquipment.setOnClickListener {
-                        if (binding.rvEquipment.visibility == View.GONE) {
-                            binding.rvEquipment.visibility = View.VISIBLE
-                            binding.iconDropdownEquipment.rotation = 180f
+                    binding.cardIngredients.setOnClickListener {
+                        val transition = AutoTransition()
+                        transition.duration = 150
+
+
+                        TransitionManager.beginDelayedTransition(
+                            binding.cardIngredients,
+                            transition
+                        )
+
+                        if (binding.rvIngredients.visibility == View.GONE) {
+                            binding.rvIngredients.visibility = View.VISIBLE
+                            binding.iconDropdownIngredients.rotation = 180f
                         } else {
-                            binding.rvEquipment.visibility = View.GONE
+                            binding.rvIngredients.visibility = View.GONE
                             binding.iconDropdownIngredients.rotation = 0f
                         }
                     }
@@ -112,7 +123,7 @@ class DirectionsAdapter :
 
                 // * Set up equipment RecyclerView if there is equipment
                 if (step.equipment.isNotEmpty()) {
-                    binding.rvIngredients.visibility = View.VISIBLE
+                    binding.rvEquipment.visibility = View.VISIBLE
 
                     val equipmentAdapter = EquipmentAdapter()
                     binding.rvEquipment.apply {
@@ -123,13 +134,21 @@ class DirectionsAdapter :
                     }
                     equipmentAdapter.submitList(step.equipment)
 
-                    binding.cardIngredients.setOnClickListener {
-                        if (binding.rvIngredients.visibility == View.GONE) {
-                            binding.rvIngredients.visibility = View.VISIBLE
-                            binding.iconDropdownIngredients.rotation = 180f
+                    val transition = AutoTransition()
+                    transition.duration = 150
+
+                    binding.cardEquipment.setOnClickListener {
+                        TransitionManager.beginDelayedTransition(
+                            binding.cardEquipment,
+                            transition
+                        )
+
+                        if (binding.rvEquipment.visibility == View.GONE) {
+                            binding.rvEquipment.visibility = View.VISIBLE
+                            binding.iconDropdownEquipment.rotation = 180f
                         } else {
-                            binding.rvIngredients.visibility = View.GONE
-                            binding.iconDropdownIngredients.rotation = 0f
+                            binding.rvEquipment.visibility = View.GONE
+                            binding.iconDropdownEquipment.rotation = 0f
                         }
                     }
                 } else {
