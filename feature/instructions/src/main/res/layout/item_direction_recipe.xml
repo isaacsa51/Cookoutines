@@ -4,175 +4,140 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <!--    <com.google.android.material.card.MaterialCardView-->
-    <!--        android:id="@+id/cardStep"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_margin="8dp"-->
-    <!--        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintTop_toTopOf="parent">-->
-
-    <!--        <androidx.constraintlayout.widget.ConstraintLayout-->
-    <!--            android:layout_width="match_parent"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:padding="16dp">-->
-
-    <!--            &lt;!&ndash; Step Number &ndash;&gt;-->
-    <!--            <TextView-->
-    <!--                android:id="@+id/stepNumberLabel"-->
-    <!--                style="@style/TitleMedium"-->
-    <!--                android:layout_width="wrap_content"-->
-    <!--                android:layout_height="wrap_content"-->
-    <!--                android:text="Step number: 1"-->
-    <!--                app:layout_constraintStart_toStartOf="parent"-->
-    <!--                app:layout_constraintTop_toTopOf="parent" />-->
-
-    <!--            &lt;!&ndash; Equipment Label &ndash;&gt;-->
-    <!--            <TextView-->
-    <!--                android:id="@+id/equipmentLabel"-->
-    <!--                style="@style/BodyMedium"-->
-    <!--                android:layout_width="wrap_content"-->
-    <!--                android:layout_height="wrap_content"-->
-    <!--                android:layout_marginTop="8dp"-->
-    <!--                android:text="Equipment needed:"-->
-    <!--                app:layout_constraintStart_toStartOf="parent"-->
-    <!--                app:layout_constraintTop_toBottomOf="@id/stepNumberLabel" />-->
-
-    <!--            &lt;!&ndash; Equipment List Container &ndash;&gt;-->
-    <!--            <LinearLayout-->
-    <!--                android:id="@+id/equipmentContainer"-->
-    <!--                android:layout_width="match_parent"-->
-    <!--                android:layout_height="wrap_content"-->
-    <!--                android:layout_marginTop="4dp"-->
-    <!--                android:orientation="vertical"-->
-    <!--                app:layout_constraintStart_toStartOf="parent"-->
-    <!--                app:layout_constraintTop_toBottomOf="@id/equipmentLabel">-->
-
-    <!--                &lt;!&ndash; Equipment Item Example &ndash;&gt;-->
-    <!--                <LinearLayout-->
-    <!--                    android:layout_width="wrap_content"-->
-    <!--                    android:layout_height="wrap_content"-->
-    <!--                    android:orientation="horizontal"-->
-    <!--                    android:layout_marginBottom="4dp">-->
-
-    <!--                    <ImageView-->
-    <!--                        android:id="@+id/equipmentImage"-->
-    <!--                        android:layout_width="24dp"-->
-    <!--                        android:layout_height="24dp"-->
-    <!--                        android:layout_marginEnd="8dp"-->
-    <!--                        android:contentDescription="Equipment Image"-->
-    <!--                        app:srcCompat="@drawable/placeholder_image" />-->
-
-    <!--                    <TextView-->
-    <!--                        android:id="@+id/equipmentName"-->
-    <!--                        style="@style/BodyMedium"-->
-    <!--                        android:layout_width="wrap_content"-->
-    <!--                        android:layout_height="wrap_content"-->
-    <!--                        android:text="Equipment Name" />-->
-    <!--                </LinearLayout>-->
-    <!--            </LinearLayout>-->
-
-    <!--            &lt;!&ndash; Ingredients Label &ndash;&gt;-->
-    <!--            <TextView-->
-    <!--                android:id="@+id/ingredientNeededLabel"-->
-    <!--                style="@style/BodyMedium"-->
-    <!--                android:layout_width="wrap_content"-->
-    <!--                android:layout_height="wrap_content"-->
-    <!--                android:text="Ingredients needed:"-->
-    <!--                app:layout_constraintStart_toStartOf="parent"-->
-    <!--                app:layout_constraintTop_toBottomOf="@id/equipmentContainer"-->
-    <!--                android:layout_marginTop="8dp" />-->
-
-    <!--            &lt;!&ndash; Ingredient List Container &ndash;&gt;-->
-    <!--            <LinearLayout-->
-    <!--                android:id="@+id/ingredientContainer"-->
-    <!--                android:layout_width="match_parent"-->
-    <!--                android:layout_height="wrap_content"-->
-    <!--                android:layout_marginTop="4dp"-->
-    <!--                android:orientation="vertical"-->
-    <!--                app:layout_constraintStart_toStartOf="parent"-->
-    <!--                app:layout_constraintTop_toBottomOf="@id/ingredientNeededLabel">-->
-
-    <!--                &lt;!&ndash; Ingredient Item Example &ndash;&gt;-->
-    <!--                <TextView-->
-    <!--                    android:id="@+id/ingredientName"-->
-    <!--                    style="@style/BodyMedium"-->
-    <!--                    android:layout_width="wrap_content"-->
-    <!--                    android:layout_height="wrap_content"-->
-    <!--                    android:text="Ingredient Name" />-->
-    <!--            </LinearLayout>-->
-
-    <!--            &lt;!&ndash; Divider &ndash;&gt;-->
-    <!--            <com.google.android.material.divider.MaterialDivider-->
-    <!--                android:id="@+id/infoDivider"-->
-    <!--                android:layout_width="match_parent"-->
-    <!--                android:layout_height="wrap_content"-->
-    <!--                android:layout_marginVertical="16dp"-->
-    <!--                app:dividerInsetEnd="16dp"-->
-    <!--                app:dividerInsetStart="16dp"-->
-    <!--                app:layout_constraintStart_toStartOf="parent"-->
-    <!--                app:layout_constraintTop_toBottomOf="@id/ingredientContainer" />-->
-
-    <!--            &lt;!&ndash; Step Instructions &ndash;&gt;-->
-    <!--            <TextView-->
-    <!--                android:id="@+id/stepInfo"-->
-    <!--                style="@style/BodySmall"-->
-    <!--                android:layout_width="wrap_content"-->
-    <!--                android:layout_height="wrap_content"-->
-    <!--                android:layout_marginTop="16dp"-->
-    <!--                android:text="Step instructions go here."-->
-    <!--                app:layout_constraintStart_toStartOf="parent"-->
-    <!--                app:layout_constraintTop_toBottomOf="@id/infoDivider" />-->
-
-    <!--            &lt;!&ndash; Time Indicator (if applicable) &ndash;&gt;-->
-    <!--            <TextView-->
-    <!--                android:id="@+id/timeIndicator"-->
-    <!--                style="@style/BodySmall"-->
-    <!--                android:layout_width="wrap_content"-->
-    <!--                android:layout_height="wrap_content"-->
-    <!--                android:layout_marginTop="8dp"-->
-    <!--                android:text="Time: 15 minutes"-->
-    <!--                app:layout_constraintStart_toStartOf="parent"-->
-    <!--                app:layout_constraintTop_toBottomOf="@id/stepInfo" />-->
-
-    <!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
-
-    <!--    </com.google.android.material.card.MaterialCardView>-->
-
-    <LinearLayout
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardStep"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="8dp"
+        android:layout_margin="8dp"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/tv_step_number"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="1."
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/tv_step_description"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Instruction step description" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_ingredients"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone" />
+            android:orientation="vertical"
+            android:padding="16dp">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_equipment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-    </LinearLayout>
+                <TextView
+                    android:id="@+id/tv_step_number"
+                    style="@style/DisplayMedium"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:alpha="0.725"
+                    android:text="Step 1"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/iconButton"
+                    style="?attr/materialIconButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="Mark as completed"
+                    app:icon="@drawable/ic_done"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_step_number"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/tv_step_number" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/tv_step_description"
+                style="@style/TitleMedium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Step name"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                style="@style/BodyMedium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Lorem ipsum dolor amet, consectetuer adipiscing elit. Nullam praesent blandit pretium eleifend aptent malesuada rutrum. Metus aliquet rutrum primis, maximus volutpat aenean. Primis tempus tempor suscipit, mus justo viverra neque egestas." />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardEquipment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="4dp"
+                android:layout_marginTop="16dp"
+                android:clickable="true"
+                android:focusable="true"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="2dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        style="@style/LabelMedium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Equipment"
+                        android:textStyle="bold" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_equipment"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardIngredients"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="4dp"
+                android:layout_marginTop="16dp"
+                android:clickable="true"
+                android:focusable="true"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="2dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        style="@style/LabelMedium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Ingredients"
+                        android:textStyle="bold" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_ingredients"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

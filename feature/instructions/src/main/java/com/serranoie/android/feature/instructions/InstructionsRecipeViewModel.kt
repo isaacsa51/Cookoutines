@@ -1,5 +1,6 @@
 package com.serranoie.android.feature.instructions
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.serranoie.android.core.domain.model.recipe.Recipe
@@ -28,8 +29,11 @@ class InstructionsRecipeViewModel @Inject constructor(
                     getRecipeByIdUseCase(id)
                 }
                 _recipeState.value = result
+                Log.d("InstructionsRecipeViewModel", "Data: $result")
             } catch (e: Exception) {
                 _recipeState.value = DataResult.Error(e)
+                Log.e("InstructionsRecipeViewModel", "Error: $e")
+
             }
         }
     }

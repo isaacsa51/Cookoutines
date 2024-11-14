@@ -13,7 +13,7 @@ import com.serranoie.android.core.domain.model.instructions.Ingredient
 import com.serranoie.android.core.domain.model.instructions.InstructionsItem
 import com.serranoie.android.core.domain.model.instructions.Step
 import com.serranoie.android.feature.instructions.R
-import com.serranoie.android.feature.instructions.databinding.FragmentDirectionsBinding
+import com.serranoie.android.feature.instructions.databinding.FragmentInstructionsRecipeBinding
 import com.serranoie.android.feature.instructions.databinding.ItemDirectionEquipmentBinding
 import com.serranoie.android.feature.instructions.databinding.ItemDirectionIngredientBinding
 import com.serranoie.android.feature.instructions.databinding.ItemDirectionRecipeBinding
@@ -23,7 +23,7 @@ class DirectionsAdapter :
         InstructionGroupDiffCallback()
     ) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): InstructionGroupViewHolder {
-        val binding = FragmentDirectionsBinding.inflate(
+        val binding = FragmentInstructionsRecipeBinding.inflate(
             LayoutInflater.from(parent.context), parent, false
         )
         return InstructionGroupViewHolder(binding)
@@ -39,7 +39,7 @@ class DirectionsAdapter :
     }
 
     inner class InstructionGroupViewHolder(
-        private val binding: FragmentDirectionsBinding
+        private val binding: FragmentInstructionsRecipeBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(instructionGroup: InstructionsItem) {
@@ -134,7 +134,7 @@ class DirectionsAdapter :
         ) : RecyclerView.ViewHolder(binding.root) {
 
             fun bind(ingredient: Ingredient) {
-                binding.tvIngredientName.text = ingredient.name
+                binding.ivIngredientName.text = ingredient.name
                 binding.ivIngredientImage.load(ingredient.image) {
                     crossfade(true)
                     placeholder(R.drawable.placeholder_image)

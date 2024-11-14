@@ -11,6 +11,7 @@ plugins {
 
 val baseUrl: String = gradleLocalProperties(rootDir, providers).getProperty("BASE_URL")
 val apiKey: String = gradleLocalProperties(rootDir, providers).getProperty("TASTY_API_KEY")
+val secondKey: String = "015a307ab96345c6b8590e4315215f49"
 
 android {
     namespace = "com.serranoie.android.cookoutines"

@@ -14,8 +14,9 @@ import androidx.navigation.fragment.findNavController
 import coil.load
 import com.serranoie.android.core.domain.result.DataResult
 import com.serranoie.android.feature.instructions.databinding.FragmentInstructionsRecipeBinding
-import com.serranoie.android.feature.instructions.directions.DirectionsFragment
-import com.serranoie.android.feature.instructions.ingredients.IngredientsFragment
+import com.serranoie.android.feature.instructions.directions.DirectionsAdapter
+import com.serranoie.android.feature.instructions.directions.DirectionsViewModel
+import com.serranoie.android.feature.instructions.ingredients.IngredientsAdapter
 import com.serranoie.android.feature.instructions.utils.CuisineTypeAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -24,9 +25,12 @@ import kotlinx.coroutines.launch
 class InstructionsRecipeFragment : Fragment() {
 
     private val viewModel: InstructionsRecipeViewModel by viewModels()
+    private val directionsViewModel: DirectionsViewModel by viewModels()
 
     private var _binding: FragmentInstructionsRecipeBinding? = null
     private val binding get() = _binding!!
+
+    private lateinit var directionsAdapter: DirectionsAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,6 +54,23 @@ class InstructionsRecipeFragment : Fragment() {
         (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         viewLifecycleOwner.lifecycleScope.launch {
+            directionsViewModel.instructions.collect { result ->
+                when (result) {
+                    is DataResult.Loading -> {
+                        // Show a loading indicator in your UI
+                    }
+                    is DataResult.Success -> {
+                        directionsAdapter.submitList(result.data) // Submit the list here
+                    }
+                    is DataResult.Error -> {
+                        // Handle the error, e.g., show an error message
+                        Log.e("InstructionsRecipeFragment", "Error loading instructions: ${result.exception}")
+                    }
+                }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
             viewModel.recipeState.collect { state ->
                 when (state) {
                     is DataResult.Loading -> {
@@ -58,6 +79,8 @@ class InstructionsRecipeFragment : Fragment() {
 
                     is DataResult.Success -> {
                         binding.circularLoader.visibility = View.GONE
+
+                        Log.e("InstructionsRecipeFragment", "DATA: ${state.data}")
 
                         binding.collapsingToolbarLayout.title = state.data.title
 
@@ -71,6 +94,8 @@ class InstructionsRecipeFragment : Fragment() {
                             HtmlCompat.FROM_HTML_MODE_LEGACY
                         )
 
+
+                        // * CUISINES
                         if (state.data.cuisines.toString() == "[]") {
                             binding.cuisineRecyclerView.visibility = View.GONE
                         } else {
@@ -81,23 +106,23 @@ class InstructionsRecipeFragment : Fragment() {
                             binding.cuisineRecyclerView.adapter = cuisineAdapter
                         }
 
+                        // * DIRECTIONS
+                        directionsAdapter = DirectionsAdapter()
+                        binding.directionsRecyclerView.adapter = directionsAdapter
+                        directionsViewModel.getRecipeInstructions(state.data.id!!)
+
+                        // * INGREDIENTS
+                        val ingredientsAdapter = IngredientsAdapter(state.data.extendedIngredients!!)
+                        binding.ingredientsRecyclerView.adapter = ingredientsAdapter
+                        binding.totalIngredientsLabel.text =
+                            "Total ingredients: ${state.data.extendedIngredients?.size}"
+
                         binding.recipeImageView.load(state.data.image) {
                             crossfade(true)
                             crossfade(500)
                             placeholder(R.drawable.placeholder_image)
                             error(R.drawable.placeholder_image)
                         }
-
-                        val ingredientsFragment =
-                            IngredientsFragment.newInstance(state.data.extendedIngredients!!)
-                        childFragmentManager.beginTransaction()
-                            .replace(R.id.fragmentContainer, ingredientsFragment)
-                            .commit()
-
-                        val directionsFragment = DirectionsFragment.newInstance(state.data.id!!)
-                        childFragmentManager.beginTransaction()
-                            .replace(R.id.fragmentContainer, directionsFragment)
-                            .commit()
                     }
 
                     is DataResult.Error -> {
@@ -114,32 +139,15 @@ class InstructionsRecipeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        childFragmentManager.beginTransaction()
-            .replace(R.id.fragmentContainer, IngredientsFragment())
-            .commit()
-
-        binding.radioGroupTabs.setOnCheckedChangeListener { _, checkedId ->
-            when (checkedId) {
-                R.id.radioIngredients -> {
-                    val ingredients =
-                        (viewModel.recipeState.value as? DataResult.Success)?.data?.extendedIngredients
-                            ?: emptyList()
-                    val ingredientsFragment = IngredientsFragment.newInstance(ingredients)
-                    childFragmentManager.beginTransaction()
-                        .replace(R.id.fragmentContainer, ingredientsFragment)
-                        .commit()
-                }
-
-                R.id.radioDirections -> {
-                    val recipeId =
-                        (viewModel.recipeState.value as? DataResult.Success)?.data?.id ?: 0
-                    val directionsFragment = DirectionsFragment.newInstance(recipeId)
-                    childFragmentManager.beginTransaction()
-                        .replace(R.id.fragmentContainer, directionsFragment)
-                        .commit()
-                }
-            }
-        }
+//        binding.ingredientsRecyclerView.visibility == View.GONE
+//
+//        binding.cardIngredients.setOnClickListener {
+//            if (binding.ingredientsRecyclerView.visibility == View.GONE) {
+//                binding.ingredientsRecyclerView.visibility = View.VISIBLE
+//            } else {
+//                binding.ingredientsRecyclerView.visibility = View.GONE
+//            }
+//        }
 
         binding.toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()

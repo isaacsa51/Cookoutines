@@ -1,5 +1,6 @@
 package com.serranoie.android.feature.instructions.ingredients
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -11,7 +12,7 @@ import com.serranoie.android.feature.instructions.utils.UiConstants
 import java.util.Locale
 
 class IngredientsAdapter(
-    private val ingredients: List<ExtendedIngredient>
+    private val ingredients: List<ExtendedIngredient?>
 ) : RecyclerView.Adapter<IngredientsAdapter.IngredientViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IngredientViewHolder {
@@ -23,7 +24,7 @@ class IngredientsAdapter(
     }
 
     override fun onBindViewHolder(holder: IngredientViewHolder, position: Int) {
-        holder.bind(ingredients[position])
+        holder.bind(ingredients[position]!!)
     }
 
     override fun getItemCount(): Int = ingredients.size
@@ -32,6 +33,8 @@ class IngredientsAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(ingredient: ExtendedIngredient) {
+
+            Log.d("IngredientsAdapter", "Ingredient: $ingredient")
 
             binding.ingredientName.text = ingredient.name?.replaceFirstChar {
                 if (it.isLowerCase()) it.titlecase(

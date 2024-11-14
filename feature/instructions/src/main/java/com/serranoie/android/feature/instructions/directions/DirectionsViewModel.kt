@@ -34,6 +34,7 @@ class DirectionsViewModel @Inject constructor(
 
                 _instructions.value = result
 
+                Log.d("DirectionsViewModel", "Instructions: $result")
             } catch (e: Exception) {
                 _instructions.value = DataResult.Error(e)
             }
