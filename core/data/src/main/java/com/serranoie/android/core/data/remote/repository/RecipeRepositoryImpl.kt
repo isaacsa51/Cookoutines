@@ -98,4 +98,16 @@ class RecipeRepositoryImpl(private val api: SpoonacularApi) : SpoonacularReposit
             DataResult.Error(e)
         }
     }
+
+    override suspend fun insertRecipe(recipe: Recipe) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun deleteRecipe(recipe: Recipe) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getSavedRecipesByDate(): DataResult<List<Recipe>> {
+        TODO("Not yet implemented")
+    }
 }

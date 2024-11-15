@@ -1,6 +1,9 @@
 package com.serranoie.android.di
 
 import android.content.Context
+import androidx.room.Room
+import com.serranoie.android.core.data.local.dao.RecipesDao
+import com.serranoie.android.core.data.local.persistence.AppDataBase
 import com.serranoie.android.core.data.remote.SpoonacularApi
 import com.serranoie.android.core.data.remote.repository.RecipeRepositoryImpl
 import com.serranoie.android.data.local.persistence.DataStoreManager
@@ -60,6 +63,22 @@ object DependenciesProvider {
     @Singleton
     fun provideApiService(retrofit: Retrofit): SpoonacularApi {
         return retrofit.create(SpoonacularApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideAppDataBase(@ApplicationContext appContext: Context) : AppDataBase {
+        return Room.databaseBuilder(
+            appContext,
+            AppDataBase::class.java,
+            "app_database"
+        ).build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideRecipeDao(appDataBase: AppDataBase): RecipesDao {
+        return appDataBase.recipesDao()
     }
 
     @Provides
