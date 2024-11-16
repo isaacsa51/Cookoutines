@@ -1,6 +1,7 @@
 package com.serranoie.android.core.data.mappers
 
 import android.util.Log
+import com.serranoie.android.core.data.local.entity.RecipeEntity
 import com.serranoie.android.core.data.remote.dto.recipe.AnalyzedInstructionDto
 import com.serranoie.android.core.data.remote.dto.recipe.EquipmentDto
 import com.serranoie.android.core.data.remote.dto.recipe.ExtendedIngredientDto
@@ -189,5 +190,81 @@ fun ResultDto.toListDomain() : List<Result> {
             imageType,
             title,
         )
+    )
+}
+
+fun RecipeEntity.toRecipe(): Recipe {
+    return Recipe(
+        aggregateLikes = aggregateLikes,
+        analyzedInstructions = null, // Discard
+        cheap = cheap,
+        cookingMinutes = cookingMinutes,
+        creditsText = creditsText,
+        cuisines = null, // Discard
+        dairyFree = dairyFree,
+        diets = null, // Discard
+        dishTypes = null, // Discard
+        extendedIngredients = null, // Discard
+        gaps = gaps,
+        glutenFree = glutenFree,
+        healthScore = healthScore,
+        id = id,
+        image = image,
+        imageType = imageType,
+        instructions = instructions,
+        lowFodmap = lowFodmap,
+        occasions = null, // Discard
+        originalId = null, // Discard
+        preparationMinutes = preparationMinutes,
+        pricePerServing = pricePerServing,
+        readyInMinutes = readyInMinutes,
+        servings = servings,
+        sourceName = sourceName,
+        sourceUrl = sourceUrl,
+        spoonacularScore = spoonacularScore,
+        spoonacularSourceUrl = spoonacularSourceUrl,
+        summary = summary,
+        sustainable = sustainable,
+        title = title,
+        vegan = vegan,
+        vegetarian = vegetarian,
+        veryHealthy = veryHealthy,
+        veryPopular = veryPopular,
+        weightWatcherSmartPoints = weightWatcherSmartPoints
+    )
+}
+
+fun Recipe.toRecipeEntity(): RecipeEntity {
+    return RecipeEntity(
+        id = id!!, // Assuming id is not null in Recipe
+        aggregateLikes = aggregateLikes,
+        analyzedInstructions = null,
+        cheap = cheap,
+        cookingMinutes = cookingMinutes as? Int, // Handle type casting if needed
+        creditsText = creditsText,
+        dairyFree = dairyFree,
+        gaps = gaps,
+        glutenFree = glutenFree,
+        healthScore = healthScore,
+        image = image,
+        imageType = imageType,
+        instructions = instructions,
+        lowFodmap = lowFodmap,
+        preparationMinutes = preparationMinutes as? Int, // Handle type casting if needed
+        pricePerServing = pricePerServing,
+        readyInMinutes = readyInMinutes,
+        servings = servings,
+        sourceName = sourceName,
+        sourceUrl = sourceUrl,
+        spoonacularScore = spoonacularScore,
+        spoonacularSourceUrl = spoonacularSourceUrl,
+        summary = summary,
+        sustainable = sustainable,
+        title = title,
+        vegan = vegan,
+        vegetarian = vegetarian,
+        veryHealthy = veryHealthy,
+        veryPopular = veryPopular,
+        weightWatcherSmartPoints = weightWatcherSmartPoints
     )
 }

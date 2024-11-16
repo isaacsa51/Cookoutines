@@ -133,6 +133,5 @@ object DependenciesProvider {
     @Singleton
     fun provideGetDetailedInstructionsUseCase(repository: RecipeRepositoryImpl): GetDetailedInstructionsUseCase {
         return GetDetailedInstructionsUseCase(repository)
-
     }
 }

@@ -63,7 +63,7 @@ class RecipesListFragment : Fragment() {
 //            submitSearchQuery()
 //        }
 
-        binding.searchTextInputLayout.editText?.setOnEditorActionListener { v, actionId, _ ->
+        binding.searchTextInputLayout.editText?.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 submitSearchQuery()
 
