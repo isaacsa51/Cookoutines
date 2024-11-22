@@ -2,6 +2,9 @@ package com.serranoie.android.feature.recipes_list.trending
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.net.toUri
+import androidx.navigation.NavDeepLinkRequest
+import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
@@ -40,6 +43,14 @@ class TrendingAdapter :
                 crossfade(500)
                 placeholder(R.drawable.placeholder_image)
                 error(R.drawable.placeholder_image)
+            }
+
+            binding.root.setOnClickListener {
+                val recipeId = recipe.id
+                val request = NavDeepLinkRequest.Builder
+                    .fromUri("cookoutines://instructions/${recipeId?.toString()}".toUri())
+                    .build()
+                findNavController(this.itemView).navigate(request)
             }
         }
     }

@@ -59,10 +59,6 @@ class RecipesListFragment : Fragment() {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         }
 
-//        binding.searchTextInputLayout.setEndIconOnClickListener {
-//            submitSearchQuery()
-//        }
-
         binding.searchTextInputLayout.editText?.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 submitSearchQuery()

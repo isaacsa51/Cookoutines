@@ -1,6 +1,8 @@
 package com.serranoie.android.core.data.remote.repository
 
 import android.util.Log
+import com.serranoie.android.core.data.local.dao.RecipesDao
+import com.serranoie.android.core.data.local.entity.RecipeEntity
 import com.serranoie.android.core.data.mappers.toDomain
 import com.serranoie.android.core.data.mappers.toListDomain
 import com.serranoie.android.core.data.remote.SpoonacularApi
@@ -9,9 +11,15 @@ import com.serranoie.android.core.domain.model.recipe.Recipe
 import com.serranoie.android.core.domain.model.search.Result
 import com.serranoie.android.core.domain.repository.SpoonacularRepository
 import com.serranoie.android.core.domain.result.DataResult
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.withContext
 
-class RecipeRepositoryImpl(private val api: SpoonacularApi) : SpoonacularRepository {
-
+class RecipeRepositoryImpl @Inject constructor(
+    private val api: SpoonacularApi,
+    private val recipesDao: RecipesDao,
+    private val ioDispatcher: CoroutineDispatcher // Inject ioDispatcher
+) : SpoonacularRepository {
     override suspend fun getRandomRecipes(): DataResult<List<Recipe>> {
         return try {
             val response = api.getRecipes().execute()
@@ -100,14 +108,25 @@ class RecipeRepositoryImpl(private val api: SpoonacularApi) : SpoonacularReposit
     }
 
     override suspend fun insertRecipe(recipe: Recipe) {
-        TODO("Not yet implemented")
+        withContext(ioDispatcher) {
+            recipesDao.insertRecipe(recipe)
+        }
     }
 
     override suspend fun deleteRecipe(recipe: Recipe) {
-        TODO("Not yet implemented")
+        withContext(ioDispatcher) {
+            recipesDao.deleteRecipe(recipe)
+        }
     }
 
-    override suspend fun getSavedRecipesByDate(): DataResult<List<Recipe>> {
-        TODO("Not yet implemented")
+    override suspend fun getSavedRecipesByDate(): DataResult<List<RecipeEntity>> {
+        return withContext(ioDispatcher) {
+            try {
+                val recipes = recipesDao.getSavedRecipesByDate()
+                DataResult.Success(recipes)
+            } catch (e: Exception) {
+                DataResult.Error(e)
+            }
+        }
     }
 }

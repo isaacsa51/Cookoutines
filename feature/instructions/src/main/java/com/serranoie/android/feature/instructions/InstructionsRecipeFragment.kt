@@ -58,13 +58,13 @@ class InstructionsRecipeFragment : Fragment() {
             directionsViewModel.instructions.collect { result ->
                 when (result) {
                     is DataResult.Loading -> {
-                        // Show a loading indicator in your UI
+                        binding.circularLoader.visibility = View.VISIBLE
                     }
                     is DataResult.Success -> {
-                        directionsAdapter.submitList(result.data) // Submit the list here
+                        directionsAdapter.submitList(result.data)
+                        binding.circularLoader.visibility = View.GONE
                     }
                     is DataResult.Error -> {
-                        // Handle the error, e.g., show an error message
                         Log.e("InstructionsRecipeFragment", "Error loading instructions: ${result.exception}")
                     }
                 }
@@ -114,8 +114,6 @@ class InstructionsRecipeFragment : Fragment() {
                         binding.stepsRecyclerView.adapter = directionsAdapter
                         directionsViewModel.getRecipeInstructions(state.data.id!!)
 
-                        val progressIndicator = binding.progressIndicator
-
                         // * INGREDIENTS
                         val ingredientsAdapter = IngredientsAdapter(state.data.extendedIngredients!!)
                         binding.ingredientsRecyclerView.adapter = ingredientsAdapter
@@ -156,6 +154,10 @@ class InstructionsRecipeFragment : Fragment() {
 
         binding.toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
+        }
+
+        binding.extendedFab.setOnClickListener {
+            // TODO: save current recipe entity here...
         }
     }
 
