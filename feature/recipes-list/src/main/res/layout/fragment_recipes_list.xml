@@ -14,10 +14,10 @@
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             style="?attr/collapsingToolbarLayoutMediumStyle"
-            app:expandedTitleTextAppearance="@style/DisplaySmall"
-            app:collapsedTitleTextAppearance="@style/TitleLarge"
             android:layout_width="match_parent"
             android:layout_height="?attr/collapsingToolbarLayoutMediumSize"
+            app:collapsedTitleTextAppearance="@style/TitleLarge"
+            app:expandedTitleTextAppearance="@style/DisplaySmall"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <com.google.android.material.appbar.MaterialToolbar
@@ -90,9 +90,9 @@
 
                 <com.google.android.material.chip.ChipGroup
                     android:id="@+id/cuisinesChipGroup"
-                    android:scrollHorizontally="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:scrollHorizontally="true"
                     app:singleLine="true">
 
                     <com.google.android.material.chip.Chip
@@ -282,26 +282,16 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/labelLatestText" />
 
-<!--            <ProgressBar-->
-<!--                -->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:visibility="gone"-->
-<!--                app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toTopOf="parent" />-->
-
             <com.google.android.material.progressindicator.CircularProgressIndicator
                 android:id="@+id/progressBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
                 android:indeterminate="true"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/errorTextView"
@@ -317,5 +307,13 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
+        app:menu="@menu/bottom_navigation_menu" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -64,7 +64,8 @@ class RecipesListFragment : Fragment() {
                 submitSearchQuery()
 
                 // Hide the keyboard
-                val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                val imm =
+                    requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(binding.searchTextInputLayout.windowToken, 0)
 
                 true
@@ -83,6 +84,28 @@ class RecipesListFragment : Fragment() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
+
+        binding.bottomNavigation.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.homeMenu -> {
+                    // Respond to navigation item 1 click
+                    true
+                }
+
+                R.id.searchMenu -> {
+                    // Respond to navigation item 2 click
+                    true
+                }
+
+                R.id.savedMenu -> {
+                    true
+                }
+
+                else -> false
+
+            }
+
+        }
     }
 
     private fun setupTrendingAdapter() {
@@ -167,6 +190,8 @@ class RecipesListFragment : Fragment() {
                 }
             }
         }
+
+
     }
 
 
