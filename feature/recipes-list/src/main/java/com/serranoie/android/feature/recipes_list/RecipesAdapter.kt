@@ -1,6 +1,7 @@
 package com.serranoie.android.feature.recipes_list
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.net.toUri
 import androidx.core.view.isVisible
@@ -15,12 +16,18 @@ import com.serranoie.android.feature.recipes_list.databinding.ItemRecipeBinding
 class RecipesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val items = mutableListOf<Any>()
+    private var isSearchAdapter = false
+
 
     override fun getItemViewType(position: Int): Int {
-        return when (items[position]) {
-            is Recipe -> TYPE_RECIPE
-            is Result -> TYPE_RECIPE_SEARCH
-            else -> throw IllegalArgumentException("Unknown type")
+        return if (isSearchAdapter && items.isEmpty()) {
+            TYPE_EMPTY_SEARCH // New view type for empty search
+        } else {
+            when (items[position]) {
+                is Recipe -> TYPE_RECIPE
+                is Result -> TYPE_RECIPE_SEARCH
+                else -> throw IllegalArgumentException("Unknown type")
+            }
         }
     }
 
@@ -37,6 +44,12 @@ class RecipesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                     ItemRecipeBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 RecipeSearchViewHolder(binding)
             }
+
+//            TYPE_EMPTY_SEARCH -> {
+//                val view = LayoutInflater.from(parent.context)
+//                    .inflate(R.layout.item_empty_search, parent, false) // Create empty view layout
+//                EmptySearchViewHolder(view)
+//            }
 
             else -> throw IllegalArgumentException("Unknown view type")
         }
@@ -56,9 +69,16 @@ class RecipesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         }
     }
 
-    override fun getItemCount(): Int = items.size
+    override fun getItemCount(): Int {
+        return if (isSearchAdapter && items.isEmpty()) {
+            1
+        } else {
+            items.size
+        }
+    }
 
-    fun submitList(newItems: List<Any>) {
+    fun submitList(newItems: List<Any>, isSearch: Boolean = false) {
+        isSearchAdapter = isSearch
         items.clear()
         items.addAll(newItems)
         notifyDataSetChanged()
@@ -112,8 +132,13 @@ class RecipesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         }
     }
 
+    inner class EmptySearchViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        // You can add any specific binding logic for the empty view here
+    }
+
     companion object {
         private const val TYPE_RECIPE = 0
         private const val TYPE_RECIPE_SEARCH = 1
+        private const val TYPE_EMPTY_SEARCH = 2
     }
 }

@@ -67,7 +67,7 @@ object DependenciesProvider {
 
     @Provides
     @Singleton
-    fun provideAppDataBase(@ApplicationContext appContext: Context) : AppDataBase {
+    fun provideAppDataBase(@ApplicationContext appContext: Context): AppDataBase {
         return Room.databaseBuilder(
             appContext,
             AppDataBase::class.java,
@@ -103,12 +103,6 @@ object DependenciesProvider {
     @Singleton
     fun provideGetRecipeByIdUseCase(repository: RecipeRepositoryImpl): GetRecipeByIdUseCase {
         return GetRecipeByIdUseCase(repository)
-    }
-
-    @Provides
-    @Singleton
-    fun provideRecipeRepositoryImpl(apiService: SpoonacularApi): RecipeRepositoryImpl {
-        return RecipeRepositoryImpl(apiService)
     }
 
     @Provides

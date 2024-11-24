@@ -234,7 +234,7 @@ fun RecipeEntity.toRecipe(): Recipe {
     )
 }
 
-fun Recipe.toRecipeEntity(): RecipeEntity {
+fun Recipe.toEntity(): RecipeEntity {
     return RecipeEntity(
         id = id!!, // Assuming id is not null in Recipe
         aggregateLikes = aggregateLikes,
