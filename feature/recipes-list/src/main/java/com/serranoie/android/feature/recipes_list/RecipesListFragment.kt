@@ -10,10 +10,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import androidx.core.net.toUri
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavDeepLinkRequest
+import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.serranoie.android.core.domain.result.DataResult
 import com.serranoie.android.feature.recipes_list.databinding.FragmentRecipesListBinding
@@ -98,6 +101,10 @@ class RecipesListFragment : Fragment() {
                 }
 
                 R.id.savedMenu -> {
+                    val request = NavDeepLinkRequest.Builder
+                        .fromUri("cookoutines://saved".toUri())
+                        .build()
+                    findNavController(this.requireView()).navigate(request)
                     true
                 }
 

@@ -26,4 +26,10 @@
             app:argType="integer"
             app:uri="cookoutines://instructions/{recipeId}" />
     </fragment>
+    <fragment
+        android:id="@+id/savedRecipesFragment"
+        android:name="com.serranoie.android.feature.saved.SavedRecipesFragment"
+        android:label="SavedRecipesFragment">
+        <deepLink app:uri="cookoutines://saved" />
+    </fragment>
 </navigation>

@@ -66,10 +66,11 @@ dependencies {
     implementation(project(":core:di"))
     implementation(project(":feature:recipes-list"))
     implementation(project(":feature:recipes-list:domain"))
-    implementation(project(":feature:onboarding"))
     implementation(project(":feature:instructions"))
+    implementation(project(":feature:onboarding"))
     implementation(project(":feature:onboarding:data"))
     implementation(project(":feature:onboarding:domain"))
+    implementation(project(":feature:saved"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
