@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph_main"
+    app:startDestination="@id/recipesListFragment">
+
+    <fragment
+        android:id="@+id/onboardingFragment"
+        android:name="com.serranoie.android.feature.onboarding.OnboardingFragment"
+        android:label="OnboardingFragment">
+        <deepLink app:uri="cookoutines://onboarding" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/recipesListFragment"
+        android:name="com.serranoie.android.feature.recipes_list.RecipesListFragment"
+        android:label="RecipesListFragment">
+        <deepLink app:uri="cookoutines://recipes" />
+    </fragment>
+    <fragment
+        android:id="@+id/instructionsRecipeFragment"
+        android:name="com.serranoie.android.feature.instructions.InstructionsRecipeFragment"
+        android:label="InstructionsRecipeFragment">
+        <deepLink
+            app:argType="integer"
+            app:uri="cookoutines://instructions/{recipeId}" />
+    </fragment>
+    <fragment
+        android:id="@+id/savedRecipesFragment"
+        android:name="com.serranoie.android.feature.saved.SavedRecipesFragment"
+        android:label="SavedRecipesFragment">
+        <deepLink app:uri="cookoutines://saved" />
+    </fragment>
+
+</navigation>

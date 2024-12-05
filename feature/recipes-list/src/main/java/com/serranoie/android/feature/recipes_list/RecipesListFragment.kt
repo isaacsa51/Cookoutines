@@ -4,19 +4,15 @@ import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import androidx.core.net.toUri
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavDeepLinkRequest
-import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.serranoie.android.core.domain.result.DataResult
 import com.serranoie.android.feature.recipes_list.databinding.FragmentRecipesListBinding
@@ -88,31 +84,6 @@ class RecipesListFragment : Fragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
 
-        binding.bottomNavigation.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.homeMenu -> {
-                    // Respond to navigation item 1 click
-                    true
-                }
-
-                R.id.searchMenu -> {
-                    // Respond to navigation item 2 click
-                    true
-                }
-
-                R.id.savedMenu -> {
-                    val request = NavDeepLinkRequest.Builder
-                        .fromUri("cookoutines://saved".toUri())
-                        .build()
-                    findNavController(this.requireView()).navigate(request)
-                    true
-                }
-
-                else -> false
-
-            }
-
-        }
     }
 
     private fun setupTrendingAdapter() {
@@ -174,9 +145,6 @@ class RecipesListFragment : Fragment() {
 
         lifecycleScope.launch {
             viewModel.searchResultsState.collect { result ->
-
-                Log.d("FRAGMENT", "Search result: $result")
-
                 when (result) {
                     is DataResult.Success -> {
                         binding.progressBar.isVisible = false
@@ -197,10 +165,7 @@ class RecipesListFragment : Fragment() {
                 }
             }
         }
-
-
     }
-
 
     private fun submitSearchQuery() {
         val query = binding.searchTextInputLayout.editText?.text.toString()
