@@ -5,12 +5,15 @@ import com.serranoie.android.core.data.local.dao.RecipesDao
 import com.serranoie.android.core.data.mappers.toDomain
 import com.serranoie.android.core.data.mappers.toEntity
 import com.serranoie.android.core.data.mappers.toListDomain
+import com.serranoie.android.core.data.mappers.toRecipe
 import com.serranoie.android.core.data.remote.SpoonacularApi
 import com.serranoie.android.core.domain.model.instructions.InstructionsItem
 import com.serranoie.android.core.domain.model.recipe.Recipe
 import com.serranoie.android.core.domain.model.search.Result
 import com.serranoie.android.core.domain.repository.SpoonacularRepository
 import com.serranoie.android.core.domain.result.DataResult
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class RecipeRepositoryImpl @Inject constructor(
@@ -117,14 +120,11 @@ class RecipeRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getSavedRecipesByDate(): DataResult<List<Recipe>> {
-        TODO()
-//        return withContext(ioDispatcher) {
-//            try {
-//                val recipes = recipesDao.getSavedRecipesByDate()
-//                DataResult.Success(recipes)
-//            } catch (e: Exception) {
-//                DataResult.Error(e)
-//            }
-//        }
+        return try {
+            val recipes = recipesDao.getSavedRecipesByDate().first().map { it.toRecipe() }
+            DataResult.Success(recipes)
+        } catch (e: Exception) {
+            DataResult.Error(e)
+        }
     }
 }

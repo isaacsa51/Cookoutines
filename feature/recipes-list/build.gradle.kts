@@ -44,8 +44,8 @@ dependencies {
 
     implementation(project(":ui-theme"))
     implementation(project(":core:domain"))
-    implementation(project(":feature:recipes-list:domain"))
     implementation(project(":core:data"))
+    implementation(project(":feature:recipes-list:domain"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

@@ -59,6 +59,7 @@ dependencies {
     implementation(project(":feature:onboarding"))
     implementation(project(":feature:onboarding:data"))
     implementation(project(":feature:onboarding:domain"))
+    implementation(project(":feature:saved:domain"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

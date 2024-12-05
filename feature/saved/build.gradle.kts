@@ -43,6 +43,8 @@ dependencies {
 
     implementation(project(":ui-theme"))
     implementation(project(":core:domain"))
+    implementation(project(":core:data"))
+    implementation(project(":feature:saved:domain"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

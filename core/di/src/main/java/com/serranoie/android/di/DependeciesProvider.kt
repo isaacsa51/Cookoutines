@@ -14,6 +14,7 @@ import com.serranoie.android.feature.onboarding.domain.SetOnboardingCompletedUse
 import com.serranoie.android.feature.recipes_list.domain.usecase.GetPopularRecipesUseCase
 import com.serranoie.android.feature.recipes_list.domain.usecase.GetRandomRecipesUseCase
 import com.serranoie.android.feature.recipes_list.domain.usecase.SearchRecipeUseCase
+import com.serranoie.android.feature.saved.domain.usecases.GetSavedRecipesUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -127,5 +128,11 @@ object DependenciesProvider {
     @Singleton
     fun provideGetDetailedInstructionsUseCase(repository: RecipeRepositoryImpl): GetDetailedInstructionsUseCase {
         return GetDetailedInstructionsUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetSavedRecipesUseCase(repository: RecipeRepositoryImpl): GetSavedRecipesUseCase {
+        return GetSavedRecipesUseCase(repository)
     }
 }

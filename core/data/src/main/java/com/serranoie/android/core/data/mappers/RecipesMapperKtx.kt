@@ -1,6 +1,5 @@
 package com.serranoie.android.core.data.mappers
 
-import android.util.Log
 import com.serranoie.android.core.data.local.entity.RecipeEntity
 import com.serranoie.android.core.data.remote.dto.recipe.AnalyzedInstructionDto
 import com.serranoie.android.core.data.remote.dto.recipe.EquipmentDto
@@ -181,8 +180,7 @@ fun RecipeSearchDto.toListDomain(): List<RecipeSearch> {
     } ?: emptyList()
 }
 
-fun ResultDto.toListDomain() : List<Result> {
-
+fun ResultDto.toListDomain(): List<Result> {
     return listOf(
         Result(
             id,

@@ -25,7 +25,7 @@ class SavedRecipesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         items[position] as Recipe
     }
 
-    fun submitList(data: MutableList<Recipe>) {
+    fun submitList(data: List<Recipe>) {
         items.clear()
         items.addAll(data)
         notifyDataSetChanged()

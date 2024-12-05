@@ -26,6 +26,7 @@
             <option value="$PROJECT_DIR$/feature/recipes-list/data" />
             <option value="$PROJECT_DIR$/feature/recipes-list/domain" />
             <option value="$PROJECT_DIR$/feature/saved" />
+            <option value="$PROJECT_DIR$/feature/saved/domain" />
             <option value="$PROJECT_DIR$/ui-theme" />
           </set>
         </option>
