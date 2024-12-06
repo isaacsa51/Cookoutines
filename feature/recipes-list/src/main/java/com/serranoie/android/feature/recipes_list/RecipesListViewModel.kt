@@ -1,11 +1,11 @@
 package com.serranoie.android.feature.recipes_list
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.serranoie.android.core.domain.model.recipe.Recipe
 import com.serranoie.android.core.domain.model.search.Result
 import com.serranoie.android.core.domain.result.DataResult
+import com.serranoie.android.core.domain.usecase.SaveRecipeUseCase
 import com.serranoie.android.feature.recipes_list.domain.usecase.GetPopularRecipesUseCase
 import com.serranoie.android.feature.recipes_list.domain.usecase.GetRandomRecipesUseCase
 import com.serranoie.android.feature.recipes_list.domain.usecase.SearchRecipeUseCase
@@ -21,7 +21,8 @@ import javax.inject.Inject
 class RecipesListViewModel @Inject constructor(
     private val getRecipesUseCase: GetRandomRecipesUseCase,
     private val getRandomRecipesUseCase: GetPopularRecipesUseCase,
-    private val searchRecipesUseCase: SearchRecipeUseCase
+    private val searchRecipesUseCase: SearchRecipeUseCase,
+    private val saveRecipeUseCase: SaveRecipeUseCase
 ) : ViewModel() {
 
     private val _recipesState =
@@ -84,6 +85,12 @@ class RecipesListViewModel @Inject constructor(
                 getRecipesUseCase()
             }
             _recipesState.value = result
+        }
+    }
+
+    fun saveRecipe(recipe: Recipe) {
+        viewModelScope.launch {
+            saveRecipeUseCase(recipe)
         }
     }
 }

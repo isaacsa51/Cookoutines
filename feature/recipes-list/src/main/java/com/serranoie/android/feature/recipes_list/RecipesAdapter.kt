@@ -12,8 +12,11 @@ import coil.load
 import com.serranoie.android.core.domain.model.recipe.Recipe
 import com.serranoie.android.core.domain.model.search.Result
 import com.serranoie.android.feature.recipes_list.databinding.ItemRecipeBinding
+import javax.inject.Inject
 
-class RecipesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class RecipesAdapter @Inject constructor(
+    private val viewModel: RecipesListViewModel
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val items = mutableListOf<Any>()
     private var isSearchAdapter = false
@@ -21,7 +24,7 @@ class RecipesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun getItemViewType(position: Int): Int {
         return if (isSearchAdapter && items.isEmpty()) {
-            TYPE_EMPTY_SEARCH // New view type for empty search
+            TYPE_EMPTY_SEARCH
         } else {
             when (items[position]) {
                 is Recipe -> TYPE_RECIPE
@@ -59,7 +62,7 @@ class RecipesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         when (holder) {
             is RecipeViewHolder -> {
                 val recipe = items[position] as Recipe
-                holder.bind(recipe)
+                holder.bind(recipe, viewModel)
             }
 
             is RecipeSearchViewHolder -> {
@@ -111,7 +114,7 @@ class RecipesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     inner class RecipeViewHolder(private val binding: ItemRecipeBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(data: Recipe) {
+        fun bind(data: Recipe, viewModel: RecipesListViewModel) {
             binding.recipeTitleTextView.text = data.title
             binding.authorTextView.text = data.creditsText
 
@@ -129,11 +132,15 @@ class RecipesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                     .build()
                 findNavController(this.itemView).navigate(request)
             }
+
+            binding.saveButton.setOnClickListener {
+                viewModel.saveRecipe(data)
+            }
         }
     }
 
     inner class EmptySearchViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        // You can add any specific binding logic for the empty view here
+        // TODO: add any specific binding logic for the empty view here
     }
 
     companion object {

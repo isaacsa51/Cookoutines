@@ -38,5 +38,4 @@ class SavedRecipesViewModel @Inject constructor(
             _recipesState.value = result
         }
     }
-
 }

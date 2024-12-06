@@ -46,7 +46,7 @@ class RecipesListFragment : Fragment() {
     }
 
     private fun setupUi() {
-        recipesAdapter = RecipesAdapter()
+        recipesAdapter = RecipesAdapter(viewModel)
         binding.recipesRecyclerView.apply {
             adapter = recipesAdapter
             layoutManager = LinearLayoutManager(context)
