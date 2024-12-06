@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -46,19 +47,19 @@ class SavedRecipesFragment : Fragment() {
             viewModel.recipesState.collect { result ->
                 when (result) {
                     is DataResult.Success -> {
-//                        binding.progressBar.isVisible = false
-//                        binding.errorTextView.isVisible = false
+                        binding.progressBar.isVisible = false
+                        // binding.errorTextView.isVisible = false
                         adapter.submitList(result.data)
                     }
 
                     is DataResult.Loading -> {
-//                        binding.progressBar.isVisible = true
-//                        binding.errorTextView.isVisible = false
+                        binding.progressBar.isVisible = true
+                        // binding.errorTextView.isVisible = false
                     }
 
                     is DataResult.Error -> {
-//                        binding.progressBar.isVisible = false
-//                        binding.errorTextView.isVisible = true
+                        binding.progressBar.isVisible = false
+                        // binding.errorTextView.isVisible = true
                         binding.savedTitleLabel.text = result.exception.message
                     }
                 }

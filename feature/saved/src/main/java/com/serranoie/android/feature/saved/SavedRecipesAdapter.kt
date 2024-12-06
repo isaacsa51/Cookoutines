@@ -22,15 +22,18 @@ class SavedRecipesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        items[position] as Recipe
+        when (holder) {
+            is SavedRecipeViewHolder -> {
+                val recipe = items[position] as Recipe
+                holder.bind(recipe)
+            }
+        }
     }
 
     fun submitList(data: List<Recipe>) {
-        items.clear()
         items.addAll(data)
         notifyDataSetChanged()
     }
-
 
     inner class SavedRecipeViewHolder(private val binding: SavedRecipeItemBinding) :
         RecyclerView.ViewHolder(binding.root) {

@@ -1,9 +1,7 @@
 package com.serranoie.android.core.domain.repository
 
-import com.serranoie.android.core.domain.model.instructions.Instructions
 import com.serranoie.android.core.domain.model.instructions.InstructionsItem
 import com.serranoie.android.core.domain.model.recipe.Recipe
-import com.serranoie.android.core.domain.model.search.RecipeSearch
 import com.serranoie.android.core.domain.model.search.Result
 import com.serranoie.android.core.domain.result.DataResult
 
