@@ -120,24 +120,27 @@ class RecipesListFragment : Fragment() {
     }
 
     private fun setupObservers() {
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch { // Launch within viewLifecycleOwner's scope
             viewModel.recipesState.collect { result ->
-                when (result) {
-                    is DataResult.Success -> {
-                        binding.progressBar.isVisible = false
-                        binding.errorTextView.isVisible = false
-                        recipesAdapter.submitList(result.data)
-                    }
+                // Check if binding is null before accessing it
+                binding.let { safeBinding ->
+                    when (result) {
+                        is DataResult.Success -> {
+                            safeBinding.progressBar.isVisible = false
+                            safeBinding.errorTextView.isVisible = false
+                            recipesAdapter.submitList(result.data)
+                        }
 
-                    is DataResult.Error -> {
-                        binding.progressBar.isVisible = false
-                        binding.errorTextView.isVisible = true
-                        binding.errorTextView.text = result.exception.message ?: "Unknown error"
-                    }
+                        is DataResult.Error -> {
+                            safeBinding.progressBar.isVisible = false
+                            safeBinding.errorTextView.isVisible = true
+                            safeBinding.errorTextView.text = result.exception.message ?: "Unknown error"
+                        }
 
-                    is DataResult.Loading -> {
-                        binding.progressBar.isVisible = true
-                        binding.errorTextView.isVisible = false
+                        is DataResult.Loading -> {
+                            safeBinding.progressBar.isVisible = true
+                            safeBinding.errorTextView.isVisible = false
+                        }
                     }
                 }
             }

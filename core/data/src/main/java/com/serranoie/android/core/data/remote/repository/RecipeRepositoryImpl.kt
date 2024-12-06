@@ -113,10 +113,8 @@ class RecipeRepositoryImpl @Inject constructor(
         recipesDao.insertRecipe(data)
     }
 
-    override suspend fun deleteRecipe(recipe: Recipe) {
-        val data = recipe.toEntity()
-
-        recipesDao.deleteRecipe(data)
+    override suspend fun deleteRecipe(id: Int) {
+        recipesDao.deleteRecipe(id)
     }
 
     override suspend fun getSavedRecipesByDate(): DataResult<List<Recipe>> {

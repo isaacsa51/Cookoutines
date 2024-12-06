@@ -6,6 +6,8 @@ import com.serranoie.android.core.data.local.dao.RecipesDao
 import com.serranoie.android.core.data.local.persistence.AppDataBase
 import com.serranoie.android.core.data.remote.SpoonacularApi
 import com.serranoie.android.core.data.remote.repository.RecipeRepositoryImpl
+import com.serranoie.android.core.domain.repository.SpoonacularRepository
+import com.serranoie.android.core.domain.usecase.DeleteRecipeUseCase
 import com.serranoie.android.core.domain.usecase.SaveRecipeUseCase
 import com.serranoie.android.data.local.persistence.DataStoreManager
 import com.serranoie.android.feature.instructions.domain.usecase.GetDetailedInstructionsUseCase
@@ -85,6 +87,12 @@ object DependenciesProvider {
 
     @Provides
     @Singleton
+    fun provideRepository(apiService: SpoonacularApi, recipesDao: RecipesDao): SpoonacularRepository {
+        return RecipeRepositoryImpl(apiService, recipesDao)
+    }
+
+    @Provides
+    @Singleton
     fun provideDataStoreManager(@ApplicationContext context: Context): DataStoreManager {
         return DataStoreManager(context)
     }
@@ -135,6 +143,12 @@ object DependenciesProvider {
     @Singleton
     fun provideSaveRecipeUseCase(repository: RecipeRepositoryImpl): SaveRecipeUseCase {
         return SaveRecipeUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideDeleteRecipeUseCase(repository: RecipeRepositoryImpl): DeleteRecipeUseCase {
+        return DeleteRecipeUseCase(repository)
     }
 
     @Provides

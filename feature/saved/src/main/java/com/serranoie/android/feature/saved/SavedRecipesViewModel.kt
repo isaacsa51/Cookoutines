@@ -1,9 +1,13 @@
 package com.serranoie.android.feature.saved
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import android.widget.Toast
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.serranoie.android.core.domain.model.recipe.Recipe
+import com.serranoie.android.core.domain.repository.SpoonacularRepository
 import com.serranoie.android.core.domain.result.DataResult
+import com.serranoie.android.core.domain.usecase.DeleteRecipeUseCase
 import com.serranoie.android.feature.saved.domain.usecases.GetSavedRecipesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -15,8 +19,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SavedRecipesViewModel @Inject constructor(
-    private val getSavedRecipesUseCase: GetSavedRecipesUseCase
-) : ViewModel() {
+    application: Application,
+    private val getSavedRecipesUseCase: GetSavedRecipesUseCase,
+    private val deleteRecipeUseCase: DeleteRecipeUseCase,
+    private val repository: SpoonacularRepository
+) : AndroidViewModel(application) {
 
     private val _recipesState =
         MutableStateFlow<DataResult<List<Recipe>>>(DataResult.Loading)
@@ -36,6 +43,17 @@ class SavedRecipesViewModel @Inject constructor(
             }
 
             _recipesState.value = result
+        }
+    }
+
+    suspend fun deleteRecipe(id: Int) {
+        viewModelScope.launch {
+            deleteRecipeUseCase(id)
+            _recipesState.value = repository.getSavedRecipesByDate()
+        }
+
+        withContext(Dispatchers.Main) {
+            Toast.makeText(getApplication(), "Recipe deleted", Toast.LENGTH_SHORT).show()
         }
     }
 }

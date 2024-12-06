@@ -37,7 +37,7 @@ class SavedRecipesFragment : Fragment() {
     }
 
     private fun setupUi() {
-        adapter = SavedRecipesAdapter()
+        adapter = SavedRecipesAdapter(viewModel, viewLifecycleOwner.lifecycleScope)
         binding.postsRecyclerView.adapter = adapter
         binding.postsRecyclerView.layoutManager = StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
     }
@@ -60,7 +60,7 @@ class SavedRecipesFragment : Fragment() {
                     is DataResult.Error -> {
                         binding.progressBar.isVisible = false
                         // binding.errorTextView.isVisible = true
-                        binding.savedTitleLabel.text = result.exception.message
+                        binding.errorTextLabel.text = result.exception.message
                     }
                 }
             }

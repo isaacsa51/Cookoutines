@@ -13,8 +13,8 @@ interface RecipesDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertRecipe(recipe: RecipeEntity)
 
-    @Delete
-    suspend fun deleteRecipe(recipe: RecipeEntity)
+    @Query("DELETE FROM recipe WHERE id = :id")
+    suspend fun deleteRecipe(id: Int)
 
     @Query("SELECT * FROM recipe ORDER BY saved_date DESC")
     fun getSavedRecipesByDate(): Flow<List<RecipeEntity>>
