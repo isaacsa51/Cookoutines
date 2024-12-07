@@ -50,6 +50,8 @@ class SavedRecipesFragment : Fragment() {
                         binding.progressBar.isVisible = false
                         // binding.errorTextView.isVisible = false
                         adapter.submitList(result.data)
+                        adapter.updateAll(result.data)
+
                     }
 
                     is DataResult.Loading -> {

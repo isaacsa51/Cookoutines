@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.serranoie.android.core.domain.model.recipe.Recipe
 import com.serranoie.android.feature.saved.databinding.SavedRecipeItemBinding
+import com.serranoie.android.feature.saved.utils.RecipeDeleteListener
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -26,15 +27,23 @@ class SavedRecipesAdapter @Inject constructor(
         return SavedRecipeViewHolder(binding)
     }
 
-    override fun getItemCount(): Int {
-       return items.size
-    }
+    override fun getItemCount(): Int = items.size
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is SavedRecipeViewHolder -> {
                 val recipe = items[position] as Recipe
-                holder.bind(recipe, viewModel, position, lifecycleScope)
+
+                val listener = object : RecipeDeleteListener {
+                    override fun delete(position: Int) {
+                        lifecycleScope.launch {
+                            viewModel.deleteRecipe(recipe.id!!)
+                            notifyItemRemoved(position)
+                        }
+                    }
+                }
+
+                holder.bind(recipe, viewModel, position, lifecycleScope, listener)
             }
         }
     }
@@ -44,10 +53,16 @@ class SavedRecipesAdapter @Inject constructor(
         notifyDataSetChanged()
     }
 
+    fun updateAll(data: List<Recipe>) {
+        items.clear()
+        items.addAll(data)
+        notifyDataSetChanged()
+    }
+
     inner class SavedRecipeViewHolder(private val binding: SavedRecipeItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(data: Recipe, viewModel: SavedRecipesViewModel, position: Int, lifecycleScope: LifecycleCoroutineScope) {
+        fun bind(data: Recipe, viewModel: SavedRecipesViewModel, position: Int, lifecycleScope: LifecycleCoroutineScope, listener: RecipeDeleteListener) {
             binding.recipeTitleTextView.text = data.title
             binding.recipeImageView.load(data.image) {
                 crossfade(true)
@@ -57,11 +72,15 @@ class SavedRecipesAdapter @Inject constructor(
             }
 
             binding.deleteButton.setOnClickListener {
-                lifecycleScope.launch {
-                    viewModel.deleteRecipe(data.id!!)
-                }
-                items.removeAt(position) // Remove item from the items list
-                notifyItemRemoved(position) // Notify adapter of data change
+                listener.delete(position)
+
+//                lifecycleScope.launch {
+//                    viewModel.deleteRecipe(data.id!!)
+//                }
+//                items.removeAt(position) // Remove item from the items list
+//
+//                notifyItemRemoved(position) // Notify adapter of data change
+//                notifyItemRangeChanged(position, items.size - position) // Update remaining items
             }
 
             binding.root.setOnClickListener {
