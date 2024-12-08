@@ -114,6 +114,8 @@ class RecipesAdapter @Inject constructor(
     inner class RecipeViewHolder(private val binding: ItemRecipeBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
+        private var isSaved = false
+
         fun bind(data: Recipe, viewModel: RecipesListViewModel) {
             binding.recipeTitleTextView.text = data.title
             binding.authorTextView.text = data.creditsText
@@ -134,7 +136,12 @@ class RecipesAdapter @Inject constructor(
             }
 
             binding.saveButton.setOnClickListener {
-                viewModel.saveRecipe(data)
+                isSaved = !isSaved
+                if (isSaved) {
+                    viewModel.saveRecipe(data)
+                } else {
+                    viewModel.deleteRecipe(data.id!!)
+                }
             }
         }
     }

@@ -46,7 +46,6 @@ data class RecipeEntity(
     @ColumnInfo(name = "very_popular") val veryPopular: Boolean?,
     @ColumnInfo(name = "weight_watcher_smart_points") val weightWatcherSmartPoints: Int?,
     @ColumnInfo(name = "is_saved") val isSaved: Boolean = false,
-    @ColumnInfo(name = "saved_date") val savedDate: Long? = null
 )
 
 @Entity(tableName = "analyzed_instruction")

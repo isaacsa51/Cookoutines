@@ -63,7 +63,8 @@ fun RecipeDto.toDomain(): Recipe {
         vegetarian = vegetarian,
         veryHealthy = veryHealthy,
         veryPopular = veryPopular,
-        weightWatcherSmartPoints = weightWatcherSmartPoints
+        weightWatcherSmartPoints = weightWatcherSmartPoints,
+        isSaved = false
     )
 }
 
@@ -228,7 +229,8 @@ fun RecipeEntity.toRecipe(): Recipe {
         vegetarian = vegetarian,
         veryHealthy = veryHealthy,
         veryPopular = veryPopular,
-        weightWatcherSmartPoints = weightWatcherSmartPoints
+        weightWatcherSmartPoints = weightWatcherSmartPoints,
+        isSaved = isSaved
     )
 }
 
@@ -263,6 +265,7 @@ fun Recipe.toEntity(): RecipeEntity {
         vegetarian = vegetarian,
         veryHealthy = veryHealthy,
         veryPopular = veryPopular,
-        weightWatcherSmartPoints = weightWatcherSmartPoints
+        weightWatcherSmartPoints = weightWatcherSmartPoints,
+        isSaved = isSaved ?: false,
     )
 }

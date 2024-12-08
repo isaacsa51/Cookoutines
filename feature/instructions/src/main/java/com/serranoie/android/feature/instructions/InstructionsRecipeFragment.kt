@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -60,12 +61,17 @@ class InstructionsRecipeFragment : Fragment() {
                     is DataResult.Loading -> {
                         binding.circularLoader.visibility = View.VISIBLE
                     }
+
                     is DataResult.Success -> {
                         directionsAdapter.submitList(result.data)
                         binding.circularLoader.visibility = View.GONE
                     }
+
                     is DataResult.Error -> {
-                        Log.e("InstructionsRecipeFragment", "Error loading instructions: ${result.exception}")
+                        Log.e(
+                            "InstructionsRecipeFragment",
+                            "Error loading instructions: ${result.exception}"
+                        )
                     }
                 }
             }
@@ -79,9 +85,9 @@ class InstructionsRecipeFragment : Fragment() {
                     }
 
                     is DataResult.Success -> {
-                        binding.circularLoader.visibility = View.GONE
+                        var isSaved: Boolean
 
-                        Log.e("InstructionsRecipeFragment", "DATA: ${state.data}")
+                        binding.circularLoader.visibility = View.GONE
 
                         binding.collapsingToolbarLayout.title = state.data.title
 
@@ -115,7 +121,8 @@ class InstructionsRecipeFragment : Fragment() {
                         directionsViewModel.getRecipeInstructions(state.data.id!!)
 
                         // * INGREDIENTS
-                        val ingredientsAdapter = IngredientsAdapter(state.data.extendedIngredients!!)
+                        val ingredientsAdapter =
+                            IngredientsAdapter(state.data.extendedIngredients!!)
                         binding.ingredientsRecyclerView.adapter = ingredientsAdapter
                         binding.totalIngredientsLabel.text =
                             "Total ingredients: ${state.data.extendedIngredients?.size}"
@@ -125,6 +132,21 @@ class InstructionsRecipeFragment : Fragment() {
                             crossfade(500)
                             placeholder(R.drawable.placeholder_image)
                             error(R.drawable.placeholder_image)
+                        }
+
+                        isSaved = viewModel.isRecipeSaved(state.data.id!!)
+
+                        updateFabState(isSaved)
+
+                        binding.extendedFab.setOnClickListener {
+                            if (isSaved) {
+                                viewModel.deleteRecipe(state.data.id!!)
+                                isSaved = false
+                            } else {
+                                viewModel.saveRecipe(state.data.copy(isSaved = true))
+                                isSaved = true
+                            }
+                            updateFabState(isSaved)
                         }
                     }
 
@@ -158,6 +180,19 @@ class InstructionsRecipeFragment : Fragment() {
 
         binding.extendedFab.setOnClickListener {
             // TODO: save current recipe entity here...
+        }
+    }
+
+    private fun updateFabState(isSaved: Boolean) {
+        binding.extendedFab.text = if (isSaved) {
+            "Saved"
+        } else {
+            "Save Recipe"
+        }
+        binding.extendedFab.icon = if (isSaved) {
+            ContextCompat.getDrawable(requireContext(), R.drawable.ic_bookmarked)
+        } else {
+            ContextCompat.getDrawable(requireContext(), R.drawable.ic_bookmark)
         }
     }
 

@@ -2,6 +2,8 @@ package com.serranoie.android.di
 
 import android.content.Context
 import androidx.room.Room
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.serranoie.android.core.data.local.dao.RecipesDao
 import com.serranoie.android.core.data.local.persistence.AppDataBase
 import com.serranoie.android.core.data.remote.SpoonacularApi
@@ -32,8 +34,30 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object DependenciesProvider {
+
     private const val API_KEY = BuildConfig.API_KEY
     private const val BASE_URL = BuildConfig.BASE_URL
+
+    private val MIGRATION_1_2 = object : Migration(1, 2) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+            if (!columnExists(db, "recipe", "is_saved")) {
+                db.execSQL("ALTER TABLE recipe ADD COLUMN is_saved INTEGER NOT NULL DEFAULT 0")
+            }
+        }
+    }
+
+    private fun columnExists(database: SupportSQLiteDatabase, tableName: String, columnName: String): Boolean {
+        val cursor = database.query("PRAGMA table_info($tableName)")
+        while (cursor.moveToNext()) {
+            val name = cursor.getString(cursor.getColumnIndexOrThrow("name"))
+            if (name == columnName) {
+                cursor.close()
+                return true
+            }
+        }
+        cursor.close()
+        return false
+    }
 
     @Provides
     @Singleton
@@ -76,7 +100,9 @@ object DependenciesProvider {
             appContext,
             AppDataBase::class.java,
             "app_database"
-        ).build()
+        )
+            .addMigrations(MIGRATION_1_2)
+            .build()
     }
 
     @Provides

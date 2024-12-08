@@ -16,6 +16,6 @@ interface RecipesDao {
     @Query("DELETE FROM recipe WHERE id = :id")
     suspend fun deleteRecipe(id: Int)
 
-    @Query("SELECT * FROM recipe ORDER BY saved_date DESC")
+    @Query("SELECT * FROM recipe")
     fun getSavedRecipesByDate(): Flow<List<RecipeEntity>>
 }

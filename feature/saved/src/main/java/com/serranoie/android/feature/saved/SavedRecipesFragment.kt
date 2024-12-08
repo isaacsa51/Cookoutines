@@ -36,6 +36,11 @@ class SavedRecipesFragment : Fragment() {
         return binding.root
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.triggerRefresh()
+    }
+
     private fun setupUi() {
         adapter = SavedRecipesAdapter(viewModel, viewLifecycleOwner.lifecycleScope)
         binding.postsRecyclerView.adapter = adapter
@@ -65,6 +70,12 @@ class SavedRecipesFragment : Fragment() {
                         binding.errorTextLabel.text = result.exception.message
                     }
                 }
+            }
+        }
+
+        lifecycleScope.launch {
+            viewModel.refreshTrigger.collect {
+                viewModel.loadSavedRecipes()
             }
         }
     }

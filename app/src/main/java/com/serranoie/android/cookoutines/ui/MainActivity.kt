@@ -8,6 +8,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
@@ -16,6 +17,7 @@ import com.serranoie.android.cookoutines.R
 import com.serranoie.android.cookoutines.databinding.ActivityMainBinding
 import com.serranoie.android.feature.onboarding.domain.GetOnboardingStatusUseCase
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -34,15 +36,18 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        navController = navHostFragment.navController
+
         enableEdgeToEdge()
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
-        // TODO: Delete comment to implement the functionality of the onboarding status check
-//        lifecycleScope.launch {
-//            getOnboardingStatusUseCase().collect { onboardingCompleted ->
-//                setStartDestination(onboardingCompleted)
-//            }
-//        }
+        lifecycleScope.launch {
+            getOnboardingStatusUseCase().collect { onboardingCompleted ->
+                setStartDestination(onboardingCompleted)
+            }
+        }
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, windowInsets ->
             val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -54,15 +59,15 @@ class MainActivity : AppCompatActivity() {
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
 
-        val navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        val navController = navHostFragment.navController
-
         binding.bottomNavigation.setupWithNavController(navController)
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
                 R.id.onboardingFragment -> {
+                    binding.bottomNavigation.visibility = View.GONE
+                }
+
+                R.id.instructionsRecipeFragment -> {
                     binding.bottomNavigation.visibility = View.GONE
                 }
 
@@ -95,7 +100,7 @@ class MainActivity : AppCompatActivity() {
         val navGraph = navInflater.inflate(R.navigation.nav_graph)
 
         val startDest = if (onboardingCompleted) {
-            R.id.recipesListFragment
+            R.id.nav_graph_main
         } else {
             R.id.onboardingFragment
         }
