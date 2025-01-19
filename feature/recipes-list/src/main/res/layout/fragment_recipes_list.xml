@@ -42,25 +42,6 @@
             android:layout_height="wrap_content"
             android:padding="8dp">
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/searchTextInputLayout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:startIconDrawable="@drawable/ic_search">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Search recipe"
-                    android:imeOptions="actionDone"
-                    android:inputType="text" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
             <TextView
                 android:id="@+id/labelTrending"
                 style="@style/TitleLarge"
@@ -69,7 +50,7 @@
                 android:paddingVertical="12dp"
                 android:text="Trending recipes"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/searchTextInputLayout" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/trendingRecyclerView"
@@ -78,188 +59,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/labelTrending" />
-
-            <HorizontalScrollView
-                android:id="@+id/horizontalScrollView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:scrollbars="none"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/trendingRecyclerView">
-
-                <com.google.android.material.chip.ChipGroup
-                    android:id="@+id/cuisinesChipGroup"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:scrollHorizontally="true"
-                    app:singleLine="true">
-
-                    <com.google.android.material.chip.Chip
-                        style="@style/Cookoutines.Component.FilterChip"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="African" />
-
-                    <com.google.android.material.chip.Chip
-                        style="@style/Cookoutines.Component.FilterChip"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Asian" />
-
-                    <com.google.android.material.chip.Chip
-                        style="@style/Cookoutines.Component.FilterChip"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="American" />
-
-                    <com.google.android.material.chip.Chip
-                        style="@style/Cookoutines.Component.FilterChip"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="British" />
-
-                    <com.google.android.material.chip.Chip
-                        style="@style/Cookoutines.Component.FilterChip"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Cajun" />
-
-                    <com.google.android.material.chip.Chip
-                        style="@style/Cookoutines.Component.FilterChip"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Caribbean" />
-
-                    <com.google.android.material.chip.Chip
-                        style="@style/Cookoutines.Component.FilterChip"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Chinese" />
-
-                    <com.google.android.material.chip.Chip
-                        style="@style/Cookoutines.Component.FilterChip"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Eastern European" />
-
-                    <com.google.android.material.chip.Chip
-                        style="@style/Cookoutines.Component.FilterChip"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="European" />
-
-                    <com.google.android.material.chip.Chip
-                        style="@style/Cookoutines.Component.FilterChip"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="French" />
-
-                    <com.google.android.material.chip.Chip
-                        style="@style/Cookoutines.Component.FilterChip"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="German" />
-
-                    <com.google.android.material.chip.Chip
-                        style="@style/Cookoutines.Component.FilterChip"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Greek" />
-
-                    <com.google.android.material.chip.Chip
-                        style="@style/Cookoutines.Component.FilterChip"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Indian" />
-
-                    <com.google.android.material.chip.Chip
-                        style="@style/Cookoutines.Component.FilterChip"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Irish" />
-
-                    <com.google.android.material.chip.Chip
-                        style="@style/Cookoutines.Component.FilterChip"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Italian" />
-
-                    <com.google.android.material.chip.Chip
-                        style="@style/Cookoutines.Component.FilterChip"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Japanese" />
-
-                    <com.google.android.material.chip.Chip
-                        style="@style/Cookoutines.Component.FilterChip"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Jewish" />
-
-                    <com.google.android.material.chip.Chip
-                        style="@style/Cookoutines.Component.FilterChip"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Korean" />
-
-                    <com.google.android.material.chip.Chip
-                        style="@style/Cookoutines.Component.FilterChip"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Latin American" />
-
-                    <com.google.android.material.chip.Chip
-                        style="@style/Cookoutines.Component.FilterChip"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Mediterranean" />
-
-                    <com.google.android.material.chip.Chip
-                        style="@style/Cookoutines.Component.FilterChip"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Mexican" />
-
-                    <com.google.android.material.chip.Chip
-                        style="@style/Cookoutines.Component.FilterChip"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Middle Eastern" />
-
-                    <com.google.android.material.chip.Chip
-                        style="@style/Cookoutines.Component.FilterChip"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Nordic" />
-
-                    <com.google.android.material.chip.Chip
-                        style="@style/Cookoutines.Component.FilterChip"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Southern" />
-
-                    <com.google.android.material.chip.Chip
-                        style="@style/Cookoutines.Component.FilterChip"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Spanish" />
-
-                    <com.google.android.material.chip.Chip
-                        style="@style/Cookoutines.Component.FilterChip"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Thai" />
-
-                    <com.google.android.material.chip.Chip
-                        style="@style/Cookoutines.Component.FilterChip"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Vietnamese" />
-
-                </com.google.android.material.chip.ChipGroup>
-
-            </HorizontalScrollView>
 
             <TextView
                 android:id="@+id/labelLatestText"
@@ -270,7 +69,7 @@
                 android:text="Latest recipes"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/horizontalScrollView" />
+                app:layout_constraintTop_toBottomOf="@id/trendingRecyclerView" />
 
 
             <androidx.recyclerview.widget.RecyclerView

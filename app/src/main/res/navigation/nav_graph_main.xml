@@ -18,6 +18,12 @@
         <deepLink app:uri="cookoutines://recipes" />
     </fragment>
     <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.serranoie.android.feature.search.SearchFragment"
+        android:label="SearchFragment">
+        <deepLink app:uri="cookoutines://search" />
+    </fragment>
+    <fragment
         android:id="@+id/instructionsRecipeFragment"
         android:name="com.serranoie.android.feature.instructions.InstructionsRecipeFragment"
         android:label="InstructionsRecipeFragment">

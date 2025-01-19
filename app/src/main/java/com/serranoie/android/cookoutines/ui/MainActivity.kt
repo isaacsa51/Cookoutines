@@ -84,6 +84,7 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
                 R.id.searchMenu -> {
+                    navigateToFragment(R.id.searchFragment)
                     true
                 }
                 R.id.savedMenu -> {
@@ -110,7 +111,7 @@ class MainActivity : AppCompatActivity() {
         navController.graph = navGraph
     }
 
-    fun navigateToFragment(destinationId: Int) {
+    private fun navigateToFragment(destinationId: Int) {
         findNavController(R.id.nav_host_fragment).navigate(destinationId)
     }
 

@@ -58,31 +58,31 @@ class RecipesListFragment : Fragment() {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         }
 
-        binding.searchTextInputLayout.editText?.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                submitSearchQuery()
-
-                // Hide the keyboard
-                val imm =
-                    requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.hideSoftInputFromWindow(binding.searchTextInputLayout.windowToken, 0)
-
-                true
-            } else {
-                false
-            }
-        }
-
-        binding.searchTextInputLayout.editText?.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-                if (s.isNullOrEmpty()) {
-                    viewModel.resetToRandomRecipes()
-                }
-            }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-        })
+//        binding.searchTextInputLayout.editText?.setOnEditorActionListener { _, actionId, _ ->
+//            if (actionId == EditorInfo.IME_ACTION_DONE) {
+//                submitSearchQuery()
+//
+//                // Hide the keyboard
+//                val imm =
+//                    requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+//                imm.hideSoftInputFromWindow(binding.searchTextInputLayout.windowToken, 0)
+//
+//                true
+//            } else {
+//                false
+//            }
+//        }
+//
+//        binding.searchTextInputLayout.editText?.addTextChangedListener(object : TextWatcher {
+//            override fun afterTextChanged(s: Editable?) {
+//                if (s.isNullOrEmpty()) {
+//                    viewModel.resetToRandomRecipes()
+//                }
+//            }
+//
+//            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+//            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+//        })
 
     }
 
@@ -120,9 +120,8 @@ class RecipesListFragment : Fragment() {
     }
 
     private fun setupObservers() {
-        viewLifecycleOwner.lifecycleScope.launch { // Launch within viewLifecycleOwner's scope
+        viewLifecycleOwner.lifecycleScope.launch {
             viewModel.recipesState.collect { result ->
-                // Check if binding is null before accessing it
                 binding.let { safeBinding ->
                     when (result) {
                         is DataResult.Success -> {
@@ -170,12 +169,12 @@ class RecipesListFragment : Fragment() {
         }
     }
 
-    private fun submitSearchQuery() {
-        val query = binding.searchTextInputLayout.editText?.text.toString()
-        if (query.isNotBlank()) {
-            viewModel.searchRecipes(query)
-        }
-    }
+//    private fun submitSearchQuery() {
+//        val query = binding.searchTextInputLayout.editText?.text.toString()
+//        if (query.isNotBlank()) {
+//            viewModel.searchRecipes(query)
+//        }
+//    }
 
     override fun onDestroyView() {
         super.onDestroyView()
