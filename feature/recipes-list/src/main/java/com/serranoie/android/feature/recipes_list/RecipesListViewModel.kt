@@ -37,13 +37,6 @@ class RecipesListViewModel @Inject constructor(
     val trendingRecipesState: StateFlow<DataResult<List<Result>>> =
         _trendingRecipesState
 
-    private val _searchResultsState =
-        MutableStateFlow<DataResult<List<Result>>>(
-            DataResult.Loading
-        )
-    val searchResultsState: StateFlow<DataResult<List<Result>>> =
-        _searchResultsState
-
     init {
         loadRecipes()
         loadTrendingRecipes()
@@ -70,26 +63,6 @@ class RecipesListViewModel @Inject constructor(
         }
     }
 
-    fun searchRecipes(query: String) {
-        viewModelScope.launch {
-            _searchResultsState.value = DataResult.Loading
-            val result = withContext(Dispatchers.IO) {
-                searchRecipesUseCase(query)
-            }
-            _searchResultsState.value = result
-        }
-    }
-
-    fun resetToRandomRecipes() {
-        viewModelScope.launch {
-            _recipesState.value = DataResult.Loading
-            val result = withContext(Dispatchers.IO) {
-                getRecipesUseCase()
-            }
-            _recipesState.value = result
-        }
-    }
-
     fun saveRecipe(recipe: Recipe) {
         viewModelScope.launch {
             saveRecipeUseCase(recipe)
@@ -100,5 +73,9 @@ class RecipesListViewModel @Inject constructor(
         viewModelScope.launch {
             deleteRecipeUseCase(id)
         }
+    }
+
+    fun refreshRecipes() {
+        loadRecipes()
     }
 }

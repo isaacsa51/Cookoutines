@@ -1,14 +1,9 @@
 package com.serranoie.android.feature.recipes_list
 
-import android.content.Context
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo
-import android.view.inputmethod.InputMethodManager
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -41,6 +36,7 @@ class RecipesListFragment : Fragment() {
         setupObservers()
         setupPopularAdapter()
         setupTrendingAdapter()
+        setupSwipeToRefresh()
 
         return binding.root
     }
@@ -57,33 +53,13 @@ class RecipesListFragment : Fragment() {
             adapter = trendingAdapter
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         }
+    }
 
-//        binding.searchTextInputLayout.editText?.setOnEditorActionListener { _, actionId, _ ->
-//            if (actionId == EditorInfo.IME_ACTION_DONE) {
-//                submitSearchQuery()
-//
-//                // Hide the keyboard
-//                val imm =
-//                    requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-//                imm.hideSoftInputFromWindow(binding.searchTextInputLayout.windowToken, 0)
-//
-//                true
-//            } else {
-//                false
-//            }
-//        }
-//
-//        binding.searchTextInputLayout.editText?.addTextChangedListener(object : TextWatcher {
-//            override fun afterTextChanged(s: Editable?) {
-//                if (s.isNullOrEmpty()) {
-//                    viewModel.resetToRandomRecipes()
-//                }
-//            }
-//
-//            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-//            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-//        })
-
+    private fun setupSwipeToRefresh() {
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            viewModel.refreshRecipes()
+            binding.swipeRefreshLayout.isRefreshing = false
+        }
     }
 
     private fun setupTrendingAdapter() {
@@ -133,7 +109,8 @@ class RecipesListFragment : Fragment() {
                         is DataResult.Error -> {
                             safeBinding.progressBar.isVisible = false
                             safeBinding.errorTextView.isVisible = true
-                            safeBinding.errorTextView.text = result.exception.message ?: "Unknown error"
+                            safeBinding.errorTextView.text =
+                                result.exception.message ?: "Unknown error"
                         }
 
                         is DataResult.Loading -> {
@@ -144,37 +121,7 @@ class RecipesListFragment : Fragment() {
                 }
             }
         }
-
-        lifecycleScope.launch {
-            viewModel.searchResultsState.collect { result ->
-                when (result) {
-                    is DataResult.Success -> {
-                        binding.progressBar.isVisible = false
-                        binding.errorTextView.isVisible = false
-                        recipesAdapter.submitList(result.data)
-                    }
-
-                    is DataResult.Error -> {
-                        binding.progressBar.isVisible = false
-                        binding.errorTextView.isVisible = true
-                        binding.errorTextView.text = result.exception.message ?: "Unknown error"
-                    }
-
-                    is DataResult.Loading -> {
-                        binding.progressBar.isVisible = true
-                        binding.errorTextView.isVisible = false
-                    }
-                }
-            }
-        }
     }
-
-//    private fun submitSearchQuery() {
-//        val query = binding.searchTextInputLayout.editText?.text.toString()
-//        if (query.isNotBlank()) {
-//            viewModel.searchRecipes(query)
-//        }
-//    }
 
     override fun onDestroyView() {
         super.onDestroyView()

@@ -68,6 +68,9 @@ dependencies {
 
     // Coil
     implementation(libs.coil)
+
+    // Swipe to Refresh
+    implementation(libs.androidx.swiperefreshlayout)
 }
 kapt {
     correctErrorTypes = true
