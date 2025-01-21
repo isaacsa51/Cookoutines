@@ -12,6 +12,9 @@ import androidx.navigation.NavDeepLinkRequest
 import androidx.navigation.fragment.findNavController
 import com.serranoie.android.feature.onboarding.databinding.FragmentOnboardingBinding
 import dagger.hilt.android.AndroidEntryPoint
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.schedulers.Schedulers
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -20,6 +23,8 @@ class OnboardingFragment : Fragment() {
 
     private var _binding: FragmentOnboardingBinding? = null
     private val binding get() = _binding!!
+
+    private val compositeDisposable = CompositeDisposable()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,22 +38,21 @@ class OnboardingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        lifecycleScope.launchWhenStarted {
-            viewModel.onboardingCompleted.collect { completed ->
-                binding.btnStart.setOnClickListener {
-                    viewModel.setOnboardingCompleted()
-
-                    val request = NavDeepLinkRequest.Builder
-                        .fromUri("cookoutines://recipes".toUri())
-                        .build()
-                    findNavController().navigate(request)
+        compositeDisposable.add(
+            viewModel.onboardingCompleted
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { completed ->
+                    binding.btnStart.setOnClickListener {
+                        viewModel.setOnboardingCompleted()
+                    }
                 }
-            }
-        }
+        )
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        compositeDisposable.clear()
     }
 }

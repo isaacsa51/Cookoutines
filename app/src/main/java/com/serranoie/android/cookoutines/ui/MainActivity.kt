@@ -8,7 +8,6 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
@@ -17,7 +16,9 @@ import com.serranoie.android.cookoutines.R
 import com.serranoie.android.cookoutines.databinding.ActivityMainBinding
 import com.serranoie.android.feature.onboarding.domain.GetOnboardingStatusUseCase
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.schedulers.Schedulers
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -25,10 +26,10 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
+    private val compositeDisposable = CompositeDisposable()
 
     @Inject
     lateinit var getOnboardingStatusUseCase: GetOnboardingStatusUseCase
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,11 +44,14 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
-        lifecycleScope.launch {
-            getOnboardingStatusUseCase().collect { onboardingCompleted ->
-                setStartDestination(onboardingCompleted)
-            }
-        }
+        compositeDisposable.add(
+            getOnboardingStatusUseCase()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { onboardingCompleted ->
+                    setStartDestination(onboardingCompleted)
+                }
+        )
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, windowInsets ->
             val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -83,14 +87,17 @@ class MainActivity : AppCompatActivity() {
                     navigateToFragment(R.id.recipesListFragment)
                     true
                 }
+
                 R.id.searchMenu -> {
                     navigateToFragment(R.id.searchFragment)
                     true
                 }
+
                 R.id.savedMenu -> {
                     navigateToFragment(R.id.savedRecipesFragment)
                     true
                 }
+
                 else -> false
             }
         }
@@ -117,5 +124,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp() || super.onSupportNavigateUp()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        compositeDisposable.clear()
     }
 }

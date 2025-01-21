@@ -1,15 +1,14 @@
 package com.serranoie.android.feature.onboarding
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.serranoie.android.feature.onboarding.domain.GetOnboardingStatusUseCase
 import com.serranoie.android.feature.onboarding.domain.SetOnboardingCompletedUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.schedulers.Schedulers
+import io.reactivex.rxjava3.subjects.BehaviorSubject
 import javax.inject.Inject
 
 @HiltViewModel
@@ -18,21 +17,34 @@ class OnboardingViewModel @Inject constructor(
     private val setOnboardingCompletedUseCase: SetOnboardingCompletedUseCase
 ) : ViewModel() {
 
-    private val _onboardingCompleted = MutableStateFlow(false)
-    val onboardingCompleted: StateFlow<Boolean> = _onboardingCompleted
+    private val _onboardingCompleted = BehaviorSubject.create<Boolean>()
+    val onboardingCompleted: Observable<Boolean> = _onboardingCompleted.hide()
+    private val compositeDisposable = CompositeDisposable()
 
     init {
-        viewModelScope.launch {
-            getOnboardingStatusUseCase().collect { status ->
-                _onboardingCompleted.value = status
-            }
-        }
+        compositeDisposable.add(
+            getOnboardingStatusUseCase()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { status ->
+                    _onboardingCompleted.onNext(status)
+                }
+        )
     }
 
     fun setOnboardingCompleted() {
-        viewModelScope.launch {
+        compositeDisposable.add(
             setOnboardingCompletedUseCase(true)
-            _onboardingCompleted.value = true
-        }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    _onboardingCompleted.onNext(true)
+                }
+        )
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        compositeDisposable.clear()
     }
 }
