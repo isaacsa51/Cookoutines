@@ -65,19 +65,21 @@ class MainActivity : AppCompatActivity() {
 
         binding.bottomNavigation.setupWithNavController(navController)
 
+        setupBottomNavigation()
+    }
+
+    private fun setupBottomNavigation() {
+        binding.bottomNavigation.setupWithNavController(navController)
+
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            when (destination.id) {
-                R.id.onboardingFragment -> {
-                    binding.bottomNavigation.visibility = View.GONE
-                }
-
-                R.id.instructionsRecipeFragment -> {
-                    binding.bottomNavigation.visibility = View.GONE
-                }
-
-                else -> {
-                    binding.bottomNavigation.visibility = View.VISIBLE
-                }
+            binding.bottomNavigation.visibility = if (destination.id in setOf(
+                    R.id.onboardingFragment,
+                    R.id.instructionsRecipeFragment
+                )
+            ) {
+                View.GONE
+            } else {
+                View.VISIBLE
             }
         }
 
