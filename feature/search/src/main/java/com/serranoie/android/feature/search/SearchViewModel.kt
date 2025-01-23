@@ -1,17 +1,16 @@
 package com.serranoie.android.feature.search
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.serranoie.android.core.domain.model.recipe.Recipe
 import com.serranoie.android.core.domain.model.search.Result
 import com.serranoie.android.core.domain.result.DataResult
 import com.serranoie.android.feature.recipes_list.domain.usecase.SearchRecipeUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.schedulers.Schedulers
+import io.reactivex.rxjava3.subjects.BehaviorSubject
 import javax.inject.Inject
 
 @HiltViewModel
@@ -20,32 +19,29 @@ class SearchViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _searchResultsState =
-        MutableStateFlow<DataResult<List<Result>>>(
-            DataResult.Loading
-        )
-    val searchResultsState: StateFlow<DataResult<List<Result>>> =
-        _searchResultsState
+        BehaviorSubject.createDefault<DataResult<List<Result>>>(DataResult.Loading)
+    val searchResultsState: Observable<DataResult<List<Result>>> = _searchResultsState.hide()
 
     private val _recipesState =
-        MutableStateFlow<DataResult<List<Recipe>>>(DataResult.Loading)
-    val recipesState: StateFlow<DataResult<List<Recipe>>> =
-        _recipesState
+        BehaviorSubject.createDefault<DataResult<List<Recipe>>>(DataResult.Loading)
+    val recipesState: Observable<DataResult<List<Recipe>>> = _recipesState.hide()
+
+    private val compositeDisposable = CompositeDisposable()
 
     fun searchRecipes(query: String) {
-        viewModelScope.launch {
-            _searchResultsState.value = DataResult.Loading
-            val result = withContext(Dispatchers.IO) {
-                searchRecipeUseCase(query)
-            }
-            _searchResultsState.value = result
-        }
+        compositeDisposable.add(
+            searchRecipeUseCase(query)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    { result -> _searchResultsState.onNext(result) },
+                    { error -> _searchResultsState.onNext(DataResult.Error(error)) }
+                )
+        )
     }
 
-    fun resetToRandomRecipes() {
-        viewModelScope.launch {
-            _searchResultsState.value = DataResult.Loading
-            // Assuming you have a use case to get random recipes
-            // _searchResultsState.value = getRecipesUseCase()
-        }
+    override fun onCleared() {
+        super.onCleared()
+        compositeDisposable.clear()
     }
 }

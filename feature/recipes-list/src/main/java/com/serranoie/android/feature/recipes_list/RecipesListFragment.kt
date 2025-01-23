@@ -36,7 +36,6 @@ class RecipesListFragment : Fragment() {
 
         setupUi()
         setupObservers()
-        //setupPopularAdapter()
         setupTrendingAdapter()
         setupSwipeToRefresh()
 
@@ -75,7 +74,7 @@ class RecipesListFragment : Fragment() {
                         is DataResult.Error -> binding.errorTextView.text =
                             result.exception.message ?: "Unknown error"
 
-                        is DataResult.Loading -> {} // Handle loading state if needed
+                        is DataResult.Loading -> {}
                     }
                 }
         )

@@ -1,6 +1,5 @@
 package com.serranoie.android.core.data.remote.repository
 
-import android.util.Log
 import com.serranoie.android.core.data.local.dao.RecipesDao
 import com.serranoie.android.core.data.mappers.toDomain
 import com.serranoie.android.core.data.mappers.toEntity
@@ -35,8 +34,8 @@ class RecipeRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getRecipeById(id: Int): DataResult<Recipe> {
-        return try {
+    override fun getRecipeById(id: Int): Single<DataResult<Recipe>> {
+        return Single.fromCallable {
             val response = api.getRecipeDetails(id).execute()
 
             if (response.isSuccessful) {
@@ -46,13 +45,11 @@ class RecipeRepositoryImpl @Inject constructor(
             } else {
                 DataResult.Error(Exception("API request failed"))
             }
-        } catch (e: Exception) {
-            DataResult.Error(e)
         }
     }
 
     override fun getPopularRecipes(): Single<DataResult<List<Result>>> {
-        return Single.fromCallable{
+        return Single.fromCallable {
             val response = api.getPopularRecipes().execute()
 
             if (response.isSuccessful) {
@@ -66,8 +63,8 @@ class RecipeRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun searchRecipes(query: String): DataResult<List<Result>> {
-        return try {
+    override fun searchRecipes(query: String): Single<DataResult<List<Result>>> {
+        return Single.fromCallable {
             val response = api.searchRecipes(query).execute()
 
             if (response.isSuccessful) {
@@ -78,13 +75,11 @@ class RecipeRepositoryImpl @Inject constructor(
             } else {
                 DataResult.Error(Exception("API request failed: ${response.message()}"))
             }
-        } catch (e: Exception) {
-            DataResult.Error(e)
         }
     }
 
-    override suspend fun getRecipeInstructions(id: Int): DataResult<List<InstructionsItem>> {
-        return try {
+    override fun getRecipeInstructions(id: Int): Single<DataResult<List<InstructionsItem>>> {
+        return Single.fromCallable {
             val response = api.getRecipeInstructions(id).execute()
 
             if (response.isSuccessful) {
@@ -93,15 +88,11 @@ class RecipeRepositoryImpl @Inject constructor(
                     val mappedData = responseBody?.toListDomain()
                     DataResult.Success(mappedData!!)
                 } catch (e: Exception) {
-                    Log.d("REPOSITORY", "EXCEPTION: ${e.message}")
                     DataResult.Error(e)
                 }
             } else {
-                Log.d("REPOSITORY", "EXCEPTION: ${response.message()}")
                 DataResult.Error(Exception("API request failed: ${response.message()}"))
             }
-        } catch (e: Exception) {
-            DataResult.Error(e)
         }
     }
 

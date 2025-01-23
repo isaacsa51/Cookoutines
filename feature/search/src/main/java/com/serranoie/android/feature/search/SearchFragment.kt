@@ -12,12 +12,13 @@ import android.view.inputmethod.InputMethodManager
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.serranoie.android.core.domain.result.DataResult
 import com.serranoie.android.feature.search.databinding.FragmentSearchBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.schedulers.Schedulers
 
 @AndroidEntryPoint
 class SearchFragment : Fragment() {
@@ -28,6 +29,8 @@ class SearchFragment : Fragment() {
     private lateinit var adapter: SearchAdapter
 
     private val viewModel: SearchViewModel by viewModels()
+
+    private val compositeDisposable = CompositeDisposable()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -77,31 +80,34 @@ class SearchFragment : Fragment() {
     }
 
     private fun setupObservers() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.searchResultsState.collect { result ->
-                when (result) {
-                    is DataResult.Success -> {
-                        binding.progressBar.isVisible = false
-                        binding.errorTextView.isVisible = false
-                        binding.recipesRecyclerView.isVisible = true
-                        adapter.submitList(result.data)
-                    }
+        compositeDisposable.add(
+            viewModel.searchResultsState
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { result ->
+                    when (result) {
+                        is DataResult.Success -> {
+                            binding.progressBar.isVisible = false
+                            binding.errorTextView.isVisible = false
+                            binding.recipesRecyclerView.isVisible = true
+                            adapter.submitList(result.data)
+                        }
 
-                    is DataResult.Error -> {
-                        binding.progressBar.isVisible = false
-                        binding.errorTextView.isVisible = true
-                        binding.recipesRecyclerView.isVisible = false
-                        binding.errorTextView.text = result.exception.message ?: "Unknown error"
-                    }
+                        is DataResult.Error -> {
+                            binding.progressBar.isVisible = false
+                            binding.errorTextView.isVisible = true
+                            binding.recipesRecyclerView.isVisible = false
+                            binding.errorTextView.text = result.exception.message ?: "Unknown error"
+                        }
 
-                    is DataResult.Loading -> {
-                        binding.progressBar.isVisible = true
-                        binding.errorTextView.isVisible = false
-                        binding.recipesRecyclerView.isVisible = false
+                        is DataResult.Loading -> {
+                            binding.progressBar.isVisible = true
+                            binding.errorTextView.isVisible = false
+                            binding.recipesRecyclerView.isVisible = false
+                        }
                     }
                 }
-            }
-        }
+        )
     }
 
     private fun submitSearchQuery() {
@@ -114,5 +120,6 @@ class SearchFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        compositeDisposable.clear()
     }
 }
