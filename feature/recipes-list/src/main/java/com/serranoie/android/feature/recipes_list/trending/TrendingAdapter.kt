@@ -8,7 +8,6 @@ import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import com.serranoie.android.core.domain.model.recipe.Recipe
 import com.serranoie.android.core.domain.model.search.Result
 import com.serranoie.android.feature.recipes_list.R
 import com.serranoie.android.feature.recipes_list.databinding.ItemPopularRecipeBinding

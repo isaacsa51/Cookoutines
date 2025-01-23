@@ -70,6 +70,10 @@ dependencies {
     kapt(libs.hilt.android.compiler)
     androidTestImplementation(libs.hilt.android.testing)
     kaptTest(libs.hilt.android.compiler)
+
+    //RX Java
+    implementation(libs.rxjava)
+    implementation(libs.rxandroid)
 }
 
 kapt {

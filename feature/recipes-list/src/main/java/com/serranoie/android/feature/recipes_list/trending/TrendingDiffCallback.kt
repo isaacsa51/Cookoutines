@@ -1,7 +1,6 @@
 package com.serranoie.android.feature.recipes_list.trending
 
 import androidx.recyclerview.widget.DiffUtil
-import com.serranoie.android.core.domain.model.recipe.Recipe
 import com.serranoie.android.core.domain.model.search.Result
 
 class TrendingDiffCallback: DiffUtil.ItemCallback<Result>() {

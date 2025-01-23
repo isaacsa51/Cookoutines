@@ -11,3 +11,8 @@ java {
 dependencies {
     implementation(project(":core:domain"))
 }
+
+dependencies {
+    //RX Java
+    implementation(libs.rxjava)
+}

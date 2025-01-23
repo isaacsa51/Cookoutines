@@ -48,12 +48,6 @@ class RecipesAdapter @Inject constructor(
                 RecipeSearchViewHolder(binding)
             }
 
-//            TYPE_EMPTY_SEARCH -> {
-//                val view = LayoutInflater.from(parent.context)
-//                    .inflate(R.layout.item_empty_search, parent, false) // Create empty view layout
-//                EmptySearchViewHolder(view)
-//            }
-
             else -> throw IllegalArgumentException("Unknown view type")
         }
     }

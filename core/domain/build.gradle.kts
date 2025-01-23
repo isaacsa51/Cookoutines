@@ -11,3 +11,9 @@ java {
 kotlin {
     jvmToolchain(17)
 }
+
+dependencies {
+    //RX Java
+    implementation("io.reactivex.rxjava3:rxjava:3.1.10")
+    //implementation("io.reactivex.rxjava3:rxandroid:3.0.2")
+}

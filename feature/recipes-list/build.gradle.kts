@@ -71,6 +71,10 @@ dependencies {
 
     // Swipe to Refresh
     implementation(libs.androidx.swiperefreshlayout)
+
+    //RX Java
+    implementation(libs.rxjava)
+    implementation(libs.rxandroid)
 }
 kapt {
     correctErrorTypes = true

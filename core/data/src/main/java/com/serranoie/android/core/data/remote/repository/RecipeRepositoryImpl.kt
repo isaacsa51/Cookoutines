@@ -12,25 +12,26 @@ import com.serranoie.android.core.domain.model.recipe.Recipe
 import com.serranoie.android.core.domain.model.search.Result
 import com.serranoie.android.core.domain.repository.SpoonacularRepository
 import com.serranoie.android.core.domain.result.DataResult
+import io.reactivex.rxjava3.core.Single
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class RecipeRepositoryImpl @Inject constructor(
     private val api: SpoonacularApi,
     private val recipesDao: RecipesDao,
 ) : SpoonacularRepository {
-    override suspend fun getRandomRecipes(): DataResult<List<Recipe>> {
-        return try {
+
+    override fun getRandomRecipes(): Single<DataResult<List<Recipe>>> {
+        return Single.fromCallable {
             val response = api.getRecipes().execute()
+
             if (response.isSuccessful) {
-                val recipes = response.body()?.recipes?.map { it.toDomain() }
-                DataResult.Success(recipes ?: emptyList())
+                val recipes = response.body()?.recipes?.map { it.toDomain() } ?: emptyList()
+
+                DataResult.Success(recipes)
             } else {
-                DataResult.Error(Exception("API request failed"))
+                DataResult.Error(Exception("API error: ${response.code()}"))
             }
-        } catch (e: Exception) {
-            DataResult.Error(e)
         }
     }
 
@@ -50,21 +51,18 @@ class RecipeRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getPopularRecipes(): DataResult<List<Result>> {
-        return try {
+    override fun getPopularRecipes(): Single<DataResult<List<Result>>> {
+        return Single.fromCallable{
             val response = api.getPopularRecipes().execute()
 
             if (response.isSuccessful) {
-                val resultsDtoList = response.body()?.results.orEmpty()
-                val recipes = resultsDtoList.mapNotNull { it?.toDomain() }
+                val results = response.body()?.results.orEmpty()
+                val recipes = results.mapNotNull { it?.toDomain() }
 
                 DataResult.Success(recipes)
             } else {
-                Log.d("POPULAR ERROR", response.message().toString())
-                DataResult.Error(Exception("API request failed"))
+                DataResult.Error(Exception("API request failed: ${response.message()}"))
             }
-        } catch (e: Exception) {
-            DataResult.Error(e)
         }
     }
 

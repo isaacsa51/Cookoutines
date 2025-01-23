@@ -7,13 +7,14 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.serranoie.android.core.domain.result.DataResult
 import com.serranoie.android.feature.recipes_list.databinding.FragmentRecipesListBinding
 import com.serranoie.android.feature.recipes_list.trending.TrendingAdapter
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.schedulers.Schedulers
 
 @AndroidEntryPoint
 class RecipesListFragment : Fragment() {
@@ -25,6 +26,7 @@ class RecipesListFragment : Fragment() {
     private lateinit var recipesAdapter: RecipesAdapter
     private lateinit var trendingAdapter: TrendingAdapter
 
+    private val compositeDisposable = CompositeDisposable()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,7 +36,7 @@ class RecipesListFragment : Fragment() {
 
         setupUi()
         setupObservers()
-        setupPopularAdapter()
+        //setupPopularAdapter()
         setupTrendingAdapter()
         setupSwipeToRefresh()
 
@@ -63,68 +65,56 @@ class RecipesListFragment : Fragment() {
     }
 
     private fun setupTrendingAdapter() {
-        lifecycleScope.launch {
-            viewModel.trendingRecipesState.collect { result ->
-                when (result) {
-                    is DataResult.Success -> trendingAdapter.submitList(result.data)
-                    is DataResult.Error -> binding.errorTextView.text =
-                        result.exception.message ?: "Unknown error"
+        compositeDisposable.add(
+            viewModel.trendingRecipesState
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { result ->
+                    when (result) {
+                        is DataResult.Success -> trendingAdapter.submitList(result.data)
+                        is DataResult.Error -> binding.errorTextView.text =
+                            result.exception.message ?: "Unknown error"
 
-                    is DataResult.Loading -> {}
-                }
-            }
-        }
-    }
-
-    private fun setupPopularAdapter() {
-        lifecycleScope.launch {
-            viewModel.trendingRecipesState.collect { result ->
-                when (result) {
-                    is DataResult.Success -> {
-                        trendingAdapter.submitList(result.data)
-                    }
-
-                    is DataResult.Error -> {
-                        binding.errorTextView.text = result.exception.message ?: "Unknown error"
-                    }
-
-                    is DataResult.Loading -> {
+                        is DataResult.Loading -> {} // Handle loading state if needed
                     }
                 }
-            }
-        }
+        )
     }
 
     private fun setupObservers() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.recipesState.collect { result ->
-                binding.let { safeBinding ->
-                    when (result) {
-                        is DataResult.Success -> {
-                            safeBinding.progressBar.isVisible = false
-                            safeBinding.errorTextView.isVisible = false
-                            recipesAdapter.submitList(result.data)
-                        }
+        compositeDisposable.add(
+            viewModel.recipesState
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { result ->
+                    binding.let { safeBinding ->
+                        when (result) {
+                            is DataResult.Success -> {
+                                safeBinding.progressBar.isVisible = false
+                                safeBinding.errorTextView.isVisible = false
+                                recipesAdapter.submitList(result.data)
+                            }
 
-                        is DataResult.Error -> {
-                            safeBinding.progressBar.isVisible = false
-                            safeBinding.errorTextView.isVisible = true
-                            safeBinding.errorTextView.text =
-                                result.exception.message ?: "Unknown error"
-                        }
+                            is DataResult.Error -> {
+                                safeBinding.progressBar.isVisible = false
+                                safeBinding.errorTextView.isVisible = true
+                                safeBinding.errorTextView.text =
+                                    result.exception.message ?: "Unknown error"
+                            }
 
-                        is DataResult.Loading -> {
-                            safeBinding.progressBar.isVisible = true
-                            safeBinding.errorTextView.isVisible = false
+                            is DataResult.Loading -> {
+                                safeBinding.progressBar.isVisible = true
+                                safeBinding.errorTextView.isVisible = false
+                            }
                         }
                     }
                 }
-            }
-        }
+        )
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
+        compositeDisposable.clear()
         _binding = null
     }
 }
