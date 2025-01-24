@@ -27,6 +27,7 @@ class RecipeRepositoryImpl @Inject constructor(
                 val recipes = response.body()?.recipes?.map { it.toDomain() }
                 DataResult.Success(recipes ?: emptyList())
             } else {
+                Log.e("REPOSITORY", "EXCEPTION: ${response.message()}")
                 DataResult.Error(Exception("API request failed"))
             }
         } catch (e: Exception) {
@@ -43,7 +44,8 @@ class RecipeRepositoryImpl @Inject constructor(
 
                 DataResult.Success(recipe!!)
             } else {
-                DataResult.Error(Exception("API request failed"))
+                Log.e("REPOSITORY", "EXCEPTION: ${response.message()}")
+                DataResult.Error(Exception("API request failed: ${response.message()}"))
             }
         } catch (e: Exception) {
             DataResult.Error(e)
@@ -60,7 +62,7 @@ class RecipeRepositoryImpl @Inject constructor(
 
                 DataResult.Success(recipes)
             } else {
-                Log.d("POPULAR ERROR", response.message().toString())
+                Log.e("REPOSITORY", "EXCEPTION: ${response.message()}")
                 DataResult.Error(Exception("API request failed"))
             }
         } catch (e: Exception) {
@@ -78,6 +80,7 @@ class RecipeRepositoryImpl @Inject constructor(
 
                 DataResult.Success(recipes)
             } else {
+                Log.e("REPOSITORY", "EXCEPTION: ${response.message()}")
                 DataResult.Error(Exception("API request failed: ${response.message()}"))
             }
         } catch (e: Exception) {

@@ -40,9 +40,7 @@ class InstructionsRecipeViewModel @Inject constructor(
     }
 
     suspend fun isRecipeSaved(recipeId: Int): Boolean {
-        val savedRecipesResult = getSavedRecipesUseCase()
-
-        return when (savedRecipesResult) {
+        return when (val savedRecipesResult = getSavedRecipesUseCase()) {
             is DataResult.Success -> {
                 savedRecipesResult.data.any { it.id == recipeId && it.isSaved == true }
             }
@@ -59,7 +57,6 @@ class InstructionsRecipeViewModel @Inject constructor(
                     getRecipeByIdUseCase(id)
                 }
                 _recipeState.value = result
-                Log.d("InstructionsRecipeViewModel", "Data: $result")
             } catch (e: Exception) {
                 _recipeState.value = DataResult.Error(e)
                 Log.e("InstructionsRecipeViewModel", "Error: $e")
