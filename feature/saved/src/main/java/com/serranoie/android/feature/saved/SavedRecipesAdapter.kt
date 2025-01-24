@@ -1,16 +1,21 @@
 package com.serranoie.android.feature.saved
 
+import android.app.Activity
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.net.toUri
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.navigation.NavDeepLinkRequest
 import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import com.google.android.material.snackbar.Snackbar
 import com.serranoie.android.core.domain.model.recipe.Recipe
 import com.serranoie.android.feature.saved.databinding.SavedRecipeItemBinding
 import com.serranoie.android.feature.saved.utils.RecipeDeleteListener
+import dagger.hilt.android.internal.Contexts.getApplication
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -43,7 +48,7 @@ class SavedRecipesAdapter @Inject constructor(
                     }
                 }
 
-                holder.bind(recipe, viewModel, position, lifecycleScope, listener)
+                holder.bind(recipe, position, listener)
             }
         }
     }
@@ -62,7 +67,7 @@ class SavedRecipesAdapter @Inject constructor(
     inner class SavedRecipeViewHolder(private val binding: SavedRecipeItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(data: Recipe, viewModel: SavedRecipesViewModel, position: Int, lifecycleScope: LifecycleCoroutineScope, listener: RecipeDeleteListener) {
+        fun bind(data: Recipe, position: Int, listener: RecipeDeleteListener) {
             binding.recipeTitleTextView.text = data.title
             binding.recipeImageView.load(data.image) {
                 crossfade(true)
@@ -74,13 +79,7 @@ class SavedRecipesAdapter @Inject constructor(
             binding.deleteButton.setOnClickListener {
                 listener.delete(position)
 
-//                lifecycleScope.launch {
-//                    viewModel.deleteRecipe(data.id!!)
-//                }
-//                items.removeAt(position) // Remove item from the items list
-//
-//                notifyItemRemoved(position) // Notify adapter of data change
-//                notifyItemRangeChanged(position, items.size - position) // Update remaining items
+                Snackbar.make(binding.root, "Recipe deleted", Snackbar.LENGTH_SHORT).show()
             }
 
             binding.root.setOnClickListener {
