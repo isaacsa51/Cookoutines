@@ -1,7 +1,6 @@
 package com.serranoie.android.feature.saved
 
 import android.app.Application
-import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import com.serranoie.android.core.domain.model.recipe.Recipe
 import com.serranoie.android.core.domain.repository.SpoonacularRepository
@@ -59,15 +58,13 @@ class SavedRecipesViewModel @Inject constructor(
         compositeDisposable.add(
             Completable.fromAction { deleteRecipeUseCase(id) }
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .andThen(repository.getSavedRecipesByDate())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     { result -> _recipesState.onNext(result) },
                     { error -> _recipesState.onNext(DataResult.Error(error)) }
                 )
         )
-
-        Toast.makeText(getApplication(), "Recipe deleted", Toast.LENGTH_SHORT).show()
     }
 
     override fun onCleared() {

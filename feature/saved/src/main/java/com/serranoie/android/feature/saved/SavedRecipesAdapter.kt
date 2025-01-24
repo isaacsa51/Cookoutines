@@ -1,7 +1,10 @@
 package com.serranoie.android.feature.saved
 
+import android.app.Activity
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.net.toUri
 import androidx.navigation.NavDeepLinkRequest
 import androidx.navigation.Navigation.findNavController
@@ -43,9 +46,24 @@ class SavedRecipesAdapter @Inject constructor(
                             Completable.fromAction { viewModel.deleteRecipe(recipe.id!!) }
                                 .subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe {
-                                    notifyItemRemoved(position)
-                                }
+                                .subscribe(
+                                    {
+                                        (holder.itemView.context as? Activity)?.runOnUiThread {
+                                            Toast.makeText(
+                                                holder.itemView.context,
+                                                "Recipe deleted",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        }
+                                        notifyItemRemoved(position)
+                                    },
+                                    { error ->
+                                        Log.e(
+                                            "SavedRecipesAdapter",
+                                            "Error deleting recipe: ${error.message}"
+                                        )
+                                    }
+                                )
                         )
                     }
                 }
