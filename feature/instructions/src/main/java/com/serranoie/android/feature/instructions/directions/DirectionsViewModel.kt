@@ -1,17 +1,15 @@
 package com.serranoie.android.feature.instructions.directions
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.serranoie.android.core.domain.model.instructions.InstructionsItem
 import com.serranoie.android.core.domain.result.DataResult
 import com.serranoie.android.feature.instructions.domain.usecase.GetDetailedInstructionsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.schedulers.Schedulers
+import io.reactivex.rxjava3.subjects.BehaviorSubject
 import javax.inject.Inject
 
 @HiltViewModel
@@ -20,24 +18,25 @@ class DirectionsViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _instructions =
-        MutableStateFlow<DataResult<List<InstructionsItem>>>(DataResult.Loading)
-    val instructions: StateFlow<DataResult<List<InstructionsItem>>> = _instructions
+        BehaviorSubject.createDefault<DataResult<List<InstructionsItem>>>(DataResult.Loading)
+    val instructions: Observable<DataResult<List<InstructionsItem>>> = _instructions.hide()
+
+    private val compositeDisposable = CompositeDisposable()
 
     fun getRecipeInstructions(recipeId: Int) {
-        viewModelScope.launch {
-            _instructions.value = DataResult.Loading
+        compositeDisposable.add(
+            getDetailedInstructionsUseCase(recipeId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    { result -> _instructions.onNext(result) },
+                    { error -> _instructions.onNext(DataResult.Error(error)) }
+                )
+        )
+    }
 
-            try {
-                val result = withContext(Dispatchers.IO) {
-                    getDetailedInstructionsUseCase(recipeId)
-                }
-
-                _instructions.value = result
-
-                Log.d("DirectionsViewModel", "Instructions: $result")
-            } catch (e: Exception) {
-                _instructions.value = DataResult.Error(e)
-            }
-        }
+    override fun onCleared() {
+        super.onCleared()
+        compositeDisposable.clear()
     }
 }

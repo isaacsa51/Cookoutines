@@ -195,15 +195,15 @@ fun ResultDto.toListDomain(): List<Result> {
 fun RecipeEntity.toRecipe(): Recipe {
     return Recipe(
         aggregateLikes = aggregateLikes,
-        analyzedInstructions = null, // Discard
+        analyzedInstructions = null,
         cheap = cheap,
         cookingMinutes = cookingMinutes,
         creditsText = creditsText,
-        cuisines = null, // Discard
+        cuisines = null,
         dairyFree = dairyFree,
-        diets = null, // Discard
-        dishTypes = null, // Discard
-        extendedIngredients = null, // Discard
+        diets = null,
+        dishTypes = null,
+        extendedIngredients = null,
         gaps = gaps,
         glutenFree = glutenFree,
         healthScore = healthScore,
@@ -212,8 +212,8 @@ fun RecipeEntity.toRecipe(): Recipe {
         imageType = imageType,
         instructions = instructions,
         lowFodmap = lowFodmap,
-        occasions = null, // Discard
-        originalId = null, // Discard
+        occasions = null,
+        originalId = null,
         preparationMinutes = preparationMinutes,
         pricePerServing = pricePerServing,
         readyInMinutes = readyInMinutes,

@@ -12,7 +12,6 @@ import com.serranoie.android.core.domain.model.search.Result
 import com.serranoie.android.core.domain.repository.SpoonacularRepository
 import com.serranoie.android.core.domain.result.DataResult
 import io.reactivex.rxjava3.core.Single
-import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
 class RecipeRepositoryImpl @Inject constructor(
@@ -96,22 +95,21 @@ class RecipeRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun insertRecipe(recipe: Recipe) {
+    override fun insertRecipe(recipe: Recipe) {
         val data = recipe.toEntity()
 
         recipesDao.insertRecipe(data)
     }
 
-    override suspend fun deleteRecipe(id: Int) {
+    override fun deleteRecipe(id: Int) {
         recipesDao.deleteRecipe(id)
     }
 
-    override suspend fun getSavedRecipesByDate(): DataResult<List<Recipe>> {
-        return try {
-            val recipes = recipesDao.getSavedRecipesByDate().first().map { it.toRecipe() }
-            DataResult.Success(recipes)
-        } catch (e: Exception) {
-            DataResult.Error(e)
-        }
+    override fun getSavedRecipesByDate(): Single<DataResult<List<Recipe>>> {
+        return recipesDao.getSavedRecipesByDate()
+            .map<DataResult<List<Recipe>>> { recipes ->
+                DataResult.Success(recipes.map { it.toRecipe() })
+            }
+            .onErrorReturn { exception -> DataResult.Error(exception) }
     }
 }

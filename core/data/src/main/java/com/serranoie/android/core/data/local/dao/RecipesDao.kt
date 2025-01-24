@@ -6,16 +6,17 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.serranoie.android.core.data.local.entity.RecipeEntity
+import io.reactivex.rxjava3.core.Single
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface RecipesDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertRecipe(recipe: RecipeEntity)
+    fun insertRecipe(recipe: RecipeEntity)
 
     @Query("DELETE FROM recipe WHERE id = :id")
-    suspend fun deleteRecipe(id: Int)
+    fun deleteRecipe(id: Int)
 
     @Query("SELECT * FROM recipe")
-    fun getSavedRecipesByDate(): Flow<List<RecipeEntity>>
+    fun getSavedRecipesByDate(): Single<List<RecipeEntity>>
 }

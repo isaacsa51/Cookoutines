@@ -14,7 +14,7 @@ interface SpoonacularRepository {
     fun getRecipeInstructions(id: Int): Single<DataResult<List<InstructionsItem>>>
 
     // Local functions
-    suspend fun insertRecipe(recipe: Recipe)
-    suspend fun deleteRecipe(id: Int)
-    suspend fun getSavedRecipesByDate(): DataResult<List<Recipe>>
+    fun insertRecipe(recipe: Recipe)
+    fun deleteRecipe(id: Int)
+    fun getSavedRecipesByDate(): Single<DataResult<List<Recipe>>>
 }

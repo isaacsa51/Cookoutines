@@ -1,8 +1,6 @@
 package com.serranoie.android.feature.instructions
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.serranoie.android.core.domain.model.recipe.Recipe
 import com.serranoie.android.core.domain.result.DataResult
 import com.serranoie.android.core.domain.usecase.DeleteRecipeUseCase
@@ -10,11 +8,13 @@ import com.serranoie.android.core.domain.usecase.SaveRecipeUseCase
 import com.serranoie.android.feature.instructions.domain.usecase.GetRecipeByIdUseCase
 import com.serranoie.android.feature.saved.domain.usecases.GetSavedRecipesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Single
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.schedulers.Schedulers
+import io.reactivex.rxjava3.subjects.BehaviorSubject
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,47 +24,52 @@ class InstructionsRecipeViewModel @Inject constructor(
     private val saveRecipeUseCase: SaveRecipeUseCase,
     private val deleteRecipeUseCase: DeleteRecipeUseCase
 ) : ViewModel() {
-    private val _recipeState = MutableStateFlow<DataResult<Recipe>>(DataResult.Loading)
-    val recipeState: StateFlow<DataResult<Recipe>> = _recipeState
+
+    private val _recipeState = BehaviorSubject.createDefault<DataResult<Recipe>>(DataResult.Loading)
+    val recipeState: Observable<DataResult<Recipe>> = _recipeState.hide()
+
+    private val compositeDisposable = CompositeDisposable()
 
     fun saveRecipe(recipe: Recipe) {
-        viewModelScope.launch {
-            saveRecipeUseCase(recipe.copy(isSaved = true))
-        }
+        compositeDisposable.add(
+            Completable.fromAction { saveRecipeUseCase(recipe.copy(isSaved = true)) }
+                .subscribeOn(Schedulers.io())
+                .subscribe()
+        )
     }
 
     fun deleteRecipe(recipeId: Int) {
-        viewModelScope.launch {
-            deleteRecipeUseCase(recipeId)
-        }
+        compositeDisposable.add(
+            Completable.fromAction { deleteRecipeUseCase(recipeId) }
+                .subscribeOn(Schedulers.io())
+                .subscribe()
+        )
     }
 
-    suspend fun isRecipeSaved(recipeId: Int): Boolean {
-        val savedRecipesResult = getSavedRecipesUseCase()
-
-        return when (savedRecipesResult) {
-            is DataResult.Success -> {
-                savedRecipesResult.data.any { it.id == recipeId && it.isSaved == true }
+    fun isRecipeSaved(recipeId: Int): Single<Boolean> {
+        return getSavedRecipesUseCase()
+            .map { result ->
+                when (result) {
+                    is DataResult.Success -> result.data.any { it.id == recipeId && it.isSaved == true }
+                    else -> false
+                }
             }
-
-            else -> false
-        }
     }
 
     fun getCurrentRecipe(id: Int) {
-        viewModelScope.launch {
-            _recipeState.value = DataResult.Loading
-            try {
-                val result = withContext(Dispatchers.IO) {
-                    getRecipeByIdUseCase(id)
-                }
-                _recipeState.value = result
-                Log.d("InstructionsRecipeViewModel", "Data: $result")
-            } catch (e: Exception) {
-                _recipeState.value = DataResult.Error(e)
-                Log.e("InstructionsRecipeViewModel", "Error: $e")
+        compositeDisposable.add(
+            getRecipeByIdUseCase(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    { result -> _recipeState.onNext(result) },
+                    { error -> _recipeState.onNext(DataResult.Error(error)) }
+                )
+        )
+    }
 
-            }
-        }
+    override fun onCleared() {
+        super.onCleared()
+        compositeDisposable.clear()
     }
 }
