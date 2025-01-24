@@ -71,6 +71,8 @@ dependencies {
 
     // Swipe to Refresh
     implementation(libs.androidx.swiperefreshlayout)
+
+    implementation("com.facebook.shimmer:shimmer:0.5.0")
 }
 kapt {
     correctErrorTypes = true

@@ -9,10 +9,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.ListAdapter
+import com.facebook.shimmer.ShimmerFrameLayout
 import com.serranoie.android.core.domain.result.DataResult
 import com.serranoie.android.feature.recipes_list.databinding.FragmentRecipesListBinding
 import com.serranoie.android.feature.recipes_list.trending.TrendingAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -34,8 +37,6 @@ class RecipesListFragment : Fragment() {
 
         setupUi()
         setupObservers()
-        setupPopularAdapter()
-        setupTrendingAdapter()
         setupSwipeToRefresh()
 
         return binding.root
@@ -62,60 +63,46 @@ class RecipesListFragment : Fragment() {
         }
     }
 
-    private fun setupTrendingAdapter() {
-        lifecycleScope.launch {
-            viewModel.trendingRecipesState.collect { result ->
-                when (result) {
-                    is DataResult.Success -> trendingAdapter.submitList(result.data)
-                    is DataResult.Error -> binding.errorTextView.text =
-                        result.exception.message ?: "Unknown error"
-
-                    is DataResult.Loading -> {}
-                }
-            }
-        }
-    }
-
-    private fun setupPopularAdapter() {
-        lifecycleScope.launch {
-            viewModel.trendingRecipesState.collect { result ->
-                when (result) {
-                    is DataResult.Success -> {
-                        trendingAdapter.submitList(result.data)
-                    }
-
-                    is DataResult.Error -> {
-                        binding.errorTextView.text = result.exception.message ?: "Unknown error"
-                    }
-
-                    is DataResult.Loading -> {
-                    }
-                }
-            }
-        }
-    }
-
     private fun setupObservers() {
+        observeData(
+            viewModel.trendingRecipesState,
+            trendingAdapter,
+            binding.shimmerTrending
+        )
+        observeData(
+            viewModel.recipesState,
+            recipesAdapter,
+            binding.shimmerRandom
+        )
+    }
+
+    private fun <T> observeData(
+        dataState: Flow<DataResult<List<T>>>,
+        adapter: ListAdapter<T, *>,
+        shimmerView: ShimmerFrameLayout
+    ) {
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.recipesState.collect { result ->
-                binding.let { safeBinding ->
+            dataState.collect { result ->
+                binding.apply {
                     when (result) {
                         is DataResult.Success -> {
-                            safeBinding.progressBar.isVisible = false
-                            safeBinding.errorTextView.isVisible = false
-                            recipesAdapter.submitList(result.data)
+                            shimmerView.isVisible = false
+                            errorTextView.isVisible = false
+                            adapter.submitList(result.data)
+                            recipesRecyclerView.isVisible = result.data.isNotEmpty()
                         }
 
                         is DataResult.Error -> {
-                            safeBinding.progressBar.isVisible = false
-                            safeBinding.errorTextView.isVisible = true
-                            safeBinding.errorTextView.text =
-                                result.exception.message ?: "Unknown error"
+                            shimmerView.isVisible = false
+                            errorTextView.isVisible = true
+                            errorTextView.text = result.exception.message ?: "Unknown error"
+                            recipesRecyclerView.isVisible = false
                         }
 
                         is DataResult.Loading -> {
-                            safeBinding.progressBar.isVisible = true
-                            safeBinding.errorTextView.isVisible = false
+                            shimmerView.isVisible = true
+                            errorTextView.isVisible = false
+                            recipesRecyclerView.isVisible = false
                         }
                     }
                 }
