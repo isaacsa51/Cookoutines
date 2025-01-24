@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import com.google.android.material.snackbar.Snackbar
 import com.serranoie.android.core.domain.model.recipe.Recipe
 import com.serranoie.android.feature.recipes_list.databinding.ItemRecipeBinding
 import javax.inject.Inject
@@ -37,8 +38,13 @@ class RecipesAdapter(private val viewModel: RecipesListViewModel) :
                 isSaved = !isSaved
                 if (isSaved) {
                     saveRecipe(currentRecipe)
+                    binding.saveButton.setIconResource(R.drawable.ic_bookmarked)
+                    Snackbar.make(binding.root, "Recipe saved!", Snackbar.LENGTH_SHORT).show()
                 } else {
                     deleteRecipe(currentRecipe.id!!)
+                    binding.saveButton.setIconResource(R.drawable.ic_bookmark)
+                    Snackbar.make(binding.root, "Recipe deleted", Snackbar.LENGTH_SHORT).show()
+
                 }
             }
         }

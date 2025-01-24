@@ -68,7 +68,6 @@ class SearchAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         notifyDataSetChanged()
         notifyItemChanged(0)
         notifyItemRangeChanged(0, items.size)
-        notifyItemRangeChanged(0, items.size)
     }
 
     inner class SearchViewHolder(private val binding: ItemSearchBinding) :
@@ -98,7 +97,7 @@ class SearchAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     inner class EmptySearchViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val binding = ItemEmptySearchBinding.bind(itemView)
         init {
-            binding.label.text = "No recipes found with this query..."
+            binding.label.text = "Search any recipe you want to cook!"
         }
     }
 
