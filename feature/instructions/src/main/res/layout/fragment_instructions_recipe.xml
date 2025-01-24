@@ -57,8 +57,8 @@
         android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true"
         android:layout_marginTop="-20dp"
+        android:fillViewport="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -67,12 +67,10 @@
             android:padding="16dp">
 
             <com.google.android.material.progressindicator.LinearProgressIndicator
-                android:id="@+id/progressIndicator"
+                android:id="@+id/recipeProgress"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:indeterminate="true"
-                android:visibility="gone"
+                android:indeterminate="false"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -187,8 +185,8 @@
                 style="@style/TitleLarge"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Steps &amp; Ingredients"
                 android:paddingVertical="8dp"
+                android:text="Steps &amp; Ingredients"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/cuisineRecyclerView" />

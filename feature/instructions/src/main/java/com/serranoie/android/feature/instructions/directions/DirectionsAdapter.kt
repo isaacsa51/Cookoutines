@@ -20,15 +20,18 @@ import com.serranoie.android.feature.instructions.databinding.ItemDirectionIngre
 import com.serranoie.android.feature.instructions.databinding.ItemDirectionRecipeBinding
 import com.serranoie.android.feature.instructions.databinding.ItemStepsBinding
 
-class DirectionsAdapter :
-    ListAdapter<InstructionsItem, DirectionsAdapter.InstructionGroupViewHolder>(
-        InstructionGroupDiffCallback()
-    ) {
+class DirectionsAdapter(
+    private val onProgressUpdated: (Float) -> Unit
+) : ListAdapter<InstructionsItem, DirectionsAdapter.InstructionGroupViewHolder>(InstructionGroupDiffCallback()) {
+
+    private var totalSteps = 0
+    private var completedSteps = 0
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): InstructionGroupViewHolder {
         val binding = ItemStepsBinding.inflate(
             LayoutInflater.from(parent.context), parent, false
         )
-        return InstructionGroupViewHolder(binding)
+        return InstructionGroupViewHolder(binding, ::onStepCompleted)
     }
 
     override fun getItemCount(): Int {
@@ -38,14 +41,27 @@ class DirectionsAdapter :
     override fun onBindViewHolder(holder: InstructionGroupViewHolder, position: Int) {
         val instructionGroup = getItem(position)
         holder.bind(instructionGroup)
+        totalSteps += instructionGroup.steps.size
+    }
+
+    private fun onStepCompleted(change: Int) {
+        completedSteps += change
+
+        val progress = if (totalSteps > 0){
+            completedSteps.toFloat() / totalSteps.toFloat()
+        } else {
+            0f
+        }
+        onProgressUpdated(progress)
     }
 
     inner class InstructionGroupViewHolder(
-        private val binding: ItemStepsBinding
+        private val binding: ItemStepsBinding,
+        private val onStepCompleted: (Int) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(instructionGroup: InstructionsItem) {
-            val stepAdapter = InstructionStepAdapter()
+            val stepAdapter = InstructionStepAdapter(onStepCompleted)
 
             binding.directionsRecyclerView.apply {
                 layoutManager = LinearLayoutManager(context)
@@ -56,12 +72,10 @@ class DirectionsAdapter :
     }
 
     // * Adapter for the steps
-    inner class InstructionStepAdapter :
+    inner class InstructionStepAdapter(private val onStepCompleted: (Int) -> Unit) :
         ListAdapter<Step, InstructionStepAdapter.InstructionStepViewHolder>(
             InstructionStepDiffCallback()
         ) {
-
-        private var checkedCount = 0
 
         override fun onCreateViewHolder(
             parent: ViewGroup,
@@ -70,7 +84,7 @@ class DirectionsAdapter :
             val binding = ItemDirectionRecipeBinding.inflate(
                 LayoutInflater.from(parent.context), parent, false
             )
-            return InstructionStepViewHolder(binding)
+            return InstructionStepViewHolder(binding, onStepCompleted)
         }
 
         override fun onBindViewHolder(holder: InstructionStepViewHolder, position: Int) {
@@ -79,8 +93,11 @@ class DirectionsAdapter :
         }
 
         inner class InstructionStepViewHolder(
-            private val binding: ItemDirectionRecipeBinding
+            private val binding: ItemDirectionRecipeBinding,
+            private val onStepCompleted: (Int) -> Unit
         ) : RecyclerView.ViewHolder(binding.root) {
+
+            private var isCompleted = false
 
             fun bind(step: Step) {
                 binding.tvStepNumber.text = "Step ${step.number}."
@@ -156,7 +173,14 @@ class DirectionsAdapter :
                 }
 
                 binding.cardStep.setOnClickListener {
-                    binding.cardStep.isChecked = !binding.cardStep.isChecked
+                    isCompleted = !isCompleted
+
+                    binding.cardStep.isChecked = isCompleted
+                    if (isCompleted) {
+                        onStepCompleted(1)
+                    } else {
+                        onStepCompleted(-1)
+                    }
                 }
             }
         }

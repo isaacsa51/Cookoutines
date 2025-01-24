@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ready_time_format">Recipe time completion</string>
+    <string name="servings_format">Total servings</string>
+    <string name="total_ingredients_format">Total ingredients needed</string>
+    <string name="saved">Saved</string>
+    <string name="save_recipe">Save recipe</string>
+</resources>
