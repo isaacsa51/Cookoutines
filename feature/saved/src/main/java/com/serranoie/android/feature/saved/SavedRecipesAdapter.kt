@@ -3,7 +3,6 @@ package com.serranoie.android.feature.saved
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.net.toUri
-import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.navigation.NavDeepLinkRequest
 import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
@@ -11,15 +10,19 @@ import coil.load
 import com.serranoie.android.core.domain.model.recipe.Recipe
 import com.serranoie.android.feature.saved.databinding.SavedRecipeItemBinding
 import com.serranoie.android.feature.saved.utils.RecipeDeleteListener
-import kotlinx.coroutines.launch
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.schedulers.Schedulers
 import javax.inject.Inject
 
 class SavedRecipesAdapter @Inject constructor(
     private val viewModel: SavedRecipesViewModel,
-    private val lifecycleScope: LifecycleCoroutineScope
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val items = mutableListOf<Any>()
+    private val compositeDisposable = CompositeDisposable()
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SavedRecipeViewHolder {
         val binding =
@@ -36,14 +39,18 @@ class SavedRecipesAdapter @Inject constructor(
 
                 val listener = object : RecipeDeleteListener {
                     override fun delete(position: Int) {
-                        lifecycleScope.launch {
-                            viewModel.deleteRecipe(recipe.id!!)
-                            notifyItemRemoved(position)
-                        }
+                        compositeDisposable.add(
+                            Completable.fromAction { viewModel.deleteRecipe(recipe.id!!) }
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe {
+                                    notifyItemRemoved(position)
+                                }
+                        )
                     }
                 }
 
-                holder.bind(recipe, viewModel, position, lifecycleScope, listener)
+                holder.bind(recipe, position, listener)
             }
         }
     }
@@ -62,7 +69,11 @@ class SavedRecipesAdapter @Inject constructor(
     inner class SavedRecipeViewHolder(private val binding: SavedRecipeItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(data: Recipe, viewModel: SavedRecipesViewModel, position: Int, lifecycleScope: LifecycleCoroutineScope, listener: RecipeDeleteListener) {
+        fun bind(
+            data: Recipe,
+            position: Int,
+            listener: RecipeDeleteListener
+        ) {
             binding.recipeTitleTextView.text = data.title
             binding.recipeImageView.load(data.image) {
                 crossfade(true)
@@ -73,14 +84,6 @@ class SavedRecipesAdapter @Inject constructor(
 
             binding.deleteButton.setOnClickListener {
                 listener.delete(position)
-
-//                lifecycleScope.launch {
-//                    viewModel.deleteRecipe(data.id!!)
-//                }
-//                items.removeAt(position) // Remove item from the items list
-//
-//                notifyItemRemoved(position) // Notify adapter of data change
-//                notifyItemRangeChanged(position, items.size - position) // Update remaining items
             }
 
             binding.root.setOnClickListener {
@@ -91,5 +94,10 @@ class SavedRecipesAdapter @Inject constructor(
                 findNavController(this.itemView).navigate(request)
             }
         }
+    }
+
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView)
+        compositeDisposable.clear()
     }
 }

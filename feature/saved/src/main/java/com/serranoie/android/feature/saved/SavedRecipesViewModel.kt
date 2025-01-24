@@ -3,21 +3,19 @@ package com.serranoie.android.feature.saved
 import android.app.Application
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.viewModelScope
 import com.serranoie.android.core.domain.model.recipe.Recipe
 import com.serranoie.android.core.domain.repository.SpoonacularRepository
 import com.serranoie.android.core.domain.result.DataResult
 import com.serranoie.android.core.domain.usecase.DeleteRecipeUseCase
 import com.serranoie.android.feature.saved.domain.usecases.GetSavedRecipesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.schedulers.Schedulers
+import io.reactivex.rxjava3.subjects.BehaviorSubject
+import io.reactivex.rxjava3.subjects.PublishSubject
 import javax.inject.Inject
 
 @HiltViewModel
@@ -29,42 +27,51 @@ class SavedRecipesViewModel @Inject constructor(
 ) : AndroidViewModel(application) {
 
     private val _recipesState =
-        MutableStateFlow<DataResult<List<Recipe>>>(DataResult.Loading)
-    val recipesState: StateFlow<DataResult<List<Recipe>>> =
-        _recipesState
-    private val _refreshTrigger = MutableSharedFlow<Unit>()
-    val refreshTrigger: SharedFlow<Unit> = _refreshTrigger.asSharedFlow()
+        BehaviorSubject.createDefault<DataResult<List<Recipe>>>(DataResult.Loading)
+    val recipesState: Observable<DataResult<List<Recipe>>> = _recipesState.hide()
 
-    fun triggerRefresh() {
-        viewModelScope.launch {
-            _refreshTrigger.emit(Unit)
-        }
-    }
+    private val _refreshTrigger = PublishSubject.create<Unit>()
+    val refreshTrigger: Observable<Unit> = _refreshTrigger.hide()
+
+    private val compositeDisposable = CompositeDisposable()
 
     init {
         loadSavedRecipes()
     }
 
-    fun loadSavedRecipes() {
-        viewModelScope.launch {
-            _recipesState.value = DataResult.Loading
-
-            val result = withContext(Dispatchers.IO) {
-                getSavedRecipesUseCase()
-            }
-
-            _recipesState.value = result
-        }
+    fun triggerRefresh() {
+        _refreshTrigger.onNext(Unit)
     }
 
-    suspend fun deleteRecipe(id: Int) {
-        viewModelScope.launch {
-            deleteRecipeUseCase(id)
-            _recipesState.value = repository.getSavedRecipesByDate()
-        }
+    fun loadSavedRecipes() {
+        compositeDisposable.add(
+            getSavedRecipesUseCase()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    { result -> _recipesState.onNext(result) },
+                    { error -> _recipesState.onNext(DataResult.Error(error)) }
+                )
+        )
+    }
 
-        withContext(Dispatchers.Main) {
-            Toast.makeText(getApplication(), "Recipe deleted", Toast.LENGTH_SHORT).show()
-        }
+    fun deleteRecipe(id: Int) {
+        compositeDisposable.add(
+            Completable.fromAction { deleteRecipeUseCase(id) }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .andThen(repository.getSavedRecipesByDate())
+                .subscribe(
+                    { result -> _recipesState.onNext(result) },
+                    { error -> _recipesState.onNext(DataResult.Error(error)) }
+                )
+        )
+
+        Toast.makeText(getApplication(), "Recipe deleted", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        compositeDisposable.clear()
     }
 }

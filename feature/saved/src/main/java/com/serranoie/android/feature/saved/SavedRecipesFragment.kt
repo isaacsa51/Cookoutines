@@ -7,13 +7,14 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.serranoie.android.core.domain.result.DataResult
 import com.serranoie.android.feature.saved.databinding.FragmentSavedRecipesBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.schedulers.Schedulers
 
 @AndroidEntryPoint
 class SavedRecipesFragment : Fragment() {
@@ -23,6 +24,8 @@ class SavedRecipesFragment : Fragment() {
 
     private val viewModel: SavedRecipesViewModel by viewModels()
     private lateinit var adapter: SavedRecipesAdapter
+
+    private val compositeDisposable = CompositeDisposable()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,46 +45,50 @@ class SavedRecipesFragment : Fragment() {
     }
 
     private fun setupUi() {
-        adapter = SavedRecipesAdapter(viewModel, viewLifecycleOwner.lifecycleScope)
+        adapter = SavedRecipesAdapter(viewModel)
         binding.postsRecyclerView.adapter = adapter
-        binding.postsRecyclerView.layoutManager = StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
+        binding.postsRecyclerView.layoutManager =
+            StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
     }
 
     private fun setupObservers() {
-        lifecycleScope.launch {
-            viewModel.recipesState.collect { result ->
-                when (result) {
-                    is DataResult.Success -> {
-                        binding.progressBar.isVisible = false
-                        // binding.errorTextView.isVisible = false
-                        adapter.submitList(result.data)
-                        adapter.updateAll(result.data)
+        compositeDisposable.add(
+            viewModel.recipesState
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { result ->
+                    when (result) {
+                        is DataResult.Success -> {
+                            binding.progressBar.isVisible = false
+                            adapter.submitList(result.data)
+                            adapter.updateAll(result.data)
+                        }
 
-                    }
+                        is DataResult.Loading -> {
+                            binding.progressBar.isVisible = true
+                        }
 
-                    is DataResult.Loading -> {
-                        binding.progressBar.isVisible = true
-                        // binding.errorTextView.isVisible = false
-                    }
-
-                    is DataResult.Error -> {
-                        binding.progressBar.isVisible = false
-                        // binding.errorTextView.isVisible = true
-                        binding.errorTextLabel.text = result.exception.message
+                        is DataResult.Error -> {
+                            binding.progressBar.isVisible = false
+                            binding.errorTextLabel.text = result.exception.message
+                        }
                     }
                 }
-            }
-        }
+        )
 
-        lifecycleScope.launch {
-            viewModel.refreshTrigger.collect {
-                viewModel.loadSavedRecipes()
-            }
-        }
+        compositeDisposable.add(
+            viewModel.refreshTrigger
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    viewModel.loadSavedRecipes()
+                }
+        )
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        compositeDisposable.clear()
     }
 }
