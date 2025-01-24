@@ -10,6 +10,7 @@ import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.serranoie.android.core.domain.model.search.Result
+import com.serranoie.android.feature.search.databinding.ItemEmptySearchBinding
 import com.serranoie.android.feature.search.databinding.ItemSearchBinding
 
 class SearchAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -18,7 +19,7 @@ class SearchAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var isSearchAdapter = false
 
     override fun getItemViewType(position: Int): Int {
-        return if (items.isEmpty()) {
+        return if (items.isEmpty() && isSearchAdapter) {
             TYPE_EMPTY_SEARCH
         } else {
             TYPE_RECIPE_SEARCH
@@ -35,7 +36,7 @@ class SearchAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
             TYPE_EMPTY_SEARCH -> {
                 val view = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_empty_search, parent, false) // Create empty view layout
+                    .inflate(R.layout.item_empty_search, parent, false)
                 EmptySearchViewHolder(view)
             }
 
@@ -95,7 +96,10 @@ class SearchAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     inner class EmptySearchViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        // TODO: add any specific binding logic for the empty view here
+        private val binding = ItemEmptySearchBinding.bind(itemView)
+        init {
+            binding.label.text = "No recipes found with this query..."
+        }
     }
 
     companion object {

@@ -2,7 +2,6 @@ package com.serranoie.android.feature.search
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.serranoie.android.core.domain.model.recipe.Recipe
 import com.serranoie.android.core.domain.model.search.Result
 import com.serranoie.android.core.domain.result.DataResult
 import com.serranoie.android.feature.recipes_list.domain.usecase.SearchRecipeUseCase
@@ -20,16 +19,8 @@ class SearchViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _searchResultsState =
-        MutableStateFlow<DataResult<List<Result>>>(
-            DataResult.Loading
-        )
-    val searchResultsState: StateFlow<DataResult<List<Result>>> =
-        _searchResultsState
-
-    private val _recipesState =
-        MutableStateFlow<DataResult<List<Recipe>>>(DataResult.Loading)
-    val recipesState: StateFlow<DataResult<List<Recipe>>> =
-        _recipesState
+        MutableStateFlow<DataResult<List<Result>>>(DataResult.Success(emptyList()))
+    val searchResultsState: StateFlow<DataResult<List<Result>>> = _searchResultsState
 
     fun searchRecipes(query: String) {
         viewModelScope.launch {
@@ -38,14 +29,6 @@ class SearchViewModel @Inject constructor(
                 searchRecipeUseCase(query)
             }
             _searchResultsState.value = result
-        }
-    }
-
-    fun resetToRandomRecipes() {
-        viewModelScope.launch {
-            _searchResultsState.value = DataResult.Loading
-            // Assuming you have a use case to get random recipes
-            // _searchResultsState.value = getRecipesUseCase()
         }
     }
 }
