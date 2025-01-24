@@ -98,25 +98,20 @@ class RecipesListFragment : Fragment() {
     private fun setupObservers() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.recipesState.collect { result ->
-                binding.let { safeBinding ->
-                    when (result) {
-                        is DataResult.Success -> {
-                            safeBinding.progressBar.isVisible = false
-                            safeBinding.errorTextView.isVisible = false
-                            recipesAdapter.submitList(result.data)
-                        }
-
-                        is DataResult.Error -> {
-                            safeBinding.progressBar.isVisible = false
-                            safeBinding.errorTextView.isVisible = true
-                            safeBinding.errorTextView.text =
-                                result.exception.message ?: "Unknown error"
-                        }
-
-                        is DataResult.Loading -> {
-                            safeBinding.progressBar.isVisible = true
-                            safeBinding.errorTextView.isVisible = false
-                        }
+                when (result) {
+                    is DataResult.Success -> {
+                        binding.progressBar.isVisible = false
+                        binding.errorTextView.isVisible = false
+                        recipesAdapter.submitList(result.data)
+                    }
+                    is DataResult.Error -> {
+                        binding.progressBar.isVisible = false
+                        binding.errorTextView.isVisible = true
+                        binding.errorTextView.text = result.exception.message ?: "Unknown error"
+                    }
+                    is DataResult.Loading -> {
+                        binding.progressBar.isVisible = true
+                        binding.errorTextView.isVisible = false
                     }
                 }
             }

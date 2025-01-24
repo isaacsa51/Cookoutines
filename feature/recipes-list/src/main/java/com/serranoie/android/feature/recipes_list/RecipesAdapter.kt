@@ -1,114 +1,46 @@
 package com.serranoie.android.feature.recipes_list
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.launch
 import androidx.core.net.toUri
-import androidx.core.view.isVisible
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavDeepLinkRequest
 import androidx.navigation.Navigation.findNavController
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.serranoie.android.core.domain.model.recipe.Recipe
-import com.serranoie.android.core.domain.model.search.Result
 import com.serranoie.android.feature.recipes_list.databinding.ItemRecipeBinding
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class RecipesAdapter @Inject constructor(
     private val viewModel: RecipesListViewModel
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private val items = mutableListOf<Any>()
-    private var isSearchAdapter = false
-
-
-    override fun getItemViewType(position: Int): Int {
-        return if (isSearchAdapter && items.isEmpty()) {
-            TYPE_EMPTY_SEARCH
-        } else {
-            when (items[position]) {
-                is Recipe -> TYPE_RECIPE
-                is Result -> TYPE_RECIPE_SEARCH
-                else -> throw IllegalArgumentException("Unknown type")
-            }
-        }
-    }
+    private val items = mutableListOf<Recipe>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return when (viewType) {
-            TYPE_RECIPE -> {
-                val binding =
-                    ItemRecipeBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                RecipeViewHolder(binding)
-            }
-
-            TYPE_RECIPE_SEARCH -> {
-                val binding =
-                    ItemRecipeBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                RecipeSearchViewHolder(binding)
-            }
-
-//            TYPE_EMPTY_SEARCH -> {
-//                val view = LayoutInflater.from(parent.context)
-//                    .inflate(R.layout.item_empty_search, parent, false) // Create empty view layout
-//                EmptySearchViewHolder(view)
-//            }
-
-            else -> throw IllegalArgumentException("Unknown view type")
-        }
+        val binding =
+            ItemRecipeBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return RecipeViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        when (holder) {
-            is RecipeViewHolder -> {
-                val recipe = items[position] as Recipe
-                holder.bind(recipe, viewModel)
-            }
-
-            is RecipeSearchViewHolder -> {
-                val recipeSearch = items[position] as Result
-                holder.bind(recipeSearch)
-            }
-        }
+        (holder as? RecipeViewHolder)?.bind(items[position], viewModel)
     }
 
     override fun getItemCount(): Int {
-        return if (isSearchAdapter && items.isEmpty()) {
-            1
-        } else {
-            items.size
-        }
+        return items.size
     }
 
-    fun submitList(newItems: List<Any>, isSearch: Boolean = false) {
-        isSearchAdapter = isSearch
+    fun submitList(newItems: List<Recipe>) {
+        val diffCallback = RecipeDiffCallback(items, newItems)
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
         items.clear()
         items.addAll(newItems)
-        notifyDataSetChanged()
-    }
-
-    inner class RecipeSearchViewHolder(private val binding: ItemRecipeBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-        fun bind(data: Result) {
-            binding.recipeTitleTextView.text = data.title
-            binding.authorTextView.isVisible = false
-            binding.labelCredits.isVisible = false
-
-            binding.recipeImageView.load(data.image) {
-                crossfade(true)
-                crossfade(500)
-                placeholder(R.drawable.placeholder_image)
-                error(R.drawable.placeholder_image)
-            }
-
-            binding.root.setOnClickListener {
-                val recipeId = data.id
-                val request = NavDeepLinkRequest.Builder
-                    .fromUri("cookoutines://instructions/${recipeId?.toString()}".toUri())
-                    .build()
-                findNavController(this.itemView).navigate(request)
-            }
-        }
+        diffResult.dispatchUpdatesTo(this)
     }
 
     inner class RecipeViewHolder(private val binding: ItemRecipeBinding) :
@@ -136,23 +68,34 @@ class RecipesAdapter @Inject constructor(
             }
 
             binding.saveButton.setOnClickListener {
-                isSaved = !isSaved
-                if (isSaved) {
-                    viewModel.saveRecipe(data)
-                } else {
-                    viewModel.deleteRecipe(data.id!!)
+                viewModel.viewModelScope.launch {
+                    if (isSaved) {
+                        viewModel.deleteRecipe(data.id!!)
+                    } else {
+                        viewModel.saveRecipe(data)
+                    }
+                    isSaved = !isSaved
                 }
             }
         }
     }
+}
 
-    inner class EmptySearchViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        // TODO: add any specific binding logic for the empty view here
+class RecipeDiffCallback(private val oldList: List<Recipe>, private val newList: List<Recipe>) : DiffUtil.Callback() {
+
+    override fun getOldListSize(): Int {
+        return oldList.size
     }
 
-    companion object {
-        private const val TYPE_RECIPE = 0
-        private const val TYPE_RECIPE_SEARCH = 1
-        private const val TYPE_EMPTY_SEARCH = 2
+    override fun getNewListSize(): Int {
+        return newList.size
+    }
+
+    override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+        return oldList[oldItemPosition].id == newList[newItemPosition].id
+    }
+
+    override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+        return oldList[oldItemPosition] == newList[newItemPosition]
     }
 }
