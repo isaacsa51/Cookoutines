@@ -53,7 +53,6 @@ class SavedRecipesFragment : Fragment() {
                 when (result) {
                     is DataResult.Success -> {
                         binding.progressBar.isVisible = false
-                        // binding.errorTextView.isVisible = false
                         adapter.submitList(result.data)
                         adapter.updateAll(result.data)
 
@@ -61,12 +60,10 @@ class SavedRecipesFragment : Fragment() {
 
                     is DataResult.Loading -> {
                         binding.progressBar.isVisible = true
-                        // binding.errorTextView.isVisible = false
                     }
 
                     is DataResult.Error -> {
                         binding.progressBar.isVisible = false
-                        // binding.errorTextView.isVisible = true
                         binding.errorTextLabel.text = result.exception.message
                     }
                 }

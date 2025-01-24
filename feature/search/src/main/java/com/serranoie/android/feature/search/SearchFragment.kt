@@ -91,7 +91,7 @@ class SearchFragment : Fragment() {
                         binding.progressBar.isVisible = false
                         binding.errorTextView.isVisible = true
                         binding.recipesRecyclerView.isVisible = false
-                        binding.errorTextView.text = result.exception.message ?: "Unknown error"
+                        binding.errorTextView.text = result.exception.message ?: "Not found..."
                     }
 
                     is DataResult.Loading -> {
