@@ -81,21 +81,21 @@ class SearchFragment : Fragment() {
             viewModel.searchResultsState.collect { result ->
                 when (result) {
                     is DataResult.Success -> {
-                        binding.progressBar.isVisible = false
+                        binding.shimmerLayout.isVisible = false
                         binding.errorTextView.isVisible = false
                         binding.recipesRecyclerView.isVisible = true
                         adapter.submitList(result.data)
                     }
 
                     is DataResult.Error -> {
-                        binding.progressBar.isVisible = false
+                        binding.shimmerLayout.isVisible = false
                         binding.errorTextView.isVisible = true
                         binding.recipesRecyclerView.isVisible = false
-                        binding.errorTextView.text = result.exception.message ?: "Not found..."
+                        binding.errorTextView.text = result.exception.message ?: "There was an error searching with that query..."
                     }
 
                     is DataResult.Loading -> {
-                        binding.progressBar.isVisible = true
+                        binding.shimmerLayout.isVisible = true
                         binding.errorTextView.isVisible = false
                         binding.recipesRecyclerView.isVisible = false
                     }

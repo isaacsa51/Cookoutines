@@ -68,6 +68,9 @@ dependencies {
 
     // Coil
     implementation(libs.coil)
+
+    implementation("com.facebook.shimmer:shimmer:0.5.0")
+
 }
 
 kapt {

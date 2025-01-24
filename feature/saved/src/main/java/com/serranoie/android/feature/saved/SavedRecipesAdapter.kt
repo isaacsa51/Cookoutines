@@ -1,10 +1,7 @@
 package com.serranoie.android.feature.saved
 
-import android.app.Activity
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.net.toUri
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.navigation.NavDeepLinkRequest
@@ -15,7 +12,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.serranoie.android.core.domain.model.recipe.Recipe
 import com.serranoie.android.feature.saved.databinding.SavedRecipeItemBinding
 import com.serranoie.android.feature.saved.utils.RecipeDeleteListener
-import dagger.hilt.android.internal.Contexts.getApplication
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
