@@ -1,7 +1,6 @@
 package com.serranoie.android.feature.search
 
 import androidx.lifecycle.ViewModel
-import com.serranoie.android.core.domain.model.recipe.Recipe
 import com.serranoie.android.core.domain.model.search.Result
 import com.serranoie.android.core.domain.result.DataResult
 import com.serranoie.android.feature.recipes_list.domain.usecase.SearchRecipeUseCase
@@ -19,12 +18,8 @@ class SearchViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _searchResultsState =
-        BehaviorSubject.createDefault<DataResult<List<Result>>>(DataResult.Loading)
+        BehaviorSubject.createDefault<DataResult<List<Result>>>(DataResult.Success(emptyList()))
     val searchResultsState: Observable<DataResult<List<Result>>> = _searchResultsState.hide()
-
-    private val _recipesState =
-        BehaviorSubject.createDefault<DataResult<List<Recipe>>>(DataResult.Loading)
-    val recipesState: Observable<DataResult<List<Recipe>>> = _recipesState.hide()
 
     private val compositeDisposable = CompositeDisposable()
 
