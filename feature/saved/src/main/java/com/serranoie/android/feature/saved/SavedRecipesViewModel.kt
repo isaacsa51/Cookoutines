@@ -62,9 +62,5 @@ class SavedRecipesViewModel @Inject constructor(
             deleteRecipeUseCase(id)
             _recipesState.value = repository.getSavedRecipesByDate()
         }
-
-        withContext(Dispatchers.Main) {
-            Toast.makeText(getApplication(), "Recipe deleted", Toast.LENGTH_SHORT).show()
-        }
     }
 }
