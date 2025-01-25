@@ -22,12 +22,19 @@ class SearchViewModel @Inject constructor(
         MutableStateFlow<DataResult<List<Result>>>(DataResult.Success(emptyList()))
     val searchResultsState: StateFlow<DataResult<List<Result>>> = _searchResultsState
 
-    fun searchRecipes(query: String) {
+    fun searchRecipes(query: String, cuisine: String? = null) {
         viewModelScope.launch {
             _searchResultsState.value = DataResult.Loading
-            val result = withContext(Dispatchers.IO) {
-                searchRecipeUseCase(query)
+            val fullQuery = if (cuisine != null) {
+                "$cuisine $query"
+            } else {
+                query
             }
+
+            val result = withContext(Dispatchers.IO) {
+                searchRecipeUseCase(fullQuery)
+            }
+
             _searchResultsState.value = result
         }
     }

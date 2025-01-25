@@ -29,6 +29,8 @@ class SearchFragment : Fragment() {
 
     private val viewModel: SearchViewModel by viewModels()
 
+    private var selectedCuisine: String? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -74,6 +76,21 @@ class SearchFragment : Fragment() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
+
+        setupChipGroup()
+    }
+
+    private fun setupChipGroup() {
+        binding.cuisinesChipGroup.setOnCheckedStateChangeListener { group, checkedIds ->
+            selectedCuisine = if(checkedIds.isNotEmpty()) {
+                val chip = group.findViewById<com.google.android.material.chip.Chip>(checkedIds[0])
+                chip.text.toString()
+            } else {
+                null
+            }
+
+            submitSearchQuery()
+        }
     }
 
     private fun setupObservers() {
@@ -107,7 +124,7 @@ class SearchFragment : Fragment() {
     private fun submitSearchQuery() {
         val query = binding.searchTextInputLayout.editText?.text.toString()
         if (query.isNotBlank()) {
-            viewModel.searchRecipes(query)
+            viewModel.searchRecipes(query, selectedCuisine)
         }
     }
 
