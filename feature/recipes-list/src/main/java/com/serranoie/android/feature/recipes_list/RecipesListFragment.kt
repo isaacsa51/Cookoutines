@@ -9,11 +9,15 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.ListAdapter
 import com.facebook.shimmer.ShimmerFrameLayout
+import com.serranoie.android.core.domain.model.recipe.Recipe
+import com.serranoie.android.core.domain.model.search.Result
 import com.serranoie.android.core.domain.result.DataResult
+import com.serranoie.android.feature.recipes_list.adapter.RandomRecipeDelegate
+import com.serranoie.android.feature.recipes_list.adapter.RecipeDelegateAdapter
+import com.serranoie.android.feature.recipes_list.adapter.RecipeListItem
+import com.serranoie.android.feature.recipes_list.adapter.TrendingRecipeDelegate
 import com.serranoie.android.feature.recipes_list.databinding.FragmentRecipesListBinding
-import com.serranoie.android.feature.recipes_list.trending.TrendingAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
@@ -25,9 +29,9 @@ class RecipesListFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: RecipesListViewModel by viewModels()
-    private lateinit var recipesAdapter: RecipesAdapter
-    private lateinit var trendingAdapter: TrendingAdapter
 
+    private lateinit var randomRecipeAdapter: RecipeDelegateAdapter
+    private lateinit var trendingRecipeAdapter: RecipeDelegateAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,15 +47,22 @@ class RecipesListFragment : Fragment() {
     }
 
     private fun setupUi() {
-        recipesAdapter = RecipesAdapter(viewModel)
+        randomRecipeAdapter = RecipeDelegateAdapter(
+            listOf(
+                RandomRecipeDelegate(viewModel)
+            )
+        )
+        trendingRecipeAdapter = RecipeDelegateAdapter(
+            listOf(
+                TrendingRecipeDelegate()
+            )
+        )
         binding.recipesRecyclerView.apply {
-            adapter = recipesAdapter
+            adapter = randomRecipeAdapter
             layoutManager = LinearLayoutManager(context)
         }
-
-        trendingAdapter = TrendingAdapter()
         binding.trendingRecyclerView.apply {
-            adapter = trendingAdapter
+            adapter = trendingRecipeAdapter
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         }
     }
@@ -66,20 +77,20 @@ class RecipesListFragment : Fragment() {
     private fun setupObservers() {
         observeData(
             viewModel.trendingRecipesState,
-            trendingAdapter,
-            binding.shimmerTrending
+            binding.shimmerTrending,
+            trendingRecipeAdapter
         )
         observeData(
             viewModel.recipesState,
-            recipesAdapter,
-            binding.shimmerRandom
+            binding.shimmerRandom,
+            randomRecipeAdapter
         )
     }
 
     private fun <T> observeData(
         dataState: Flow<DataResult<List<T>>>,
-        adapter: ListAdapter<T, *>,
-        shimmerView: ShimmerFrameLayout
+        shimmerView: ShimmerFrameLayout,
+        adapter: RecipeDelegateAdapter
     ) {
         viewLifecycleOwner.lifecycleScope.launch {
             dataState.collect { result ->
@@ -88,21 +99,43 @@ class RecipesListFragment : Fragment() {
                         is DataResult.Success -> {
                             shimmerView.isVisible = false
                             errorTextView.isVisible = false
-                            adapter.submitList(result.data)
-                            recipesRecyclerView.isVisible = result.data.isNotEmpty()
+                            val items = result.data.map {
+                                when (adapter.delegates.first()) {
+                                    is TrendingRecipeDelegate -> RecipeListItem.TrendingRecipeItem(
+                                        it as Result
+                                    )
+
+                                    is RandomRecipeDelegate -> RecipeListItem.LatestRecipeItem(it as Recipe)
+                                    else -> throw IllegalArgumentException("Unknown delegate type")
+                                }
+                            }
+                            adapter.submitList(items)
+                            if (adapter.delegates.first() is RandomRecipeDelegate) {
+                                recipesRecyclerView.isVisible = result.data.isNotEmpty()
+                            } else {
+                                trendingRecyclerView.isVisible = result.data.isNotEmpty()
+                            }
                         }
 
                         is DataResult.Error -> {
                             shimmerView.isVisible = false
                             errorTextView.isVisible = true
                             errorTextView.text = result.exception.message ?: "Unknown error"
-                            recipesRecyclerView.isVisible = false
+                            if (adapter.delegates.first() is RandomRecipeDelegate) {
+                                recipesRecyclerView.isVisible = false
+                            } else {
+                                trendingRecyclerView.isVisible = false
+                            }
                         }
 
                         is DataResult.Loading -> {
                             shimmerView.isVisible = true
                             errorTextView.isVisible = false
-                            recipesRecyclerView.isVisible = false
+                            if (adapter.delegates.first() is RandomRecipeDelegate) {
+                                recipesRecyclerView.isVisible = false
+                            } else {
+                                trendingRecyclerView.isVisible = false
+                            }
                         }
                     }
                 }
