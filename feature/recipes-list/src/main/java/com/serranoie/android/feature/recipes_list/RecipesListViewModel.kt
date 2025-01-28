@@ -22,7 +22,6 @@ import javax.inject.Inject
 class RecipesListViewModel @Inject constructor(
     private val getRecipesUseCase: GetRandomRecipesUseCase,
     private val getRandomRecipesUseCase: GetPopularRecipesUseCase,
-    private val searchRecipesUseCase: SearchRecipeUseCase,
     private val saveRecipeUseCase: SaveRecipeUseCase,
     private val deleteRecipeUseCase: DeleteRecipeUseCase,
 ) : ViewModel() {
